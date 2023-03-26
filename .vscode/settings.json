@@ -72,6 +72,8 @@
         "csignal": "cpp",
         "any": "cpp",
         "codecvt": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "ranges": "cpp",
+        "valarray": "cpp"
     }
 }
