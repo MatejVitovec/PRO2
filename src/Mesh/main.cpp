@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-#include "Mesh/Mesh.hpp"
+#include "Mesh.hpp"
 
 int main(int argc, char** argv)
 {

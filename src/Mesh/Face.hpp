@@ -11,6 +11,8 @@ class Face
     public:
         Face();
 
+        virtual ~Face();
+
         std::vector<int> nodesIndex;
         int ownerIndex;
         int neighborIndex;
@@ -18,8 +20,8 @@ class Face
         Vector3 center;
         Vector3 normalVector;
 
-        virtual void calculateArea();
-        virtual void calculateCenter();
+        //virtual void calculateArea();
+        //virtual void calculateCenter();
 
     protected:
 

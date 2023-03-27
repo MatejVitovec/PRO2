@@ -7,3 +7,7 @@ Cell::Cell()
     
 }
 
+Cell::~Cell()
+{
+    
+}

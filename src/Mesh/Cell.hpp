@@ -3,13 +3,15 @@
 
 #include <vector>
 #include <memory>
-#include <Face.hpp>
+#include "Face.hpp"
 #include "Vector3.hpp"
 
 class Cell
 {
     public:
         Cell();
+
+        virtual ~Cell();
 
         std::vector<int> nodesIndex;
         std::vector<int> facesIndex;
@@ -18,8 +20,8 @@ class Cell
         Vector3 center;
         double volume;
 
-        virtual void calculateVolume();
-        virtual void calclateCenter();
+        //virtual void calculateVolume();
+        //virtual void calclateCenter();
 
     protected:
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "Vector3.hpp"
 #include "Cell.hpp"
@@ -16,7 +17,7 @@ class Mesh
         Mesh();
 
         void update();
-        void loadGmsh();
+        void loadGmsh2(std::string fileName);
 
         std::vector<Vector3> nodeList;
         std::vector<Cell> cellList;        
@@ -25,7 +26,7 @@ class Mesh
         std::vector<int> internalFaceList;
 
 
-    private:        
+    private:
         void createCells();
         void createFaces();
         void createPatches();
@@ -33,6 +34,11 @@ class Mesh
         void updateCells();
         void updateFaces();
         void updatePatches();
+
+        //load GMSH
+        std::vector<std::string> readFile(std::string fileName);
+        std::vector<std::vector<std::string>> parseBlockData(const std::vector<std::string>& dataIn, std::string blockName);
+        void createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGmsh);
 
 };
 

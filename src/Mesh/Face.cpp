@@ -7,3 +7,7 @@ Face::Face()
     
 }
 
+Face::~Face()
+{
+    
+}
