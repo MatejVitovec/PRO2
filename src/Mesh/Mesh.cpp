@@ -16,6 +16,7 @@ void Mesh::loadGmsh2(std::string fileName)
     std::vector<std::string> stringData = readFile(fileName);
 
     createNodesGmsh(parseBlockData(stringData, "Nodes"));
+    createCellsGmsh(parseBlockData(stringData, "Elements"));
 }
 
 std::vector<std::string> Mesh::readFile(std::string fileName)
@@ -91,8 +92,49 @@ void Mesh::createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGms
         }
         else
         {
-            std::cout << "chybejici Node index:" << i << std::endl;
+            std::cout << "Chybejici Node, index:" << i << std::endl;
             nodeList.push_back(Vector3());
+        }
+    }
+}
+
+void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGmsh)
+{
+    int cellsSum = stoi(cellsGmsh[0][0]);
+
+    cellList.clear();
+
+    for (int i = 1; i < cellsGmsh.size(); i++)
+    {
+        if(stoi(cellsGmsh[i][0]) == i)
+        {
+            int numOfTags = stoi(cellsGmsh[i][2]);
+
+            switch (stoi(cellsGmsh[i][1]))
+            {
+            case 4:
+                //std::array<int, 4> temp = {0,0,0,0};
+                cellList.push_back(std::make_shared<TetrahedronCell>(std::array<int, 4>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags])}));
+                break;
+            case 5:
+                cellList.push_back(std::make_shared<HexahedronCell>(std::array<int, 8>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags]), stoi(cellsGmsh[i][9+numOfTags]), stoi(cellsGmsh[i][10+numOfTags])}));
+                break;
+            case 6:
+                cellList.push_back(std::make_shared<PrismCell>(std::array<int, 6>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags])}));
+                break;
+            case 7:
+                cellList.push_back(std::make_shared<PyramidCell>(std::array<int, 5>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags])}));
+                break;
+            
+            default:
+                std::cout << "Neplatný typ 3D bunky" << std::endl;
+                break;
+            }
+        }
+        else
+        {
+            std::cout << "Chybejici Cell, index:" << i << std::endl;
+            cellList.push_back(std::make_shared<Cell>());
         }
     }
 }

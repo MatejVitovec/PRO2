@@ -6,7 +6,13 @@
 #include <string>
 
 #include "Vector3.hpp"
+
 #include "Cell.hpp"
+#include "TetrahedronCell.hpp"
+#include "HexahedronCell.hpp"
+#include "PrismCell.hpp"
+#include "PyramidCell.hpp"
+
 #include "Face.hpp"
 #include "Patch.hpp"
 
@@ -20,8 +26,8 @@ class Mesh
         void loadGmsh2(std::string fileName);
 
         std::vector<Vector3> nodeList;
-        std::vector<Cell> cellList;        
-        std::vector<Face> faceList;
+        std::vector<std::shared_ptr<Cell>> cellList;
+        std::vector<std::shared_ptr<Face>> faceList;
         std::vector<Patch> patchList;
         std::vector<int> internalFaceList;
 
@@ -39,6 +45,7 @@ class Mesh
         std::vector<std::string> readFile(std::string fileName);
         std::vector<std::vector<std::string>> parseBlockData(const std::vector<std::string>& dataIn, std::string blockName);
         void createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGmsh);
+        void createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGmsh);
 
 };
 
