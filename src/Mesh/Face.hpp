@@ -9,6 +9,8 @@
 class Face
 {
     public:
+        enum faceType{TRIANGULAR, QUADRILATERAL};
+
         Face();
 
         virtual ~Face();
@@ -16,6 +18,8 @@ class Face
         std::vector<int> nodesIndex;
         int ownerIndex;
         int neighborIndex;
+
+        int type;
 
         Vector3 center;
         Vector3 normalVector;

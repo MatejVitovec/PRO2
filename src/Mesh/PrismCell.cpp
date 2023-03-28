@@ -7,7 +7,7 @@ PrismCell::PrismCell()
     
 }
 
-PrismCell::PrismCell(std::array<int, 6> nodesIdx)
+PrismCell::PrismCell(std::vector<int> nodesIdx)
 {
 
 }

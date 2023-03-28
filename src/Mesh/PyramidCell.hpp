@@ -11,14 +11,14 @@ class PyramidCell : public Cell
 {
     public:
         PyramidCell();
-        PyramidCell(std::array<int, 5> nodesIdx);
+        PyramidCell(std::vector<int> nodesIdx);
 
         virtual ~PyramidCell();
 
         //virtual void calculateVolume();
         //virtual void calclateCenter();
 
-    protected:
+    private:
 
 
 };

@@ -29,7 +29,10 @@ class Mesh
         std::vector<std::shared_ptr<Cell>> cellList;
         std::vector<std::shared_ptr<Face>> faceList;
         std::vector<Patch> patchList;
-        std::vector<int> internalFaceList;
+        
+        std::vector<int> ownerIndexList;
+        std::vector<int> neighborIndexList;
+        std::vector<int> internalFaceIndexList;
 
 
     private:

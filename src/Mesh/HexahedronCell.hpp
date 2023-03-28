@@ -11,14 +11,14 @@ class HexahedronCell : public Cell
 {
     public:
         HexahedronCell();
-        HexahedronCell(std::array<int, 8> nodesIdx);
+        HexahedronCell(std::vector<int> nodesIdx);
 
         virtual ~HexahedronCell();
 
         //virtual void calculateVolume();
         //virtual void calclateCenter();
 
-    protected:
+    private:
 
 
 };

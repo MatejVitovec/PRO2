@@ -11,14 +11,14 @@ class PrismCell : public Cell
 {
     public:
         PrismCell();
-        PrismCell(std::array<int, 6> nodesIdx);
+        PrismCell(std::vector<int> nodesIdx);
 
         virtual ~PrismCell();
 
         //virtual void calculateVolume();
         //virtual void calclateCenter();
 
-    protected:
+    private:
 
 
 };

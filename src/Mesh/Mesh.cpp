@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #include "Mesh.hpp"
 
@@ -11,12 +12,50 @@ Mesh::Mesh()
     
 }
 
+void Mesh::createFaces()
+{
+    faceList.clear();
+    ownerIndexList.clear();
+    //neighborIndexList.clear();
+
+    for (int i = 0; i < cellList.size(); i++)
+    {
+        std::vector<std::shared_ptr<Face>> ownFaces = cellList[i]->createOwnFaces();
+        faceList.insert(faceList.end(), ownFaces.begin(), ownFaces.end());
+
+        for (int j = 0; j < ownFaces.size(); j++)
+        {
+            ownerIndexList.push_back(i);
+        }
+    }
+    
+    neighborIndexList = std::vector<int>(faceList.size());
+
+    for (int i = 0; i < cellList.size(); i++)
+    {
+        std::vector<std::shared_ptr<Face>> neighborFaces = cellList[i]->createNeighborFaces();
+
+        for (auto & face : neighborFaces)
+        {
+            //nebude fungovat protoze poradi indexu uzlu nemusi sedet
+            auto iter = find(faceList.begin(), faceList.end(), face);
+            if (iter != faceList.end())
+            {                
+                neighborIndexList[iter - faceList.begin()] = i;
+            }
+        }
+    }
+
+}
+
 void Mesh::loadGmsh2(std::string fileName)
 {
     std::vector<std::string> stringData = readFile(fileName);
 
     createNodesGmsh(parseBlockData(stringData, "Nodes"));
     createCellsGmsh(parseBlockData(stringData, "Elements"));
+
+    createFaces();
 }
 
 std::vector<std::string> Mesh::readFile(std::string fileName)
@@ -113,17 +152,17 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
             switch (stoi(cellsGmsh[i][1]))
             {
             case 4:
-                //std::array<int, 4> temp = {0,0,0,0};
-                cellList.push_back(std::make_shared<TetrahedronCell>(std::array<int, 4>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags])}));
+                //std::vector<int> temp = {0,0,0,0};
+                cellList.push_back(std::make_shared<TetrahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags])}));
                 break;
             case 5:
-                cellList.push_back(std::make_shared<HexahedronCell>(std::array<int, 8>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags]), stoi(cellsGmsh[i][9+numOfTags]), stoi(cellsGmsh[i][10+numOfTags])}));
+                //cellList.push_back(std::make_shared<HexahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags]), stoi(cellsGmsh[i][9+numOfTags]), stoi(cellsGmsh[i][10+numOfTags])}));
                 break;
             case 6:
-                cellList.push_back(std::make_shared<PrismCell>(std::array<int, 6>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags])}));
+                //cellList.push_back(std::make_shared<PrismCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags])}));
                 break;
             case 7:
-                cellList.push_back(std::make_shared<PyramidCell>(std::array<int, 5>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags])}));
+                //cellList.push_back(std::make_shared<PyramidCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags])}));
                 break;
             
             default:
@@ -134,7 +173,7 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
         else
         {
             std::cout << "Chybejici Cell, index:" << i << std::endl;
-            cellList.push_back(std::make_shared<Cell>());
+            //cellList.push_back(std::make_shared<Cell>());
         }
     }
 }

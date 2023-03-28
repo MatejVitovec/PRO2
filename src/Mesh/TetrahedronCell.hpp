@@ -11,14 +11,17 @@ class TetrahedronCell : public Cell
 {
     public:
         TetrahedronCell();
-        TetrahedronCell(std::array<int, 4> nodesIdx);
+        TetrahedronCell(std::vector<int> nodesIdx);
+
+        std::vector<std::shared_ptr<Face>> createOwnFaces();
+        std::vector<std::shared_ptr<Face>> createNeighborFaces();
 
         virtual ~TetrahedronCell();
 
         //virtual void calculateVolume();
         //virtual void calclateCenter();
 
-    protected:
+    private:
 
 
 };

@@ -7,7 +7,7 @@ PyramidCell::PyramidCell()
     
 }
 
-PyramidCell::PyramidCell(std::array<int, 5> nodesIdx)
+PyramidCell::PyramidCell(std::vector<int> nodesIdx)
 {
 
 }
