@@ -13,6 +13,9 @@ class Face
 
         Face();
 
+        bool check();
+        bool equal(const Face& compFace) const;
+
         virtual ~Face();
 
         std::vector<int> nodesIndex;

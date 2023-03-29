@@ -1,6 +1,7 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <iostream>
 #include <algorithm>
 
@@ -16,36 +17,84 @@ void Mesh::createFaces()
 {
     faceList.clear();
     ownerIndexList.clear();
-    //neighborIndexList.clear();
 
-    for (int i = 0; i < cellList.size(); i++)
+    //vytvoreni sten + ownerList
+    for (int j = 0; j < cellList.size(); j++)
     {
-        std::vector<std::shared_ptr<Face>> ownFaces = cellList[i]->createOwnFaces();
-        faceList.insert(faceList.end(), ownFaces.begin(), ownFaces.end());
+        std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
 
-        for (int j = 0; j < ownFaces.size(); j++)
+        for (auto & ownFace : ownFaces)
         {
-            ownerIndexList.push_back(i);
-        }
-    }
-    
-    neighborIndexList = std::vector<int>(faceList.size());
+            bool existInList = false;
 
-    for (int i = 0; i < cellList.size(); i++)
-    {
-        std::vector<std::shared_ptr<Face>> neighborFaces = cellList[i]->createNeighborFaces();
+            for (int i = 0; i < faceList.size(); i++)
+            {
+                if (faceList[i]->equal(*ownFace))
+                {
+                    existInList = true;
+                }                
+            }
 
-        for (auto & face : neighborFaces)
-        {
-            //nebude fungovat protoze poradi indexu uzlu nemusi sedet
-            auto iter = find(faceList.begin(), faceList.end(), face);
-            if (iter != faceList.end())
-            {                
-                neighborIndexList[iter - faceList.begin()] = i;
+            if (!existInList)
+            {
+                faceList.push_back(ownFace);
+                ownerIndexList.push_back(j);
             }
         }
     }
 
+    //naplneni pole sousedu
+    neighborIndexList = std::vector<int>(faceList.size(), -1);
+
+    for (int j = 0; j < cellList.size(); j++)
+    {
+        std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
+
+        for (auto & ownFace : ownFaces)
+        {
+            for (int i = 0; i < faceList.size(); i++)
+            {
+                if (faceList[i]->equal(*ownFace) && ownerIndexList[i] != j)
+                {
+                    neighborIndexList[i] = j;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+bool Mesh::checkFaces() const
+{
+    bool fail = false;
+
+    //kontrola sten na nenulovy obsah
+    for (auto & face : faceList)
+    {
+        if(face->check())
+        {
+            std::cout << "stena neprosla kontorlou na nenulovy obsah" << std::endl;
+            fail = true;
+        }
+    }
+
+    //kontrola na opakujici se bunky
+    for (int j = 0; j < faceList.size(); j++)
+    {
+        for (int i = 0; i < faceList.size(); i++)
+        {
+            if(i != j)
+            {
+                if(faceList[i]->equal(*faceList[j]))
+                {
+                    std::cout << "v seznamuz sten je duplikat i:" << j << " j: "<< i << std::endl;
+                    fail = true;
+                }
+            }
+        }
+    }
+
+    return fail;
 }
 
 void Mesh::loadGmsh2(std::string fileName)
@@ -166,7 +215,7 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
                 break;
             
             default:
-                std::cout << "Neplatný typ 3D bunky" << std::endl;
+                //std::cout << "Neplatný typ 3D bunky" << std::endl;
                 break;
             }
         }

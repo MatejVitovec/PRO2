@@ -13,8 +13,7 @@ class TetrahedronCell : public Cell
         TetrahedronCell();
         TetrahedronCell(std::vector<int> nodesIdx);
 
-        std::vector<std::shared_ptr<Face>> createOwnFaces();
-        std::vector<std::shared_ptr<Face>> createNeighborFaces();
+        std::vector<std::shared_ptr<Face>> createFaces();
 
         virtual ~TetrahedronCell();
 

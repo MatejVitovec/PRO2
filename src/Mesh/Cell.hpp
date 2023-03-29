@@ -13,8 +13,7 @@ class Cell
 
         Cell();
 
-        virtual std::vector<std::shared_ptr<Face>> createOwnFaces();
-        virtual std::vector<std::shared_ptr<Face>> createNeighborFaces();
+        virtual std::vector<std::shared_ptr<Face>> createFaces();
 
         virtual ~Cell();
 

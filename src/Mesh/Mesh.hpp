@@ -14,6 +14,8 @@
 #include "PyramidCell.hpp"
 
 #include "Face.hpp"
+#include "TriangularFace.hpp"
+#include "QuadrilateralFace.hpp"
 #include "Patch.hpp"
 
 
@@ -43,6 +45,8 @@ class Mesh
         void updateCells();
         void updateFaces();
         void updatePatches();
+
+        bool checkFaces() const;
 
         //load GMSH
         std::vector<std::string> readFile(std::string fileName);

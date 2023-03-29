@@ -41,6 +41,12 @@ inline Vector3 operator/ (const Vector3& u, double a)
     return Vector3(u.x/a, u.y/a, u.z/a);
 }
 
+//comparison operator
+/*bool operator== (const Vector3& u, const Vector3& v)
+{
+    return (u.x == v.x && u.y == v.y && u.z == v.z);
+}*/
+
 //dot product
 inline double dot(const Vector3& u, const Vector3& v)
 {
