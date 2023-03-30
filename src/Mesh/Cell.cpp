@@ -2,14 +2,9 @@
 #include "Cell.hpp"
 
 
-Cell::Cell()
-{
-    
-}
-
 std::vector<std::shared_ptr<Face>> Cell::createFaces()
 {
-
+    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
 }
 
 Cell::~Cell()

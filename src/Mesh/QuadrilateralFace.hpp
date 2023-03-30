@@ -10,12 +10,12 @@
 class QuadrilateralFace : public Face
 {
     public:
-        QuadrilateralFace();
+        QuadrilateralFace() : Face(QUADRILATERAL) {};
+        QuadrilateralFace(std::vector<int> nodesIdx) : Face(QUADRILATERAL, nodesIdx) {};
+
+        void update(const std::vector<Vector3>& nodeList);
 
         virtual ~QuadrilateralFace();
-
-        //void calculateArea();
-        //void calculateCenter();
 
     protected:
 

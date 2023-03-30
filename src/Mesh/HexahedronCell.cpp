@@ -1,15 +1,10 @@
 #include <cmath>
 #include "HexahedronCell.hpp"
 
-
-HexahedronCell::HexahedronCell()
+std::vector<std::shared_ptr<Face>> HexahedronCell::createFaces()
 {
-    
-}
-
-HexahedronCell::HexahedronCell(std::vector<int> nodesIdx)
-{
-
+    //TODO
+    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
 }
 
 HexahedronCell::~HexahedronCell()

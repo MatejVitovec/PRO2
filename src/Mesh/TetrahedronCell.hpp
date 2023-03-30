@@ -10,8 +10,8 @@
 class TetrahedronCell : public Cell
 {
     public:
-        TetrahedronCell();
-        TetrahedronCell(std::vector<int> nodesIdx);
+        TetrahedronCell() : Cell(TETRAHEDRON) {};
+        TetrahedronCell(std::vector<int> nodesIdx) : Cell(TETRAHEDRON, nodesIdx) {};
 
         std::vector<std::shared_ptr<Face>> createFaces();
 

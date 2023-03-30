@@ -1,15 +1,10 @@
 #include <cmath>
 #include "PyramidCell.hpp"
 
-
-PyramidCell::PyramidCell()
+std::vector<std::shared_ptr<Face>> PyramidCell::createFaces()
 {
-    
-}
-
-PyramidCell::PyramidCell(std::vector<int> nodesIdx)
-{
-
+    //TODO
+    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
 }
 
 PyramidCell::~PyramidCell()

@@ -9,9 +9,11 @@
 class Cell
 {
     public:
-        enum cellType{TETRAHEDRON, HEXAHEDRON, PRISM, PYRAMID};
+        enum cellType{VOID, TETRAHEDRON, HEXAHEDRON, PRISM, PYRAMID};
 
-        Cell();
+        Cell() : type(VOID) {};
+        Cell(cellType cType) : type(cType) {};
+        Cell(cellType cType, std::vector<int> nodesIdx) : type(cType), nodesIndex(nodesIdx) {};
 
         virtual std::vector<std::shared_ptr<Face>> createFaces();
 
@@ -20,8 +22,6 @@ class Cell
         std::vector<int> nodesIndex;
         std::vector<int> facesIndex;
         //std::vector<int> neighborsIndex;
-        
-        int type;
 
         Vector3 center;
         double volume;
@@ -30,7 +30,7 @@ class Cell
         //virtual void calclateCenter();
 
     protected:
-
+        const int type;
 
 };
 

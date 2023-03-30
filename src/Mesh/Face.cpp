@@ -3,12 +3,13 @@
 #include "Face.hpp"
 
 
-Face::Face()
+void Face::update(const std::vector<Vector3>& nodeList)
 {
-    
+    area = 0;
+    normalVector = Vector3();
 }
 
-bool Face::check()
+bool Face::check() const
 {
     if(std::adjacent_find(nodesIndex.begin(), nodesIndex.end()) != nodesIndex.end())
     {
@@ -31,6 +32,12 @@ bool Face::equal(const Face& compFace) const
     }
     
     return isEqual;
+}
+
+void Face::reverseOrientation()
+{
+    std::reverse(nodesIndex.begin(), nodesIndex.end());
+    //update();
 }
 
 Face::~Face()

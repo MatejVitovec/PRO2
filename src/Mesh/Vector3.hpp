@@ -65,7 +65,8 @@ inline double norm2(const Vector3& u)
     return sqrt(u.x*u.x + u.y*u.y + u.z*u.z);
 }
 
-inline Vector3 normVector(const Vector3& u)
+//unit vector
+inline Vector3 unit(const Vector3& u)
 {
     double norm = sqrt(u.x*u.x + u.y*u.y + u.z*u.z);
     return Vector3(u.x/norm, u.y/norm, u.z/norm);

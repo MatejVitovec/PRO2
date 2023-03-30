@@ -10,8 +10,10 @@
 class PyramidCell : public Cell
 {
     public:
-        PyramidCell();
-        PyramidCell(std::vector<int> nodesIdx);
+        PyramidCell() : Cell(PYRAMID) {};
+        PyramidCell(std::vector<int> nodesIdx) : Cell(PYRAMID, nodesIdx) {};
+
+        std::vector<std::shared_ptr<Face>> createFaces();
 
         virtual ~PyramidCell();
 

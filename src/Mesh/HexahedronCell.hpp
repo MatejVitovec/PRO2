@@ -10,8 +10,10 @@
 class HexahedronCell : public Cell
 {
     public:
-        HexahedronCell();
-        HexahedronCell(std::vector<int> nodesIdx);
+        HexahedronCell() : Cell(HEXAHEDRON) {};
+        HexahedronCell(std::vector<int> nodesIdx) : Cell(HEXAHEDRON, nodesIdx) {};
+
+        std::vector<std::shared_ptr<Face>> createFaces();
 
         virtual ~HexahedronCell();
 

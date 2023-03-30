@@ -1,15 +1,10 @@
 #include <cmath>
 #include "PrismCell.hpp"
 
-
-PrismCell::PrismCell()
+std::vector<std::shared_ptr<Face>> PrismCell::createFaces()
 {
-    
-}
-
-PrismCell::PrismCell(std::vector<int> nodesIdx)
-{
-
+    //TODO
+    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
 }
 
 PrismCell::~PrismCell()

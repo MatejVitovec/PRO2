@@ -9,29 +9,35 @@
 class Face
 {
     public:
-        enum faceType{TRIANGULAR, QUADRILATERAL};
+        enum faceType{VOID, TRIANGULAR, QUADRILATERAL};
 
-        Face();
+        Face() : type(VOID) {};
+        Face(faceType fType) : type(fType) {};
+        Face(faceType fType, std::vector<int> nodesIdx) : type(fType), nodesIndex(nodesIdx) {};
 
-        bool check();
+        virtual void update(const std::vector<Vector3>& nodeList);
+
+        bool check() const;
         bool equal(const Face& compFace) const;
+        void reverseOrientation();
 
         virtual ~Face();
 
         std::vector<int> nodesIndex;
-        int ownerIndex;
-        int neighborIndex;
 
-        int type;
-
-        Vector3 center;
+        double area;
         Vector3 normalVector;
 
+        //Vector3 center;
+
         //virtual void calculateArea();
+        //virtual void calculateNormal();
         //virtual void calculateCenter();
 
     protected:
-
+        const int type;
+        //virtual void calculateArea();
+        //virtual void calculateNormal();
 
 };
 
