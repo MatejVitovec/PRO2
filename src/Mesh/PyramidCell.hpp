@@ -17,11 +17,8 @@ class PyramidCell : public Cell
 
         virtual ~PyramidCell();
 
-        //virtual void calculateVolume();
-        //virtual void calclateCenter();
-
     private:
-
+        double calculateVolume() const;
 
 };
 

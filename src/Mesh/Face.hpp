@@ -15,10 +15,10 @@ class Face
         Face(faceType fType) : type(fType) {};
         Face(faceType fType, std::vector<int> nodesIdx) : type(fType), nodesIndex(nodesIdx) {};
 
-        virtual void update(const std::vector<Vector3>& nodeList);
-
+        void update(const std::vector<Vector3>& nodeList);
         bool check() const;
         bool equal(const Face& compFace) const;
+
         void reverseOrientation();
 
         virtual ~Face();
@@ -27,17 +27,13 @@ class Face
 
         double area;
         Vector3 normalVector;
-
-        //Vector3 center;
-
-        //virtual void calculateArea();
-        //virtual void calculateNormal();
-        //virtual void calculateCenter();
+        Vector3 midpoint;
 
     protected:
         const int type;
-        //virtual void calculateArea();
-        //virtual void calculateNormal();
+
+        virtual Vector3 calculateNormalVector(const std::vector<Vector3>& nodeList) const;
+        virtual Vector3 calculateMidpoint(const std::vector<Vector3>& nodeList) const;
 
 };
 

@@ -13,12 +13,11 @@ class TriangularFace : public Face
         TriangularFace() : Face(TRIANGULAR) {};
         TriangularFace(std::vector<int> nodesIdx) : Face(TRIANGULAR, nodesIdx) {};
 
-        void update(const std::vector<Vector3>& nodeList);
-
         virtual ~TriangularFace();
 
     private:
-
+        Vector3 calculateNormalVector(const std::vector<Vector3>& nodeList) const;
+        Vector3 calculateMidpoint(const std::vector<Vector3>& nodeList) const;
 
 };
 

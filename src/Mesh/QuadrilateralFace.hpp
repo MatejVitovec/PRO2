@@ -13,12 +13,11 @@ class QuadrilateralFace : public Face
         QuadrilateralFace() : Face(QUADRILATERAL) {};
         QuadrilateralFace(std::vector<int> nodesIdx) : Face(QUADRILATERAL, nodesIdx) {};
 
-        void update(const std::vector<Vector3>& nodeList);
-
         virtual ~QuadrilateralFace();
 
-    protected:
-
+    private:
+        Vector3 calculateNormalVector(const std::vector<Vector3>& nodeList) const;
+        Vector3 calculateMidpoint(const std::vector<Vector3>& nodeList) const;
 
 };
 

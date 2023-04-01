@@ -211,7 +211,6 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
             switch (stoi(cellsGmsh[i][1]))
             {
             case 4:
-                //std::vector<int> temp = {0,0,0,0};
                 cellList.push_back(std::make_shared<TetrahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags])}));
                 break;
             case 5:

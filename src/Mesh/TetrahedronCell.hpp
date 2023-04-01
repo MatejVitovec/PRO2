@@ -17,11 +17,8 @@ class TetrahedronCell : public Cell
 
         virtual ~TetrahedronCell();
 
-        //virtual void calculateVolume();
-        //virtual void calclateCenter();
-
     private:
-
+        double calculateVolume() const;
 
 };
 

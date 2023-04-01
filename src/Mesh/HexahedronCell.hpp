@@ -17,11 +17,8 @@ class HexahedronCell : public Cell
 
         virtual ~HexahedronCell();
 
-        //virtual void calculateVolume();
-        //virtual void calclateCenter();
-
     private:
-
+        double calculateVolume() const;
 
 };
 

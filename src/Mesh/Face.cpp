@@ -5,8 +5,12 @@
 
 void Face::update(const std::vector<Vector3>& nodeList)
 {
-    area = 0;
-    normalVector = Vector3();
+    Vector3 normalVectorScale = calculateNormalVector(nodeList);
+
+    area = sqrt(normalVectorScale.x*normalVectorScale.x + normalVectorScale.y*normalVectorScale.y + normalVectorScale.z*normalVectorScale.z);
+    normalVector = normalVectorScale/area;
+
+    midpoint = calculateMidpoint(nodeList);
 }
 
 bool Face::check() const
@@ -38,6 +42,24 @@ void Face::reverseOrientation()
 {
     std::reverse(nodesIndex.begin(), nodesIndex.end());
     //update();
+}
+
+Vector3 Face::calculateNormalVector(const std::vector<Vector3>& nodeList) const
+{
+    return Vector3();
+}
+
+Vector3 Face::calculateMidpoint(const std::vector<Vector3>& nodeList) const
+{
+    Vector3 aux = Vector3(0.0, 0.0, 0.0);
+
+    int i;
+    for (i = 0; i < nodeList.size(); i++)
+    {
+        aux = aux + nodeList[nodesIndex[i]];
+    }
+    
+    return aux / ((double) i);
 }
 
 Face::~Face()

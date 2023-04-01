@@ -21,16 +21,16 @@ class Cell
 
         std::vector<int> nodesIndex;
         std::vector<int> facesIndex;
-        //std::vector<int> neighborsIndex;
 
         Vector3 center;
         double volume;
-
-        //virtual void calculateVolume();
-        //virtual void calclateCenter();
+        
 
     protected:
         const int type;
+
+        virtual double calculateVolume() const;
+        //virtual void calclateCenter();
 
 };
 

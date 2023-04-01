@@ -1,25 +1,23 @@
 #include <cmath>
 #include "QuadrilateralFace.hpp"
 
-void QuadrilateralFace::update(const std::vector<Vector3>& nodeList)
+
+Vector3 QuadrilateralFace::calculateNormalVector(const std::vector<Vector3>& nodeList) const
 {
-    /*double dxyA = (nodeList[nodesIndex[0]].x - nodeList[nodesIndex[1]].x)*(nodeList[nodesIndex[0]].y + nodeList[nodesIndex[1]].y);
-    double dxyB = (nodeList[nodesIndex[1]].x - nodeList[nodesIndex[2]].x)*(nodeList[nodesIndex[1]].y + nodeList[nodesIndex[2]].y);
-    double dxyC = (nodeList[nodesIndex[2]].x - nodeList[nodesIndex[0]].x)*(nodeList[nodesIndex[2]].y + nodeList[nodesIndex[0]].y);
+    double dxA = (nodeList[nodesIndex[4]].x - nodeList[nodesIndex[2]].x);
+    double dyA = (nodeList[nodesIndex[4]].y - nodeList[nodesIndex[2]].y);
+    double dzA = (nodeList[nodesIndex[4]].z - nodeList[nodesIndex[2]].z);
 
-    double dyzA = (nodeList[nodesIndex[0]].y - nodeList[nodesIndex[1]].y)*(nodeList[nodesIndex[0]].z + nodeList[nodesIndex[1]].z);
-    double dyzB = (nodeList[nodesIndex[1]].y - nodeList[nodesIndex[2]].y)*(nodeList[nodesIndex[1]].z + nodeList[nodesIndex[2]].z);
-    double dyzC = (nodeList[nodesIndex[2]].y - nodeList[nodesIndex[0]].y)*(nodeList[nodesIndex[2]].z + nodeList[nodesIndex[0]].z);
+    double dxB = (nodeList[nodesIndex[3]].x - nodeList[nodesIndex[1]].x);
+    double dyB = (nodeList[nodesIndex[3]].y - nodeList[nodesIndex[1]].y);
+    double dzB = (nodeList[nodesIndex[3]].z - nodeList[nodesIndex[1]].z);
 
-    double dzxA = (nodeList[nodesIndex[0]].z - nodeList[nodesIndex[1]].z)*(nodeList[nodesIndex[0]].x + nodeList[nodesIndex[1]].x);
-    double dzxB = (nodeList[nodesIndex[1]].z - nodeList[nodesIndex[2]].z)*(nodeList[nodesIndex[1]].x + nodeList[nodesIndex[2]].x);
-    double dzxC = (nodeList[nodesIndex[2]].z - nodeList[nodesIndex[0]].z)*(nodeList[nodesIndex[2]].x + nodeList[nodesIndex[0]].x);
+    return 0.5*(Vector3(dyA*dzB - dzA*dyB, dzA*dxB - dxA*dzB, dxA*dyB - dyA*dxB));
+}
 
-
-    Vector3 normalVectorScale = 0.5*(Vector3(dyzA + dyzB + dyzC, dzxA + dzxB + dzxC, dxyA + dxyB + dxyC));
-
-    area = sqrt(normalVectorScale.x*normalVectorScale.x + normalVectorScale.y*normalVectorScale.y + normalVectorScale.z*normalVectorScale.z);
-    normalVector = normalVectorScale/area;*/
+Vector3 QuadrilateralFace::calculateMidpoint(const std::vector<Vector3>& nodeList) const
+{
+    return (nodeList[nodesIndex[0]] + nodeList[nodesIndex[2]] + nodeList[nodesIndex[3]] + nodeList[nodesIndex[4]]) / 4.0;
 }
 
 QuadrilateralFace::~QuadrilateralFace()
