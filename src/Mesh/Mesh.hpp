@@ -17,37 +17,43 @@
 #include "TriangularFace.hpp"
 #include "QuadrilateralFace.hpp"
 
-#include "Patch.hpp"
+#include "Boundary.hpp"
 
 
 class Mesh
 {
     public:
-        Mesh();
+        Mesh() {};
+
+        const std::vector<Vector3>& getNodeList() const;
+        const std::vector<std::shared_ptr<Cell>>& getCellList() const;
+        const std::vector<std::shared_ptr<Face>>& getFaceList() const;
+        const std::vector<Boundary>& getBoundaryList() const;
+        const std::vector<int>& getOwnerIndexList() const;
+        const std::vector<int>& getNeighborIndexList() const;
 
         void update();
         void loadGmsh2(std::string fileName);
+        //std::vector<int> internalFaceIndexList;
+
+    private:
+        void createFaces();
+        void createBoundaries();
+        void updateCellsIndexToFace();
+        
+        void updateCells();
+        void updateFaces();
+        void updateBoundaries();
+
+        bool checkFaces() const;
 
         std::vector<Vector3> nodeList;
         std::vector<std::shared_ptr<Cell>> cellList;
         std::vector<std::shared_ptr<Face>> faceList;
-        std::vector<Patch> patchList;
+        std::vector<Boundary> boundaryList;
         
         std::vector<int> ownerIndexList;
         std::vector<int> neighborIndexList;
-        std::vector<int> internalFaceIndexList;
-
-
-    private:
-        void createCells();
-        void createFaces();
-        void createPatches();
-
-        void updateCells();
-        void updateFaces();
-        void updatePatches();
-
-        bool checkFaces() const;
 
         //load GMSH
         std::vector<std::string> readFile(std::string fileName);

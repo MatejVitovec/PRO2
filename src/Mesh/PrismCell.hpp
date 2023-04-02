@@ -18,7 +18,6 @@ class PrismCell : public Cell
         virtual ~PrismCell();
 
     private:
-        double calculateVolume() const;
 
 
 };

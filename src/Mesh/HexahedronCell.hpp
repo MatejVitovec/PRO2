@@ -18,7 +18,6 @@ class HexahedronCell : public Cell
         virtual ~HexahedronCell();
 
     private:
-        double calculateVolume() const;
 
 };
 

@@ -8,9 +8,40 @@
 #include "Mesh.hpp"
 
 
-Mesh::Mesh()
+const std::vector<Vector3>& Mesh::getNodeList() const
 {
-    
+    return nodeList;
+}
+
+const std::vector<std::shared_ptr<Cell>>& Mesh::getCellList() const
+{
+    return cellList;
+}
+
+const std::vector<std::shared_ptr<Face>>& Mesh::getFaceList() const
+{
+    return faceList;
+}
+
+const std::vector<Boundary>& Mesh::getBoundaryList() const
+{
+    return boundaryList;
+}
+
+const std::vector<int>& Mesh::getOwnerIndexList() const
+{
+    return ownerIndexList;
+}
+
+const std::vector<int>& Mesh::getNeighborIndexList() const
+{
+    return neighborIndexList;
+}
+
+void Mesh::update()
+{
+    updateFaces();
+    updateCells();
 }
 
 void Mesh::createFaces()
@@ -64,6 +95,39 @@ void Mesh::createFaces()
     }
 }
 
+void Mesh::updateCellsIndexToFace()
+{
+    for(int j = 0; j < cellList.size(); j++)
+    {
+        cellList[j]->ownFaceIndex.clear();
+        cellList[j]->neighborFaceIndex.clear();
+
+        for (int i = 0; i < ownerIndexList.size(); i++)
+        {
+            if(ownerIndexList[i] == j)
+            {
+                cellList[j]->ownFaceIndex.push_back(i);
+            }
+        }
+
+        for (int i = 0; i < neighborIndexList.size(); i++)
+        {
+            if(neighborIndexList[i] == j)
+            {
+                cellList[j]->neighborFaceIndex.push_back(i);
+            }
+        }
+    }
+}
+
+void Mesh::updateCells()
+{
+    for(auto & cell : cellList)
+    {
+        cell->update(faceList, nodeList);
+    }
+}
+
 void Mesh::updateFaces()
 {
     for(auto & face : faceList)
@@ -71,7 +135,6 @@ void Mesh::updateFaces()
         face->update(nodeList);
     }
 }
-
 
 bool Mesh::checkFaces() const
 {
@@ -106,6 +169,11 @@ bool Mesh::checkFaces() const
     return fail;
 }
 
+void Mesh::updateBoundaries()
+{
+    //TODO
+}
+
 void Mesh::loadGmsh2(std::string fileName)
 {
     std::vector<std::string> stringData = readFile(fileName);
@@ -114,7 +182,9 @@ void Mesh::loadGmsh2(std::string fileName)
     createCellsGmsh(parseBlockData(stringData, "Elements"));
 
     createFaces();
-    updateFaces();
+    updateCellsIndexToFace();
+
+    update();
 }
 
 std::vector<std::string> Mesh::readFile(std::string fileName)
@@ -224,7 +294,7 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
                 break;
             
             default:
-                std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
+                //std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
                 break;
             }
         }

@@ -15,12 +15,15 @@ class Cell
         Cell(cellType cType) : type(cType) {};
         Cell(cellType cType, std::vector<int> nodesIdx) : type(cType), nodesIndex(nodesIdx) {};
 
+        void update(const std::vector<std::shared_ptr<Face>>& faceList, const std::vector<Vector3>& nodeList);
+
         virtual std::vector<std::shared_ptr<Face>> createFaces();
 
         virtual ~Cell();
 
         std::vector<int> nodesIndex;
-        std::vector<int> facesIndex;
+        std::vector<int> ownFaceIndex;
+        std::vector<int> neighborFaceIndex;
 
         Vector3 center;
         double volume;
@@ -29,7 +32,7 @@ class Cell
     protected:
         const int type;
 
-        virtual double calculateVolume() const;
+        double calculateVolume(const std::vector<std::shared_ptr<Face>>& faceList, const std::vector<Vector3>& nodeList) const;
         //virtual void calclateCenter();
 
 };
