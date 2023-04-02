@@ -124,7 +124,7 @@ void Mesh::updateCells()
 {
     for(auto & cell : cellList)
     {
-        cell->update(faceList, nodeList);
+        cell->update(faceList);
     }
 }
 
