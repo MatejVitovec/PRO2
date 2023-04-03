@@ -15,5 +15,11 @@ int main(int argc, char** argv)
     const std::vector<std::shared_ptr<Cell>>& cells = myMesh.getCellList();
     const std::vector<std::shared_ptr<Face>>& faces = myMesh.getFaceList();
 
+    double vol = 0.0;
+    for (int i = 0; i < cells.size(); i++)
+    {
+        vol += fabs(cells[i]->volume);
+    }
+
     return 0;
 }

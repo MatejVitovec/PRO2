@@ -21,7 +21,7 @@ Vector3 TriangularFace::calculateNormalVector(const std::vector<Vector3>& nodeLi
 
 Vector3 TriangularFace::calculateMidpoint(const std::vector<Vector3>& nodeList) const
 {
-    return (nodeList[nodesIndex[0]] + nodeList[nodesIndex[2]] + nodeList[nodesIndex[3]]) / 3.0;
+    return (nodeList[nodesIndex[0]] + nodeList[nodesIndex[1]] + nodeList[nodesIndex[2]]) / 3.0;
 }
 
 

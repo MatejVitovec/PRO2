@@ -281,16 +281,16 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
             switch (stoi(cellsGmsh[i][1]))
             {
             case 4:
-                cellList.push_back(std::make_shared<TetrahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags])}));
+                cellList.push_back(std::make_shared<TetrahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1}));
                 break;
             case 5:
-                cellList.push_back(std::make_shared<HexahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags]), stoi(cellsGmsh[i][9+numOfTags]), stoi(cellsGmsh[i][10+numOfTags])}));
+                cellList.push_back(std::make_shared<HexahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1, stoi(cellsGmsh[i][9+numOfTags]) - 1, stoi(cellsGmsh[i][10+numOfTags]) - 1}));
                 break;
             case 6:
-                cellList.push_back(std::make_shared<PrismCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags]), stoi(cellsGmsh[i][8+numOfTags])}));
+                cellList.push_back(std::make_shared<PrismCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1}));
                 break;
             case 7:
-                cellList.push_back(std::make_shared<PyramidCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]), stoi(cellsGmsh[i][4+numOfTags]), stoi(cellsGmsh[i][5+numOfTags]), stoi(cellsGmsh[i][6+numOfTags]), stoi(cellsGmsh[i][7+numOfTags])}));
+                cellList.push_back(std::make_shared<PyramidCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1}));
                 break;
             
             default:
