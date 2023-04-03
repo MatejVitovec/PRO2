@@ -32,9 +32,6 @@ class Cell
     protected:
         const int type;
 
-        double calculateVolume(const std::vector<std::shared_ptr<Face>>& faceList) const;
-        //virtual void calclateCenter();
-
 };
 
 #endif // CELL_H

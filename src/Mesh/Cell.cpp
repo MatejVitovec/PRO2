@@ -5,26 +5,18 @@
 
 void Cell::update(const std::vector<std::shared_ptr<Face>>& faceList)
 {
-    volume = calculateVolume(faceList);
+    //update volume, center
+    //TODO no copy midpoint
 
-    //TODO
-    //center = Vector3();
-}
-
-std::vector<std::shared_ptr<Face>> Cell::createFaces()
-{
-    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
-}
-
-double Cell::calculateVolume(const std::vector<std::shared_ptr<Face>>& faceList) const
-{
     double vol = 0.0;
+    Vector3 cen = Vector3(0.0, 0.0, 0.0);
 
     for (auto & faceIndex : ownFaceIndex)
     {
         Vector3 midpoint = faceList[faceIndex]->midpoint;
         Vector3 normal = faceList[faceIndex]->area*(faceList[faceIndex]->normalVector);
         vol += dot(midpoint, normal);
+        cen = cen + norm2(midpoint)*norm2(midpoint)*normal;
     }
 
     for (auto & faceIndex : neighborFaceIndex)
@@ -32,9 +24,16 @@ double Cell::calculateVolume(const std::vector<std::shared_ptr<Face>>& faceList)
         Vector3 midpoint = faceList[faceIndex]->midpoint;
         Vector3 normal = faceList[faceIndex]->area*(-1.0)*(faceList[faceIndex]->normalVector);
         vol += dot(midpoint, normal);
+        cen = cen + norm2(midpoint)*norm2(midpoint)*normal;
     }
     
-    return vol/3.0;
+    volume = vol/3.0;
+    center = (0.5/volume)*cen;
+}
+
+std::vector<std::shared_ptr<Face>> Cell::createFaces()
+{
+    return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};
 }
 
 Cell::~Cell()

@@ -60,6 +60,7 @@ class Mesh
         std::vector<std::vector<std::string>> parseBlockData(const std::vector<std::string>& dataIn, std::string blockName);
         void createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGmsh);
         void createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGmsh);
+        void createBoundariesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh);
 
 };
 

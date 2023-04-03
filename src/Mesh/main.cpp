@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
     Mesh myMesh = Mesh();
-    myMesh.loadGmsh2("t2");
+    myMesh.loadGmsh2("testMesh");
 
     const std::vector<std::shared_ptr<Cell>>& cells = myMesh.getCellList();
     const std::vector<std::shared_ptr<Face>>& faces = myMesh.getFaceList();

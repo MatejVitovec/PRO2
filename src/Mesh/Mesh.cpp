@@ -182,6 +182,7 @@ void Mesh::loadGmsh2(std::string fileName)
     createCellsGmsh(parseBlockData(stringData, "Elements"));
 
     createFaces();
+    createBoundariesGmsh(parseBlockData(stringData, "PhysicalNames"), parseBlockData(stringData, "Elements"));
     updateCellsIndexToFace();
 
     update();
@@ -272,6 +273,7 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
 
     cellList.clear();
 
+    //TODO -> for( auto : ...), index from file (not for)
     for (int i = 1; i < cellsGmsh.size(); i++)
     {
         if(stoi(cellsGmsh[i][0]) == i)
@@ -304,4 +306,60 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
             cellList.push_back(std::make_shared<Cell>());
         }
     }
+}
+
+void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh)
+{
+    boundaryList.clear();
+    std::vector<std::shared_ptr<Face>> auxFaceList;
+    auxFaceList.clear();
+
+    //TODO -> for( auto : ...), index from file (not for)
+    for (int i = 1; i < elementsGmsh.size(); i++)
+    {
+        if(stoi(elementsGmsh[i][0]) == i)
+        {
+            int numOfTags = stoi(elementsGmsh[i][2]);
+
+            switch (stoi(elementsGmsh[i][1]))
+            {
+            case 2:
+                auxFaceList.push_back(std::make_shared<TriangularFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1}));
+                break;
+            case 3:
+                auxFaceList.push_back(std::make_shared<QuadrilateralFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1, stoi(elementsGmsh[i][6+numOfTags]) - 1}));
+                break;
+            
+            default:
+                //std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
+                break;
+            }
+        }
+        else
+        {
+            std::cout << "Chybejici Cell, index:" << i << std::endl;
+            cellList.push_back(std::make_shared<Cell>());
+        }
+    }
+
+    for (int j = 1; j < physicalNamesGmsh.size(); j++)
+    {
+        if(stoi(physicalNamesGmsh[j][0]) != 2)
+        {
+            continue;
+        }
+
+        int physicalId = stoi(physicalNamesGmsh[j][1]);
+        std::string physicalName = physicalNamesGmsh[j][2];
+        physicalName.erase(0,1);
+        physicalName.pop_back();
+
+        for (int i = 0; i < auxFaceList.size(); i++)
+        {
+            //TODO add faces to boundaries
+        }
+        
+    }
+
+
 }

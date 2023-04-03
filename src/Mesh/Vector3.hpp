@@ -72,4 +72,10 @@ inline Vector3 unit(const Vector3& u)
     return Vector3(u.x/norm, u.y/norm, u.z/norm);
 }
 
+//absolut value of x, y, z
+/*inline Vector3 abs(const Vector3& u)
+{
+    return Vector3(fabs(u.x), fabs(u.y), fabs(u.z));
+}*/
+
 #endif // VECTOR3_H
