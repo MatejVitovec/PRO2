@@ -9,7 +9,8 @@ class Boundary
 {
     public:
         Boundary() : boundaryConditionName("empty") {};
-        Boundary(std::vector<int> fIndexes) : facesIndex(fIndexes) {};
+        Boundary(std::string name) : boundaryConditionName(name) {};
+        //Boundary(std::vector<int> fIndexes) : facesIndex(fIndexes) {};
 
         //std::vector<int> nodesIndex;
         std::vector<int> facesIndex;

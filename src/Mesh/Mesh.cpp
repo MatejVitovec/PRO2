@@ -311,8 +311,11 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
 void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh)
 {
     boundaryList.clear();
+
     std::vector<std::shared_ptr<Face>> auxFaceList;
     auxFaceList.clear();
+    std::vector<int> auxFacePhysicalGroupList;
+    auxFacePhysicalGroupList.clear();
 
     //TODO -> for( auto : ...), index from file (not for)
     for (int i = 1; i < elementsGmsh.size(); i++)
@@ -325,9 +328,11 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
             {
             case 2:
                 auxFaceList.push_back(std::make_shared<TriangularFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1}));
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][4]));
                 break;
             case 3:
                 auxFaceList.push_back(std::make_shared<QuadrilateralFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1, stoi(elementsGmsh[i][6+numOfTags]) - 1}));
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][4]));
                 break;
             
             default:
@@ -354,12 +359,22 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
         physicalName.erase(0,1);
         physicalName.pop_back();
 
-        for (int i = 0; i < auxFaceList.size(); i++)
+        Boundary auxBoundary = Boundary(physicalName);
+
+        for (int j = 0; j < auxFacePhysicalGroupList.size(); j++)
         {
-            //TODO add faces to boundaries
+            if(auxFacePhysicalGroupList[j] == physicalId)
+            {
+                for (int i = 0; i < faceList.size(); i++)
+                {
+                    if(faceList[i]->equal(*auxFaceList[j]))
+                    {
+                        auxBoundary.facesIndex.push_back(i);
+                    }
+                }                
+            }
         }
         
+        boundaryList.push_back(auxBoundary);
     }
-
-
 }
