@@ -26,6 +26,7 @@ class Cell
         std::vector<int> neighborFaceIndex;
 
         Vector3 center;
+        Vector3 projectedArea;
         double volume;
         
 
