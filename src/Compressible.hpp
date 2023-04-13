@@ -6,19 +6,19 @@
 
 #include "Vars.hpp"
 #include "EquationOfState.hpp"
+#include "IdealGas.hpp"
 
 class Compressible : public Vars
 {
     public:
         enum {RHO, RHO_U, RHO_V, RHO_W, RHO_E};
 
-        Compressible() {};
+        Compressible() : Vars(), eqs(std::make_shared<IdealGas>()) {};
+        Compressible(const std::array<double, 5>& in) : Vars(in), eqs(std::make_shared<IdealGas>()) {};
 
-        Compressible(const std::array<double, 5>& in) : Vars(in), eqs(std::make_shared<EquationOfState>()) {};
-
-        virtual ~Compressible() {};
 
         double density() const;
+        double absVelocity() const;
         double velocityU() const;
         double velocityV() const;
         double velocityW() const;

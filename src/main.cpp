@@ -37,6 +37,8 @@ int main(int argc, char** argv)
     Compressible a({1,2,3,5,6});
     Vars b({1,2,3,5,6});
 
+    a[1] = 5.0;
+
     Compressible c = a + b;
 
     return 0;

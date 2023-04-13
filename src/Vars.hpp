@@ -15,12 +15,12 @@ class Vars
 
         //virtual ~Vars();
 
-        double& operator[] (int i)
+        const double& operator[](int i) const
         {
             return data[i];
         }
 
-        const double& operator[](int i) const
+        double& operator[] (int i)
         {
             return data[i];
         }
