@@ -2,6 +2,11 @@
 
 #include "Compressible.hpp"
 
+void Compressible::setEquationOfState(std::shared_ptr<EquationOfState> eqs_)
+{
+    eqs = eqs_;
+}
+
 
 double Compressible::density() const
 {
@@ -36,27 +41,26 @@ double Compressible::totalEnergy() const
 double Compressible::pressure() const
 {
     return eqs->pressure(*this);
-    //return 0.0;
 }
 
 double Compressible::internalEnergy() const
 {
     return eqs->internalEnergy(*this);
-    //return 0.0;
 }
 
 double Compressible::soundSpeed() const
 {
     return eqs->soundSpeed(*this);
-    //return 0.0;
 }
 
 Compressible Compressible::flux() const
 {
+    //TODO
     return Compressible();
 }
 
 Vars Compressible::primitive() const
 {
+    //TODO
     return Vars();
 }

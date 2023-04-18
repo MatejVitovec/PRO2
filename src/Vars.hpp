@@ -7,9 +7,9 @@
 class Vars
 {
     public:
-        Vars() {};
+        Vars() {}
 
-        Vars(const std::array<double, 5>& in) : data(in) {};
+        Vars(const std::array<double, 5>& in) : data(in) {}
 
         virtual ~Vars() {}
 
@@ -23,6 +23,9 @@ class Vars
             return data[i];
         }
 
+        void operator+=(const Vars& v);
+        void operator-=(const Vars& v);
+        
     protected:
         std::array<double, 5> data;
 };
@@ -30,61 +33,32 @@ class Vars
 // u + v
 inline Vars operator+ (const Vars& u, const Vars& v)
 {
-    Vars out;
-    out[0] = u[0] + v[0];
-    out[1] = u[1] + v[1];
-    out[2] = u[2] + v[2];
-    out[3] = u[3] + v[3];
-    out[4] = u[4] + v[4];
-    return out;
+    return Vars({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
 }
 
 // u - v
 inline Vars operator- (const Vars& u, const Vars& v)
 {
-    Vars out;
-    out[0] = u[0] - v[0];
-    out[1] = u[1] - v[1];
-    out[2] = u[2] - v[2];
-    out[3] = u[3] - v[3];
-    out[4] = u[4] - v[4];
-    return out;
-}
-
-// a * u
-inline Vars operator* (double a, const Vars& u)
-{
-    Vars out;
-    out[0] = a * u[0];
-    out[1] = a * u[1];
-    out[2] = a * u[2];
-    out[3] = a * u[3];
-    out[4] = a * u[4];
-    return out;
+    return Vars({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
 }
 
 // w * u
-inline Vars operator* (const Vars& w, const Vars& u)
+inline Vars operator* (const Vars& u, const Vars& v)
 {
-    Vars out;
-    out[0] = w[0] * u[0];
-    out[1] = w[1] * u[1];
-    out[2] = w[2] * u[2];
-    out[3] = w[3] * u[3];
-    out[4] = w[4] * u[4];
-    return out;
+    return Vars({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
+}
+
+// a * u
+inline Vars operator* (const double& a, const Vars& u)
+{
+    return Vars({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
 }
 
 // u / a
-inline Vars operator/ (const Vars& u, double a)
+inline Vars operator/ (const Vars& u, const double& a)
 {
-    Vars out;
-    out[0] = u[0] / a;
-    out[1] = u[1] / a;
-    out[2] = u[2] / a;
-    out[3] = u[3] / a;
-    out[4] = u[4] / a;
-    return out;
+    return Vars({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
 }
+
 
 #endif // VARS_H

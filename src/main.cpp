@@ -10,6 +10,9 @@
 #include "Vars.hpp"
 #include "Compressible.hpp"
 
+//default eqs
+std::shared_ptr<EquationOfState> Compressible::eqs = std::make_shared<IdealGas>();
+
 int main(int argc, char** argv)
 {
     /*Mesh myMesh = Mesh();
@@ -34,12 +37,25 @@ int main(int argc, char** argv)
         }
     }*/
 
+    
+
     Compressible a({1,2,3,5,6});
     Vars b({1,2,3,5,6});
+    Vars d({1,2,3,5,6});
+
+    Compressible::setEquationOfState(std::make_shared<IdealGas>());
 
     a[1] = 5.0;
+    
+    Vars x = b + d;
 
-    Compressible c = a + b;
+    b += d;
+    a -= ((-2.0)*a);
+
+    Compressible c(a);
+    Compressible e({1,2,3,5,8});
+
+    //Compressible c = a + b;
 
     return 0;
 }
