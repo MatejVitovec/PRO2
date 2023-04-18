@@ -9,7 +9,7 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"*.cpp",
-				"Mesh/*.cpp",
+				//"Mesh/*.cpp",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}"
 			],

@@ -3,9 +3,6 @@
 
 #include "EquationOfState.hpp"
 
-//prototype
-class Compressible;
-
 class IdealGas : public EquationOfState
 {
     public:

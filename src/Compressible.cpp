@@ -35,20 +35,20 @@ double Compressible::totalEnergy() const
 
 double Compressible::pressure() const
 {
-    //return eqs->pressure(*this);
-    return 0.0;
+    return eqs->pressure(*this);
+    //return 0.0;
 }
 
 double Compressible::internalEnergy() const
 {
-    //return eqs->internalEnergy(*this);
-    return 0.0;
+    return eqs->internalEnergy(*this);
+    //return 0.0;
 }
 
 double Compressible::soundSpeed() const
 {
-    //return eqs->soundSpeed(*this);
-    return 0.0;
+    return eqs->soundSpeed(*this);
+    //return 0.0;
 }
 
 Compressible Compressible::flux() const

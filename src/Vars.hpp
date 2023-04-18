@@ -11,7 +11,7 @@ class Vars
 
         Vars(const std::array<double, 5>& in) : data(in) {};
 
-        //virtual ~Vars();
+        virtual ~Vars() {}
 
         const double& operator[](int i) const
         {
