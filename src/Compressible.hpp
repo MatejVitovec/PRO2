@@ -16,9 +16,9 @@ class Compressible : public Vars
         Compressible() : Vars() {}
         Compressible(const std::array<double, 5>& in) : Vars(in) {}
 
-        static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);
-
         virtual ~Compressible() {}
+
+        static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);        
 
         double density() const;
         double absVelocity() const;
