@@ -13,9 +13,10 @@ class Compressible : public Vars
     public:
         enum {RHO, RHO_U, RHO_V, RHO_W, RHO_E};
 
-        Compressible() : Vars(), eqs(std::make_shared<IdealGas>()) {};
-        Compressible(const std::array<double, 5>& in) : Vars(in), eqs(std::make_shared<IdealGas>()) {};
-
+        //Compressible() : Vars(), eqs(std::make_shared<IdealGas>()) {}
+        //Compressible(const std::array<double, 5>& in) : Vars(in), eqs(std::make_shared<IdealGas>()) {}
+        Compressible() : Vars() {}
+        Compressible(const std::array<double, 5>& in) : Vars(in) {}
 
         double density() const;
         double absVelocity() const;
@@ -32,7 +33,7 @@ class Compressible : public Vars
         Vars primitive() const;
 
     private:
-        std::shared_ptr<EquationOfState> eqs;
+        //std::shared_ptr<EquationOfState> eqs;
 };
 
 

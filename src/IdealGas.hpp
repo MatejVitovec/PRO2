@@ -3,12 +3,15 @@
 
 #include "EquationOfState.hpp"
 
+//prototype
+class Compressible;
+
 class IdealGas : public EquationOfState
 {
     public:
 
-        IdealGas() : EquationOfState(), gamma(1.4), R(287.05) {};
-        IdealGas(double gamma, double R) : EquationOfState(), gamma(gamma), R(R) {};
+        IdealGas() : EquationOfState(), gamma(1.4), R(287.05) {}
+        IdealGas(double gamma, double R) : EquationOfState(), gamma(gamma), R(R) {}
 
         void setGamma(double gamma_);
         void setR(double R_);
@@ -17,9 +20,9 @@ class IdealGas : public EquationOfState
 
 
         //overwritten virtual
-        /*double pressure(const Compressible& data) const;
+        double pressure(const Compressible& data) const;
         double internalEnergy(const Compressible& data) const;
-        double soundSpeed(const Compressible& data) const;*/
+        double soundSpeed(const Compressible& data) const;
 
     private:
         double gamma;

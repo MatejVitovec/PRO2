@@ -4,8 +4,6 @@
 #include <vector>
 #include <memory>
 
-#include "EquationOfState.hpp"
-
 class Vars
 {
     public:
