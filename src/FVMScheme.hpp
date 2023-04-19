@@ -24,7 +24,7 @@ class FVMScheme
         int getMaxIter() const;
         double getTargetError() const;
 
-        virtual double updateTimeStep();
+        void updateTimeStep();
 
         virtual void solve() = 0;
 

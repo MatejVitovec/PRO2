@@ -31,12 +31,22 @@ double FVMScheme::getTargetError() const
     return targetError;
 }
 
-double FVMScheme::updateTimeStep()
+
+
+void FVMScheme::updateTimeStep()
 {
+    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
 
+    timeStep = 1000000;
 
-    return 0.0;
+    for (int i = 0; i < u.size(); i++)
+    {
+        double soundSpeed = u[i].soundSpeed();
+        timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(u[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(u[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(u[i].velocityW() + soundSpeed))), timeStep);
+    }
 }
+
+
 
 void FVMScheme::getResults()
 {

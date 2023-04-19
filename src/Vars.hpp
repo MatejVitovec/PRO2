@@ -31,6 +31,7 @@ class Vars
         std::array<double, 5> data;
 };
 
+
 //////////////Non member operators///////////////////
 
 // u + v
