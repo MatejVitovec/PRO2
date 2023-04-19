@@ -15,7 +15,6 @@ class IdealGas : public EquationOfState
         double getGamma() const;
         double getR() const;
 
-
         //overwritten virtual
         double pressure(const Compressible& data) const;
         double internalEnergy(const Compressible& data) const;

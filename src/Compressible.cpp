@@ -64,3 +64,107 @@ Vars Compressible::primitive() const
     //TODO
     return Vars();
 }
+
+void Compressible::operator+=(const Compressible& v)
+{
+    data[0] += v[0];
+    data[1] += v[1];
+    data[2] += v[2];
+    data[3] += v[3];
+    data[4] += v[4];
+}
+
+void Compressible::operator-=(const Compressible& v)
+{
+    data[0] -= v[0];
+    data[1] -= v[1];
+    data[2] -= v[2];
+    data[3] -= v[3];
+    data[4] -= v[4];
+}
+
+void Compressible::operator+=(const Vars& v)
+{
+    data[0] += v[0];
+    data[1] += v[1];
+    data[2] += v[2];
+    data[3] += v[3];
+    data[4] += v[4];
+}
+
+void Compressible::operator-=(const Vars& v)
+{
+    data[0] -= v[0];
+    data[1] -= v[1];
+    data[2] -= v[2];
+    data[3] -= v[3];
+    data[4] -= v[4];
+}
+
+
+//////////////Non member operators///////////////////
+
+
+// u + v
+Compressible operator+ (const Compressible& u, const Compressible& v)
+{
+    return Compressible({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
+}
+
+// u - v
+Compressible operator- (const Compressible& u, const Compressible& v)
+{
+    return Compressible({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
+}
+
+// w * u
+Compressible operator* (const Compressible& u, const Compressible& v)
+{
+    return Compressible({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
+}
+
+// a * u
+Compressible operator* (const double& a, const Compressible& u)
+{
+    return Compressible({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
+}
+
+// u * a
+Compressible operator* ( const Compressible& u, const double& a)
+{
+    return Compressible({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
+}
+
+// u / a
+Compressible operator/ (const Compressible& u, const double& a)
+{
+    return Compressible({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
+}
+
+// Compressible, Vars
+
+// u + v
+Compressible operator+ (const Compressible& u, const Vars& v)
+{
+    return Compressible({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
+}
+
+// u - v
+Compressible operator- (const Compressible& u, const Vars& v)
+{
+    return Compressible({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
+}
+
+// w * u
+Compressible operator* (const Compressible& u, const Vars& v)
+{
+    return Compressible({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
+}
+
+
+//////////////Non member function///////////////////
+
+Compressible sqrt(const Compressible& u)
+{
+    return Compressible({std::sqrt(u[0]), std::sqrt(u[1]), std::sqrt(u[2]), std::sqrt(u[3]), std::sqrt(u[4])});
+}

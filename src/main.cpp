@@ -8,6 +8,7 @@
 //#include "Mesh/Mesh.hpp"
 
 #include "Vars.hpp"
+#include "Field.hpp"
 #include "Compressible.hpp"
 
 //default eqs
@@ -38,24 +39,20 @@ int main(int argc, char** argv)
     }*/
 
     
+    Field<Compressible> pole(3);
 
-    Compressible a({1,2,3,5,6});
-    Vars b({1,2,3,5,6});
-    Vars d({1,2,3,5,6});
+    pole[0] = Compressible({1,2,3,5,6});
+    pole[1] = Compressible({1,3,3,5,6});
+    pole[2] = Compressible({1,2,8,7,9});
 
-    Compressible::setEquationOfState(std::make_shared<IdealGas>());
+    Vars promena = Vars({5,4,8,9,3});
 
-    a[1] = 5.0;
-    
-    Vars x = b + d;
+    Field<Compressible> pole2 = pole*promena;
 
-    b += d;
-    a -= ((-2.0)*a);
+    pole2 += pole;
 
-    Compressible c(a);
-    Compressible e({1,2,3,5,8});
+    Compressible norma = pole.norm();
 
-    //Compressible c = a + b;
 
     return 0;
 }

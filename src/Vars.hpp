@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <cmath>
 
 class Vars
 {
@@ -13,12 +14,12 @@ class Vars
 
         virtual ~Vars() {}
 
-        const double& operator[](int i) const
+        inline const double& operator[](int i) const
         {
             return data[i];
         }
 
-        double& operator[] (int i)
+        inline double& operator[] (int i)
         {
             return data[i];
         }
@@ -30,35 +31,29 @@ class Vars
         std::array<double, 5> data;
 };
 
+//////////////Non member operators///////////////////
+
 // u + v
-inline Vars operator+ (const Vars& u, const Vars& v)
-{
-    return Vars({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
-}
+Vars operator+ (const Vars& u, const Vars& v);
 
 // u - v
-inline Vars operator- (const Vars& u, const Vars& v)
-{
-    return Vars({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
-}
+Vars operator- (const Vars& u, const Vars& v);
 
 // w * u
-inline Vars operator* (const Vars& u, const Vars& v)
-{
-    return Vars({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
-}
+Vars operator* (const Vars& u, const Vars& v);
 
 // a * u
-inline Vars operator* (const double& a, const Vars& u)
-{
-    return Vars({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
-}
+Vars operator* (const double& a, const Vars& u);
+
+// u * a
+Vars operator* (const Vars& u, const double& a);
 
 // u / a
-inline Vars operator/ (const Vars& u, const double& a)
-{
-    return Vars({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
-}
+Vars operator/ (const Vars& u, const double& a);
 
+
+//////////////Non member function///////////////////
+
+Vars sqrt(const Vars& u);
 
 #endif // VARS_H

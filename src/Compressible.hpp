@@ -18,6 +18,11 @@ class Compressible : public Vars
 
         virtual ~Compressible() {}
 
+        void operator+=(const Compressible& v);
+        void operator-=(const Compressible& v);
+        void operator+=(const Vars& v);
+        void operator-=(const Vars& v);
+
         static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);        
 
         double density() const;
@@ -40,64 +45,42 @@ class Compressible : public Vars
 
 
 
-
-//////////////operators///////////////////
-
-inline bool operator== (const Compressible& u, const Vars& v)
-{
-    //ble
-    return u[0] == v[0] && u[1] == v[1] && u[2] == v[2] && u[3] == v[3] && u[4] == v[4];
-}
+//////////////Non member operators///////////////////
 
 
 // u + v
-inline Compressible operator+ (const Compressible& u, const Compressible& v)
-{
-    return Compressible({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
-}
+Compressible operator+ (const Compressible& u, const Compressible& v);
 
 // u - v
-inline Compressible operator- (const Compressible& u, const Compressible& v)
-{
-    return Compressible({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
-}
+Compressible operator- (const Compressible& u, const Compressible& v);
 
 // w * u
-inline Compressible operator* (const Compressible& u, const Compressible& v)
-{
-    return Compressible({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
-}
+Compressible operator* (const Compressible& u, const Compressible& v);
 
 // a * u
-inline Compressible operator* (double a, const Compressible& u)
-{
-    return Compressible({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
-}
+Compressible operator* (const double& a, const Compressible& u);
+
+// u * a
+Compressible operator* ( const Compressible& u, const double& a);
 
 // u / a
-inline Compressible operator/ (const Compressible& u, double a)
-{
-    return Compressible({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
-}
+Compressible operator/ (const Compressible& u, const double& a);
 
 // Compressible, Vars
 
 // u + v
-inline Compressible operator+ (const Compressible& u, const Vars& v)
-{
-    return Compressible({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
-}
+Compressible operator+ (const Compressible& u, const Vars& v);
 
 // u - v
-inline Compressible operator- (const Compressible& u, const Vars& v)
-{
-    return Compressible({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
-}
+Compressible operator- (const Compressible& u, const Vars& v);
 
 // w * u
-inline Compressible operator* (const Compressible& u, const Vars& v)
-{
-    return Compressible({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
-}
+Compressible operator* (const Compressible& u, const Vars& v);
+
+
+
+//////////////Non member function///////////////////
+
+Compressible sqrt(const Compressible& u);
 
 #endif // COMPRESSIBLE_H

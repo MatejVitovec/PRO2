@@ -76,5 +76,6 @@
         "ranges": "cpp",
         "valarray": "cpp",
         "*.ipp": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

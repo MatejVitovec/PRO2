@@ -28,17 +28,14 @@ double IdealGas::getR() const
 double IdealGas::pressure(const Compressible& data) const
 {
     return (gamma - 1.0)*data.density()*(data.totalEnergy() - 0.5*data.absVelocity()*data.absVelocity());
-    //return 0.0;
 }
 
 double IdealGas::internalEnergy(const Compressible& data) const
 {
     return data.pressure()/((gamma - 1.0)*data.density());
-    //return 0.0;
 }
 
 double IdealGas::soundSpeed(const Compressible& data) const
 {
     return sqrt((gamma*data.pressure())/data.density());
-    //return 0.0;
 }
