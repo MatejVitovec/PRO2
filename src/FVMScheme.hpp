@@ -4,16 +4,19 @@
 #include <vector>
 #include <memory>
 
-#include "Compressible.hpp"
 #include "Mesh/Mesh.hpp"
+#include "FluxSolver/FluxSolver.hpp"
+#include "Compressible.hpp"
 #include "Field.hpp"
 
 class FVMScheme
 {
     public:
 
-        FVMScheme() : mesh(Mesh()), u(Field<Compressible>()) {}
-        FVMScheme(Mesh mesh_) : mesh(mesh_), u(Field<Compressible>()) {}
+        FVMScheme() : mesh(Mesh()), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
+        FVMScheme(Mesh mesh_) : mesh(mesh_), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
+        FVMScheme(Mesh mesh_, std::unique_ptr<FluxSolver> fluxSolver_) : mesh(mesh_), w(Field<Compressible>()) , fluxSolver(std::move(fluxSolver_)), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
+
 
         virtual ~FVMScheme() {}
 
@@ -24,7 +27,7 @@ class FVMScheme
         int getMaxIter() const;
         double getTargetError() const;
 
-        void updateTimeStep();
+        void initialCondition(Compressible initialCondition);
 
         virtual void solve() = 0;
 
@@ -32,15 +35,26 @@ class FVMScheme
         void saveResults();
         
         
-
     protected:
-        Field<Compressible> u;
+        std::unique_ptr<FluxSolver> fluxSolver;
+
         Mesh mesh;
+
+        Field<Compressible> w;
+
+        Field<Compressible> wl;
+        Field<Compressible> wr;
+        Field<Vars> fluxes;
 
         double timeStep;
         double cfl;
         int maxIter;
         double targetError;
+
+        void updateTimeStep();
+        void calculateFluxes();
+
+    private:
 
 };
 

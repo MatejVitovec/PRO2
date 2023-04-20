@@ -63,3 +63,19 @@ Vars sqrt(const Vars& u)
 {
     return Vars({sqrt(u[0]), sqrt(u[1]), sqrt(u[2]), sqrt(u[3]), sqrt(u[4])});
 }
+
+double dot(const Vars& u, const Vars& v)
+{
+    return u[0]*v[0] + u[1]*v[1] + u[2]*v[2] + u[3]*v[3] + u[4]*v[4];
+}
+
+Vars cross(const Vars& u, const Vars& v)
+{
+    //TODO
+    return Vars();
+}
+
+/*Vars Vector3toVars(const Vector3& vec)
+{
+    return Vars({})
+}*/

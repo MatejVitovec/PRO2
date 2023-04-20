@@ -32,6 +32,9 @@ class Mesh
         const std::vector<int>& getOwnerIndexList() const;
         const std::vector<int>& getNeighborIndexList() const;
 
+        int getFacesSize() const;
+        int getCellsSize() const;
+
         void update();
         void loadGmsh2(std::string fileName);
         //std::vector<int> internalFaceIndexList;

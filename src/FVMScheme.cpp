@@ -31,6 +31,13 @@ double FVMScheme::getTargetError() const
     return targetError;
 }
 
+void FVMScheme::initialCondition(Compressible initialCondition)
+{
+    for (int i = 0; i < mesh.getCellsSize(); i++)
+    {
+        w[i] = initialCondition;
+    }    
+}
 
 
 void FVMScheme::updateTimeStep()
@@ -39,14 +46,18 @@ void FVMScheme::updateTimeStep()
 
     timeStep = 1000000;
 
-    for (int i = 0; i < u.size(); i++)
+    for (int i = 0; i < w.size(); i++)
     {
-        double soundSpeed = u[i].soundSpeed();
-        timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(u[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(u[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(u[i].velocityW() + soundSpeed))), timeStep);
+        double soundSpeed = w[i].soundSpeed();
+        timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
     }
 }
 
 
+void FVMScheme::calculateFluxes()
+{
+    fluxes = fluxSolver->claculateFluxes(wl, wr, mesh.getFaceList());
+}
 
 void FVMScheme::getResults()
 {
