@@ -28,6 +28,7 @@ class FVMScheme
         double getTargetError() const;
 
         void initialCondition(Compressible initialCondition);
+        void calculateWlWr();
 
         virtual void solve() = 0;
 
