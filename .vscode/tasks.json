@@ -9,7 +9,8 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"*.cpp",
-				//"Mesh/*.cpp",
+				"Mesh/*.cpp",
+				"FluxSolver/*.cpp",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}"
 			],

@@ -11,10 +11,10 @@ class Hllc : public FluxSolver
 
         virtual ~Hllc() {}
 
-        Vars claculateFlux(const Compressible& wl, const Compressible& wr, const Vector3& normalVector);
+        Vars<5> claculateFlux(const Compressible& wl, const Compressible& wr, const Vector3& normalVector);
 
     private:
-
+        Vars<3> waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vector3& normalVector) const;
 
 };
 

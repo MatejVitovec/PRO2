@@ -46,6 +46,7 @@ void Face::reverseOrientation()
 
 Vector3 Face::calculateNormalVector(const std::vector<Vector3>& nodeList) const
 {
+    //pouze virtualni - spatne
     return Vector3();
 }
 

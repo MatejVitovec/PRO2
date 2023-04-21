@@ -6,9 +6,6 @@
 #include <cmath>
 #include "Mesh/Vector3.hpp"
 
-
-//TODO
-
 class Vars
 {
     public:

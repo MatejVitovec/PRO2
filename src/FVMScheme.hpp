@@ -20,9 +20,9 @@ class FVMScheme
 
         virtual ~FVMScheme() {}
 
-        void setCfl(const double& cfl_);
-        void setMaxIter(const int& maxIter_);
-        void setTargetError(const double& targetError_);
+        void setCfl(double cfl_);
+        void setMaxIter(int maxIter_);
+        void setTargetError(double targetError_);
         double getCfl() const;
         int getMaxIter() const;
         double getTargetError() const;
@@ -44,7 +44,7 @@ class FVMScheme
 
         Field<Compressible> wl;
         Field<Compressible> wr;
-        Field<Vars> fluxes;
+        Field<Vars<5>> fluxes;
 
         double timeStep;
         double cfl;

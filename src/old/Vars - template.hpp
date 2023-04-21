@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include <cmath>
-#include "../Mesh/Vector3.hpp"
+#include "Mesh/Vector3.hpp"
 
 
 template <int N>
@@ -37,19 +37,21 @@ class Vars
 template <int N>
 void Vars<N>::operator+= (const Vars<N>& v)
 {
-    for (int i = 0; i < N; i++)
-    {
-        data[i] += v[i];
-    }
+    data[0] += v[0];
+    data[1] += v[1];
+    data[2] += v[2];
+    data[3] += v[3];
+    data[4] += v[4];
 }
 
 template <int N>
 void Vars<N>::operator-= (const Vars<N>& v)
 {
-    for (int i = 0; i < N; i++)
-    {
-        data[i] -= v[i];
-    }
+    data[0] -= v[0];
+    data[1] -= v[1];
+    data[2] -= v[2];
+    data[3] -= v[3];
+    data[4] -= v[4];
 }
 
 //////////////Non member operators///////////////////
@@ -57,72 +59,42 @@ void Vars<N>::operator-= (const Vars<N>& v)
 template <int N>
 Vars<N> operator+ (const Vars<N>& u, const Vars<N>& v)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i] + v[i];
-    }
-    return out;
+    return Vars<N>({u[0] + v[0], u[1] + v[1], u[2] + v[2], u[3] + v[3], u[4] + v[4]});
 }
 
 // u - v
 template <int N>
 Vars<N> operator- (const Vars<N>& u, const Vars<N>& v)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i] - v[i];
-    }
-    return out;
+    return Vars<N>({u[0] - v[0], u[1] - v[1], u[2] - v[2], u[3] - v[3], u[4] - v[4]});
 }
 
 // w * u
 template <int N>
 Vars<N> operator* (const Vars<N>& u, const Vars<N>& v)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i]*v[i];
-    }
-    return out;
+    return Vars<N>({u[0] * v[0], u[1] * v[1], u[2] * v[2], u[3] * v[3], u[4] * v[4]});
 }
 
 // a * u
 template <int N>
 Vars<N> operator* (const double& a, const Vars<N>& u)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i]*a;
-    }
-    return out;
+    return Vars<N>({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
 }
 
 // u * a
 template <int N>
 Vars<N> operator* (const Vars<N>& u, const double& a)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i]*a;
-    }
-    return out;
+    return Vars<N>({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
 }
 
 // u / a
 template <int N>
 Vars<N> operator/ (const Vars<N>& u, const double& a)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i]/a
-    }
-    return out;
+    return Vars<N>({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
 }
 
 
@@ -131,51 +103,26 @@ Vars<N> operator/ (const Vars<N>& u, const double& a)
 template <int N>
 Vars<N> sqrt(const Vars<N>& u)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = sqrt(u[i]);
-    }
-    return out;
-}
-
-template <int N>
-Vars<N> abs(const Vars<N>& u)
-{
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = fabs(u[i]);
-    }
-    return out;
+    return Vars<N>({sqrt(u[0]), sqrt(u[1]), sqrt(u[2]), sqrt(u[3]), sqrt(u[4])});
 }
 
 template <int N>
 double dot(const Vars<N>& u, const Vars<N>& v)
 {
-    Vars<N> out;
-    for (int i = 0; i < N; i++)
-    {
-        out[i] = u[i]*v[i];
-    }
-    return out;
+    return u[0]*v[0] + u[1]*v[1] + u[2]*v[2] + u[3]*v[3] + u[4]*v[4];
 }
 
 template <int N>
-double sum(const Vars<N>& u)
+Vars<N> cross(const Vars<N>& u, const Vars<N>& v)
 {
-    double out;
-    for (int i = 0; i < N; i++)
-    {
-        out += u[i]
-    }
-    return out;
+    //TODO
+    return Vars();
 }
 
-Vars<3> vector3toVars(const Vector3& vec)
+/*Vars Vector3toVars(const Vector3& vec)
 {
-    return Vars<3>({vec.x, vec.y, vec.z});
-}
+    return Vars({})
+}*/
 
 
 #endif // VARS_H

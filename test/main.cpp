@@ -31,9 +31,9 @@ Vars operator+ (const Vars& u, const Vars& v)
     return u.data + v.data;
 }
 
-Vars operator+ (const Vars& u, const Vars& v)
+double funkce(const Vars& u, const Vars& v)
 {
-    return u.data + v.data;
+    return 0.5;
 }
 
 int main(int argc, char** argv)
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     Compressible a(6);
     Compressible b(8);
 
-    Compressible c = a + b;
+    double aaa = a + b;
 
     return 0;
 }

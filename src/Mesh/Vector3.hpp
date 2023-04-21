@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include <cmath>
+
 struct Vector3
 {
     Vector3() : x(0.0), y(0.0), z(0.0) {};

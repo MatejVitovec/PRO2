@@ -8,25 +8,26 @@
 #include "EquationOfState.hpp"
 #include "IdealGas.hpp"
 
-class Compressible : public Vars
+class Compressible : public Vars<5>
 {
     public:
         enum {RHO, RHO_U, RHO_V, RHO_W, RHO_E};
 
-        Compressible() : Vars() {}
-        Compressible(const std::array<double, 5>& in) : Vars(in) {}
+        Compressible() : Vars<5>() {}
+        Compressible(const std::array<double, 5>& in) : Vars<5>(in) {}
 
         virtual ~Compressible() {}
 
         void operator+=(const Compressible& v);
         void operator-=(const Compressible& v);
-        void operator+=(const Vars& v);
-        void operator-=(const Vars& v);
+        void operator+=(const Vars<5>& v);
+        void operator-=(const Vars<5>& v);
 
         static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);        
 
         double density() const;
-        double absVelocity() const;
+        Vars<3> velocity() const;
+        double absVelocity() const;        
         double velocityU() const;
         double velocityV() const;
         double velocityW() const;
@@ -37,7 +38,7 @@ class Compressible : public Vars
         double soundSpeed() const;
 
         Compressible flux() const;
-        Vars primitive() const;
+        Vars<5> primitive() const;
 
     private:
         static std::shared_ptr<EquationOfState> eqs;
@@ -69,13 +70,13 @@ Compressible operator/ (const Compressible& u, const double& a);
 // Compressible, Vars
 
 // u + v
-Compressible operator+ (const Compressible& u, const Vars& v);
+Compressible operator+ (const Compressible& u, const Vars<5>& v);
 
 // u - v
-Compressible operator- (const Compressible& u, const Vars& v);
+Compressible operator- (const Compressible& u, const Vars<5>& v);
 
 // w * u
-Compressible operator* (const Compressible& u, const Vars& v);
+Compressible operator* (const Compressible& u, const Vars<5>& v);
 
 
 

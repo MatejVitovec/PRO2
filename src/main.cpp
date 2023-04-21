@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-//#include "Mesh/Mesh.hpp"
+#include "Mesh/Mesh.hpp"
 
 #include "Vars.hpp"
 #include "Field.hpp"
@@ -45,14 +45,13 @@ int main(int argc, char** argv)
     pole[1] = Compressible({1,3,3,5,6});
     pole[2] = Compressible({1,2,8,7,9});
 
-    Vars promena = Vars({5,4,8,9,3});
+    Vars<5> promena = Vars<5>({5,4,8,9,3});
 
     Field<Compressible> pole2 = pole*promena;
 
     pole2 += pole;
 
     Compressible norma = pole.norm();
-
 
     return 0;
 }
