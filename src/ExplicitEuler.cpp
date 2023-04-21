@@ -11,27 +11,66 @@ void ExplicitEuler::solve()
 
     int iter = 0;
 
-    while (iter < maxIter)
+    bool exitLoop = false;
+
+    while (iter < maxIter && !exitLoop)
     {
         iter++;
 
         updateTimeStep();
 
-        // ? gradient ?
+        //solve boundary condition
 
-        // wl / wr
+        calculateWlWr();
 
         calculateFluxes();
 
-        //calc reziduum
+        Field<Vars<5>> res = calculateResidual();
         
-        //numerical integration - Euler
+        Field<Compressible> wn = explicitIntegration(res);
 
-        //rezisuum check
+        Vars<5> resNorm = (wn - w).norm(); //mozna spatne
+        if(resNorm[0] < targetError) exitLoop = true;
 
-        //stream
-
-
+        w = std::move(wn);
     }
     
+}
+
+Field<Vars<5>> ExplicitEuler::calculateResidual()
+{
+    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
+
+    Field<Vars<5>> res(w.size());
+
+    for (int i = 0; i < cells.size(); i++)
+    {
+        Vars<5> aux;
+
+        for (auto & faceIndex : cells[i]->ownFaceIndex)
+        {
+            aux -= fluxes[faceIndex];
+        }
+
+        for (auto & faceIndex : cells[i]->neighborFaceIndex)
+        {
+            aux += fluxes[faceIndex];
+        }
+
+        res[i] = aux/(cells[i]->volume);
+    }
+    
+    return res;
+}
+
+Field<Compressible> ExplicitEuler::explicitIntegration(const Field<Vars<5>>& res)
+{
+    Field<Compressible>wn(w.size());
+
+    for (int i = 0; i < w.size(); i++)
+    {
+        wn[i] = w[i] + timeStep*res[i];
+    }
+    
+    return wn;
 }

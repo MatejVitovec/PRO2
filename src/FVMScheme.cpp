@@ -40,6 +40,27 @@ void FVMScheme::initialCondition(Compressible initialCondition)
 }
 
 
+void FVMScheme::calculateWlWr()
+{
+    //Without reconstruction
+
+    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
+
+    for (int i = 0; i < cells.size(); i++)
+    {        
+        for (auto & faceIndex : cells[i]->ownFaceIndex)
+        {
+            wl[faceIndex] = w[i];
+        }
+
+        for (auto & faceIndex : cells[i]->neighborFaceIndex)
+        {
+            wr[faceIndex] = w[i];
+        }
+    }
+    
+}
+
 void FVMScheme::updateTimeStep()
 {
     const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();

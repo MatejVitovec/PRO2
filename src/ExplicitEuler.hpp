@@ -12,13 +12,13 @@ class ExplicitEuler : public FVMScheme
 
         virtual ~ExplicitEuler() {}
 
-        void solve();
-
-        
+        void solve();        
         
 
     private:
-
+        Field<Vars<5>> calculateResidual();
+        Field<Compressible> explicitIntegration(const Field<Vars<5>>& res);
+        
 
 };
 

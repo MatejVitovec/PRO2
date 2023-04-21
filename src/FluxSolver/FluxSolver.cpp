@@ -25,7 +25,8 @@ Field<Vars<5>> FluxSolver::claculateFluxes(const Field<Compressible>& wl, const 
 
     for (int i = 0; i < wl.size(); i++)
     {
-        out[i] = claculateFlux(wl[i], wr[i], faceList[i]->normalVector);
+        out[i] = claculateFlux(wl[i], wr[i], faceList[i]->normalVector)*faceList[i]->area;
     }
     
+    return out;
 }
