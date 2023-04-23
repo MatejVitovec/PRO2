@@ -8,6 +8,7 @@
 #include "FluxSolver/FluxSolver.hpp"
 #include "Compressible.hpp"
 #include "Field.hpp"
+#include "BoundaryCondition/BoundaryCondition.hpp"
 
 class FVMScheme
 {
@@ -28,7 +29,6 @@ class FVMScheme
         double getTargetError() const;
 
         void initialCondition(Compressible initialCondition);
-        void calculateWlWr();
 
         virtual void solve() = 0;
 
@@ -40,6 +40,7 @@ class FVMScheme
         std::unique_ptr<FluxSolver> fluxSolver;
 
         Mesh mesh;
+        std::vector<std::shared_ptr<BoundaryCondition>> boundaryConditionList;
 
         Field<Compressible> w;
 
@@ -53,6 +54,8 @@ class FVMScheme
         double targetError;
 
         void updateTimeStep();
+        void applyBoundaryCondition();
+        void calculateWlWr();
         void calculateFluxes();
 
     private:

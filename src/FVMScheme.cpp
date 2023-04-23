@@ -39,6 +39,15 @@ void FVMScheme::initialCondition(Compressible initialCondition)
     }    
 }
 
+void FVMScheme::applyBoundaryCondition()
+{
+    const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
+
+    for (auto & boundaryCondition : boundaryConditionList)
+    {
+        boundaryCondition->apply(ownerIndexList, w, wr);
+    }
+}
 
 void FVMScheme::calculateWlWr()
 {
@@ -58,6 +67,8 @@ void FVMScheme::calculateWlWr()
             wr[faceIndex] = w[i];
         }
     }
+
+    //TODO udelat pres steny
     
 }
 
@@ -76,7 +87,6 @@ void FVMScheme::updateTimeStep()
         //timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
     }
 }
-
 
 void FVMScheme::calculateFluxes()
 {
