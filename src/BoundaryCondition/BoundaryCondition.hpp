@@ -2,8 +2,8 @@
 #define BOUNDARYCONDITION_H
 
 #include "../Mesh/Boundary.hpp"
-#include "Field.hpp"
-#include "Compressible.hpp"
+#include "../Field.hpp"
+#include "../Compressible.hpp"
 
 class BoundaryCondition
 {

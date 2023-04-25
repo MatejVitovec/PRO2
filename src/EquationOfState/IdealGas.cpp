@@ -3,7 +3,7 @@
 #include "IdealGas.hpp"
 
 //musi byt pod IdealGas.cpp kvuli forward deklaraci - byl pouzit prototyp
-#include "Compressible.hpp"
+#include "../Compressible.hpp"
 
 void IdealGas::setGamma(double gamma_)
 {

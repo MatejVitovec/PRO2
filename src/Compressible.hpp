@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "Vars.hpp"
-#include "EquationOfState.hpp"
-#include "IdealGas.hpp"
+#include "EquationOfState/EquationOfState.hpp"
+#include "EquationOfState/IdealGas.hpp"
 
 class Compressible : public Vars<5>
 {
@@ -27,6 +27,7 @@ class Compressible : public Vars<5>
 
         double density() const;
         Vars<3> velocity() const;
+        Vars<3> velocity(Vars<3> normalvector) const;
         double absVelocity() const;        
         double velocityU() const;
         double velocityV() const;
@@ -37,7 +38,7 @@ class Compressible : public Vars<5>
         double internalEnergy() const;
         double soundSpeed() const;
 
-        Compressible flux() const;
+        Vars<5> flux(const Vars<3>& normalVector) const;
         Vars<5> primitive() const;
 
     private:

@@ -11,6 +11,8 @@
 				"*.cpp",
 				"Mesh/*.cpp",
 				"FluxSolver/*.cpp",
+				"BoundaryCondition/*.cpp",
+				"EquationOfState/*.cpp",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}"
 			],

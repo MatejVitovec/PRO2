@@ -18,6 +18,12 @@ Vars<3> Compressible::velocity() const
     return Vars<3>({data[RHO_U] / data[RHO], data[RHO_V] / data[RHO], data[RHO_W] / data[RHO]});
 }
 
+Vars<3> Compressible::velocity(Vars<3> normalvector) const
+{
+
+    return Vars<3>();
+}
+
 double Compressible::absVelocity() const
 {
     return sqrt(data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / data[RHO];
@@ -58,10 +64,20 @@ double Compressible::soundSpeed() const
     return eqs->soundSpeed(*this);
 }
 
-Compressible Compressible::flux() const
+Vars<5> Compressible::flux(const Vars<3>& normalVector) const
 {
-    //TODO
-    return Compressible();
+    double density = this->density();
+    Vars<3> velocity = this->velocity();
+    double pressure = this->pressure();
+    double enthalpy = totalEnergy() + pressure/density;
+
+    double dotVelocityNormal = dot(velocity, normalVector);
+
+    return Compressible({density * dotVelocityNormal,
+                    density * velocity[0] * dotVelocityNormal + pressure * normalVector[0],
+                    density * velocity[1] * dotVelocityNormal + pressure * normalVector[1],
+                    density * velocity[2] * dotVelocityNormal + pressure * normalVector[2],
+                    density * enthalpy * dotVelocityNormal});
 }
 
 Vars<5> Compressible::primitive() const
@@ -129,19 +145,19 @@ Compressible operator* (const Compressible& u, const Compressible& v)
 }
 
 // a * u
-Compressible operator* (double a, const Compressible& u)
+Compressible operator* (const double& a, const Compressible& u)
 {
     return Compressible({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
 }
 
 // u * a
-Compressible operator* (const Compressible& u, double a)
+Compressible operator* (const Compressible& u, const double& a)
 {
     return Compressible({a*u[0], a*u[1], a*u[2], a*u[3], a*u[4]});
 }
 
 // u / a
-Compressible operator/ (const Compressible& u, double a)
+Compressible operator/ (const Compressible& u, const double& a)
 {
     return Compressible({u[0]/a, u[1]/a, u[2]/a, u[3]/a, u[4]/a});
 }

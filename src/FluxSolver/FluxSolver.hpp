@@ -14,10 +14,10 @@ class FluxSolver
         virtual ~FluxSolver() {}
 
         Field<Vars<5>> claculateFluxes(const Field<Compressible>& wl, const Field<Compressible>& wr, const std::vector<std::shared_ptr<Face>>& faceList) const;
-        virtual Vars<5> claculateFlux(const Compressible& wl, const Compressible& wr, const Vector3& normalVector) const = 0;
+        virtual Vars<5> claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const = 0;
 
     protected:
-        Vars<5> normalFlux(const Compressible& w, const Vector3& normalVector) const;
+        //Vars<5> normalFlux(const Compressible& w, const Vector3& normalVector) const;
 
 };
 

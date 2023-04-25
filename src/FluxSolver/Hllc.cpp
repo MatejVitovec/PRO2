@@ -1,36 +1,53 @@
 #include "Hllc.hpp"
 
-Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, const Vector3& normalVector)
+Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector)
 {
     enum {sl, ss, sr};
     Vars<3> wSpeed = waveSpeedsEstimate(wl, wr, normalVector);        
 
+
     if (0 <= wSpeed[sl])
     {
         //FL
-        return normalFlux(wl, normalVector);
+        return wl.flux(normalVector);
     }
     else if(0 <= wSpeed[ss])
     {
         //F*L
-        // TODO return (wSpeed[ss]*(wSpeed[sl]*wl - eulerEqn->flux(wl)) + wSpeed[sl]*(eulerEqn->pressure(wl) + eulerEqn->density(wl)*(wSpeed[sl] - eulerEqn->velocity(wl))*(wSpeed[ss] - eulerEqn->velocity(wl)))*Vector3({0, 1, wSpeed[ss]}))/(wSpeed[sl] - wSpeed[ss]);
+        Vars<3> normalVelocity = wl.velocity(normalVector);
+        double density = wl.density();
+        double totalEnergy = wl.totalEnergy();
+        double pressure = wl.pressure();
+
+        double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sl] - normalVelocity[0]))));
+        Compressible wStar = density * (((wSpeed[sl] - normalVector[0])/(wSpeed[sl] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
+
+        return wl.flux(normalVector) + wSpeed[sl]*(wStar - wl);
     }
     else if(0 <= wSpeed[sr])
     {
         //F*R
-        // TODO return (wSpeed[ss]*(wSpeed[sr]*wr - eulerEqn->flux(wr)) + wSpeed[sr]*(eulerEqn->pressure(wr) + eulerEqn->density(wr)*(wSpeed[sr] - eulerEqn->velocity(wr))*(wSpeed[ss] - eulerEqn->velocity(wr)))*Vector3({0, 1, wSpeed[ss]}))/(wSpeed[sr] - wSpeed[ss]);
+        Vars<3> normalVelocity = wr.velocity(normalVector);
+        double density = wr.density();
+        double totalEnergy = wr.totalEnergy();
+        double pressure = wr.pressure();
+
+        double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sr] - normalVelocity[0]))));
+        Compressible wStar = density * (((wSpeed[sr] - normalVector[0])/(wSpeed[sr] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
+
+        return wl.flux(normalVector) + wSpeed[sr]*(wStar - wr);
     }
     else
     {
         //FR
-        return normalFlux(wr, normalVector);
+        return wr.flux(normalVector);
     }
     
     return Vars<5>();
 }
 
 
-Vars<3> Hllc::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vector3& normalVector) const
+Vars<3> Hllc::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
 {
     //TODO
 
@@ -73,20 +90,18 @@ Vars<3> Hllc::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr,
 
     return Vector3({sl, ss, sr});*/
 
-    /*double ul = eulerEqn->velocity(wl);
-    double ur = eulerEqn->velocity(wr);
-    double al = eulerEqn->soundSpeed(wl);
-    double ar = eulerEqn->soundSpeed(wr);
-    double pl = eulerEqn->pressure(wl);
-    double pr = eulerEqn->pressure(wr);
-    double rhol = eulerEqn->density(wl);
-    double rhor = eulerEqn->density(wr);
+    double ul = wl.velocity(normalVector)[0];
+    double ur = wr.velocity(normalVector)[0];
+    double al = wl.soundSpeed();
+    double ar = wr.soundSpeed();
+    double pl = wl.pressure();
+    double pr = wr.pressure();
+    double rhol = wl.density();
+    double rhor = wr.density();
 
     double sl = std::min(ul - al, ur - ar);
     double sr = std::max(ul + al, ur + ar);
     double ss = (pr - pl + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
 
-    return Vector3({sl, ss, sr});*/
-
-    return Vars<3>();
+    return Vars<3>({sl, ss, sr});
 }

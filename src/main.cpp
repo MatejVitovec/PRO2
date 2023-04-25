@@ -7,7 +7,7 @@
 
 #include "Mesh/Mesh.hpp"
 
-#include "Vars.hpp"
+//#include "Vars.hpp"
 #include "Field.hpp"
 #include "Compressible.hpp"
 
@@ -37,6 +37,11 @@ int main(int argc, char** argv)
             normal = normal + (faces[boundary.facesIndex[i]]->area)*faces[boundary.facesIndex[i]]->normalVector;
         }
     }*/
+
+    Compressible a({1.0, 2.0, 3.0, 4.0, 5.0});
+    Vars<5> b({1.0, 2.0, 3.0, 4.0, 5.0});
+
+    Vars<5> c = a + b;
 
     
     Field<Compressible> pole(3);

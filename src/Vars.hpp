@@ -4,8 +4,8 @@
 #include <vector>
 #include <memory>
 #include <cmath>
-#include "../Mesh/Vector3.hpp"
 
+#include "Mesh/Vector3.hpp"
 
 template <int N>
 class Vars
@@ -120,7 +120,7 @@ Vars<N> operator/ (const Vars<N>& u, const double& a)
     Vars<N> out;
     for (int i = 0; i < N; i++)
     {
-        out[i] = u[i]/a
+        out[i] = u[i]/a;
     }
     return out;
 }
@@ -153,10 +153,10 @@ Vars<N> abs(const Vars<N>& u)
 template <int N>
 double dot(const Vars<N>& u, const Vars<N>& v)
 {
-    Vars<N> out;
+    double out = 0;
     for (int i = 0; i < N; i++)
     {
-        out[i] = u[i]*v[i];
+        out += u[i]*v[i];
     }
     return out;
 }
@@ -167,15 +167,12 @@ double sum(const Vars<N>& u)
     double out;
     for (int i = 0; i < N; i++)
     {
-        out += u[i]
+        out += u[i];
     }
     return out;
 }
 
-Vars<3> vector3toVars(const Vector3& vec)
-{
-    return Vars<3>({vec.x, vec.y, vec.z});
-}
+Vars<3> vector3toVars(const Vector3& vec);
 
 
 #endif // VARS_H
