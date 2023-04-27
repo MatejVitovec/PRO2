@@ -14,13 +14,16 @@ Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, cons
     else if(0 <= wSpeed[ss])
     {
         //F*L
-        Vars<3> normalVelocity = wl.velocity(normalVector);
+        //musi se natocit ss
+        Vars<3> normalVelocity = wl.velocity(normalVector); ////////////////???
         double density = wl.density();
         double totalEnergy = wl.totalEnergy();
         double pressure = wl.pressure();
 
         double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sl] - normalVelocity[0]))));
-        Compressible wStar = density * (((wSpeed[sl] - normalVector[0])/(wSpeed[sl] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
+        
+        Compressible wStar = density * (((wSpeed[sl] - normalVector[0])/(wSpeed[sl] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));////????
+        //ss natocit zpet
 
         return wl.flux(normalVector) + wSpeed[sl]*(wStar - wl);
     }
@@ -33,7 +36,7 @@ Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, cons
         double pressure = wr.pressure();
 
         double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sr] - normalVelocity[0]))));
-        Compressible wStar = density * (((wSpeed[sr] - normalVector[0])/(wSpeed[sr] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
+        Compressible wStar = density * (((wSpeed[sr] - normalVelocity[0])/(wSpeed[sr] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
 
         return wl.flux(normalVector) + wSpeed[sr]*(wStar - wr);
     }

@@ -18,9 +18,8 @@ Vars<3> Compressible::velocity() const
     return Vars<3>({data[RHO_U] / data[RHO], data[RHO_V] / data[RHO], data[RHO_W] / data[RHO]});
 }
 
-Vars<3> Compressible::velocity(Vars<3> normalvector) const
+Vars<3> Compressible::velocity(const Vars<3>& normalvector) const
 {
-
     return Vars<3>();
 }
 
@@ -69,15 +68,17 @@ Vars<5> Compressible::flux(const Vars<3>& normalVector) const
     double density = this->density();
     Vars<3> velocity = this->velocity();
     double pressure = this->pressure();
-    double enthalpy = totalEnergy() + pressure/density;
+    double enthalpy = this->totalEnergy() + pressure/density;
 
-    double dotVelocityNormal = dot(velocity, normalVector);
+    double normalVelocity = dot(velocity, normalVector);
 
-    return Compressible({density * dotVelocityNormal,
-                    density * velocity[0] * dotVelocityNormal + pressure * normalVector[0],
-                    density * velocity[1] * dotVelocityNormal + pressure * normalVector[1],
-                    density * velocity[2] * dotVelocityNormal + pressure * normalVector[2],
-                    density * enthalpy * dotVelocityNormal});
+    //mozna to takto nejde
+
+    return Compressible({density * normalVelocity,
+                    density * velocity[0] * normalVelocity + pressure * normalVector[0],
+                    density * velocity[1] * normalVelocity + pressure * normalVector[1],
+                    density * velocity[2] * normalVelocity + pressure * normalVector[2],
+                    density * enthalpy * normalVelocity});
 }
 
 Vars<5> Compressible::primitive() const
