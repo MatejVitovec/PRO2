@@ -33,7 +33,7 @@ class FVMScheme
         virtual void solve() = 0;
 
         void getResults();
-        void saveResults();
+        void saveResults() const;
         
         
     protected:

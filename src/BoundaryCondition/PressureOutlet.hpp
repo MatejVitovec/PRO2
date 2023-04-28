@@ -13,7 +13,7 @@ class PressureOutlet : public BoundaryCondition
         void setPressure(double pressure_);
         double getPressure() const;
 
-        Compressible calculateState(const Compressible& wl) const;
+        Compressible calculateState(const Compressible& wl, const Face& f) const;
         
 
     private:

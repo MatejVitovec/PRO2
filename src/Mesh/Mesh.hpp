@@ -39,6 +39,8 @@ class Mesh
         void loadGmsh2(std::string fileName);
         //std::vector<int> internalFaceIndexList;
 
+        void exportVTK() const;
+
     private:
         void createFaces();
         void createBoundaries();

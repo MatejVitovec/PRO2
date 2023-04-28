@@ -11,7 +11,7 @@ double PressureOutlet::getPressure() const
     return pressure;
 }
 
-Compressible PressureOutlet::calculateState(const Compressible& wl) const
+Compressible PressureOutlet::calculateState(const Compressible& wl, const Face& f) const
 {
     //TODO
 

@@ -15,7 +15,7 @@ class PressureTemperatureInlet : public BoundaryCondition
         double getTotalPressure() const;
         double getTotalTemperature() const;
 
-        Compressible calculateState(const Compressible& wl) const;
+        Compressible calculateState(const Compressible& wl, const Face& f) const;
         
 
     private:

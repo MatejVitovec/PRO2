@@ -42,10 +42,11 @@ void FVMScheme::initialCondition(Compressible initialCondition)
 void FVMScheme::applyBoundaryCondition()
 {
     const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
+    const std::vector<std::shared_ptr<Face>>& faceList = mesh.getFaceList();
 
     for (auto & boundaryCondition : boundaryConditionList)
     {
-        boundaryCondition->apply(ownerIndexList, w, wr);
+        boundaryCondition->apply(ownerIndexList, faceList, w, wr);
     }
 }
 
@@ -98,7 +99,7 @@ void FVMScheme::getResults()
 
 }
 
-void FVMScheme::saveResults()
+void FVMScheme::saveResults() const
 {
 
 }

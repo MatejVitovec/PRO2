@@ -32,7 +32,7 @@ void ExplicitEuler::solve()
         Vars<5> resNorm = (wn - w).norm(); //mozna spatne
         if(resNorm[0] < targetError) exitLoop = true;
 
-        w = std::move(wn);
+        w = std::move(wn); //mozna to bude fungovat
     }
     
 }
@@ -58,7 +58,7 @@ Field<Vars<5>> ExplicitEuler::calculateResidual()
         }
 
         res[i] = aux/(cells[i]->volume);
-    }
+    }    
     
     return res;
 }

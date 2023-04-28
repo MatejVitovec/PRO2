@@ -27,8 +27,8 @@ class Compressible : public Vars<5>
 
         double density() const;
         Vars<3> velocity() const;
-        Vars<3> velocity(const Vars<3>& normalvector) const;
-        double absVelocity() const;        
+        Vars<3> velocity(const Vars<3>& normalvector) const;     
+        double normalVelocity(const Vars<3>& normalvector) const;  
         double velocityU() const;
         double velocityV() const;
         double velocityW() const;

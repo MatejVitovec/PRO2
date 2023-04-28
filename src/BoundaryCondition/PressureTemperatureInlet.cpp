@@ -21,7 +21,7 @@ double PressureTemperatureInlet::getTotalTemperature() const
     return totalTemperature;
 }
 
-Compressible PressureTemperatureInlet::calculateState(const Compressible& wl) const
+Compressible PressureTemperatureInlet::calculateState(const Compressible& wl, const Face& f) const
 {
     //TODO
 

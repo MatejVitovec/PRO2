@@ -388,3 +388,10 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
         boundaryList.push_back(auxBoundary);
     }
 }
+
+
+void Mesh::exportVTK() const
+{
+
+
+}

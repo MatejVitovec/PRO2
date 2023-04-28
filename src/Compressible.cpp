@@ -23,9 +23,9 @@ Vars<3> Compressible::velocity(const Vars<3>& normalvector) const
     return Vars<3>();
 }
 
-double Compressible::absVelocity() const
+double Compressible::normalVelocity(const Vars<3>& normalvector) const
 {
-    return sqrt(data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / data[RHO];
+    return dot(this->velocity(), normalvector);
 }
 
 double Compressible::velocityU() const
