@@ -5,28 +5,6 @@
 
 std::vector<std::shared_ptr<Face>> TetrahedronCell::createFaces()
 {
-/*
-                   v
-                 .
-               ,/
-              /
-           2
-         ,/|`\
-       ,/  |  `\
-     ,/    '.   `\
-   ,/       |     `\
- ,/         |       `\
-0-----------'.--------1 --> u
- `\.         |      ,/
-    `\.      |    ,/
-       `\.   '. ,/
-          `\. |/
-             `3
-                `\.
-                   ` w
-*/
-
-
     return std::vector<std::shared_ptr<Face>>{std::make_shared<TriangularFace>(std::vector<int>{nodesIndex[0], nodesIndex[2], nodesIndex[1]}),
                                               std::make_shared<TriangularFace>(std::vector<int>{nodesIndex[0], nodesIndex[1], nodesIndex[3]}),
                                               std::make_shared<TriangularFace>(std::vector<int>{nodesIndex[0], nodesIndex[3], nodesIndex[2]}),
@@ -35,5 +13,5 @@ std::vector<std::shared_ptr<Face>> TetrahedronCell::createFaces()
 
 TetrahedronCell::~TetrahedronCell()
 {
-    
+
 }
