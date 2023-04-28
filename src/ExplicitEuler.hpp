@@ -9,6 +9,8 @@ class ExplicitEuler : public FVMScheme
 
         ExplicitEuler() : FVMScheme() {}
         ExplicitEuler(Mesh mesh_) : FVMScheme(mesh_) {}
+        ExplicitEuler(Mesh mesh_, std::unique_ptr<FluxSolver> fluxSolver_) : FVMScheme(mesh_, std::move(fluxSolver_)) {}
+
 
         virtual ~ExplicitEuler() {}
 

@@ -19,7 +19,7 @@ void ExplicitEuler::solve()
 
         updateTimeStep();
 
-        applyBoundaryCondition();
+        applyBoundaryConditions();
 
         calculateWlWr();
 

@@ -28,7 +28,9 @@ class FVMScheme
         int getMaxIter() const;
         double getTargetError() const;
 
-        void initialCondition(Compressible initialCondition);
+        void setInitialConditions(Compressible initialCondition);
+        void setInitialConditionsRiemann(Compressible initialConditionL, Compressible initialConditionR);
+        void setBoundaryCondition(std::string boundaryName, int type);
 
         virtual void solve() = 0;
 
@@ -42,9 +44,9 @@ class FVMScheme
         Mesh mesh;
         std::vector<std::shared_ptr<BoundaryCondition>> boundaryConditionList;
 
-        Field<Compressible> w;
+        Field<Compressible> w; //cell size
 
-        Field<Compressible> wl;
+        Field<Compressible> wl; //faces size
         Field<Compressible> wr;
         Field<Vars<5>> fluxes;
 
@@ -54,7 +56,7 @@ class FVMScheme
         double targetError;
 
         void updateTimeStep();
-        void applyBoundaryCondition();
+        void applyBoundaryConditions();
         void calculateWlWr();
         void calculateFluxes();
 

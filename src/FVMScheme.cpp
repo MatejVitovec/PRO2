@@ -1,4 +1,5 @@
 #include "FVMScheme.hpp"
+#include "BoundaryCondition/FreeBoundary.hpp"
 
 
 void FVMScheme::setCfl(double cfl_)
@@ -31,15 +32,30 @@ double FVMScheme::getTargetError() const
     return targetError;
 }
 
-void FVMScheme::initialCondition(Compressible initialCondition)
+void FVMScheme::setInitialConditions(Compressible initialCondition)
 {
+    w = Field<Compressible>(mesh.getCellsSize());
     for (int i = 0; i < mesh.getCellsSize(); i++)
     {
         w[i] = initialCondition;
     }    
 }
 
-void FVMScheme::applyBoundaryCondition()
+void FVMScheme::setInitialConditionsRiemann(Compressible initialConditionL, Compressible initialConditionR)
+{
+    w = Field<Compressible>(mesh.getCellsSize());
+    int i = 0;
+    for (i; i < mesh.getCellsSize()/2; i++)
+    {
+        w[i] = initialConditionL;
+    }
+    for (i; i < mesh.getCellsSize(); i++)
+    {
+        w[i] = initialConditionR;
+    }
+}
+
+void FVMScheme::applyBoundaryConditions()
 {
     const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
     const std::vector<std::shared_ptr<Face>>& faceList = mesh.getFaceList();
@@ -47,6 +63,27 @@ void FVMScheme::applyBoundaryCondition()
     for (auto & boundaryCondition : boundaryConditionList)
     {
         boundaryCondition->apply(ownerIndexList, faceList, w, wr);
+    }
+}
+
+void FVMScheme::setBoundaryCondition(std::string boundaryName, int type)
+{
+    const std::vector<Boundary>& meshBoundaryList = mesh.getBoundaryList();
+    Boundary aux;
+
+    for (auto & meshBoundary : meshBoundaryList)
+    {
+        if(meshBoundary.boundaryConditionName == boundaryName)
+        {
+            aux = meshBoundary;
+            break;
+        }
+    }
+
+    //TODO udelat lepe
+    if(type == 1)
+    {
+        boundaryConditionList.push_back(std::make_shared<FreeBoundary>(aux));
     }
 }
 

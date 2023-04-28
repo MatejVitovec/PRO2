@@ -1,6 +1,6 @@
 #include "Hll.hpp"
 
-Vars<5> Hll::claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector)
+Vars<5> Hll::claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
 {
     enum {sl, ss, sr};
     Vars<3> wSpeed = waveSpeedsEstimate(wl, wr, normalVector);        

@@ -338,11 +338,11 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
             {
             case 2:
                 auxFaceList.push_back(std::make_shared<TriangularFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1}));
-                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][4]));
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
                 break;
             case 3:
                 auxFaceList.push_back(std::make_shared<QuadrilateralFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1, stoi(elementsGmsh[i][6+numOfTags]) - 1}));
-                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][4]));
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
                 break;
             
             default:

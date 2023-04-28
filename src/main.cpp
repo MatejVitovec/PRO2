@@ -6,39 +6,48 @@
 #include <memory>
 
 #include "Mesh/Mesh.hpp"
-
-//#include "Vars.hpp"
-#include "Field.hpp"
-#include "Compressible.hpp"
+#include "ExplicitEuler.hpp"
+#include "FluxSolver/Hll.hpp"
 
 //default eqs
 std::shared_ptr<EquationOfState> Compressible::eqs = std::make_shared<IdealGas>();
 
 int main(int argc, char** argv)
 {
-    /*Mesh myMesh = Mesh();
-    myMesh.loadGmsh2("Mesh/testMesh");
+    Mesh myMesh = Mesh();
+    myMesh.loadGmsh2("Mesh/riemannMesh.msh");
 
-    const std::vector<std::shared_ptr<Cell>>& cells = myMesh.getCellList();
-    const std::vector<std::shared_ptr<Face>>& faces = myMesh.getFaceList();
-    const std::vector<Boundary>& boundaries = myMesh.getBoundaryList();
-
-    double vol = 0.0;
-    for (int i = 0; i < cells.size(); i++)
+    const std::vector<std::shared_ptr<Cell>>& cellList = myMesh.getCellList();
+    double vol = 0;
+    for (int i = 0; i < myMesh.getCellsSize(); i++)
     {
-        vol += fabs(cells[i]->volume);
+        vol += cellList[i]->volume;
     }
+    
 
-    Vector3 normal = Vector3(0.0, 0.0, 0.0);
-    for (auto boundary : boundaries)
-    {
-        for (int i = 0; i < boundary.facesIndex.size(); i++)
-        {
-            normal = normal + (faces[boundary.facesIndex[i]]->area)*faces[boundary.facesIndex[i]]->normalVector;
-        }
-    }*/
+    std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hll>();
 
-    Compressible a({1.0, 2.0, 3.0, 4.0, 5.0});
+    ExplicitEuler mySolver(myMesh, std::move(myFluxSolver));
+
+    mySolver.setCfl(0.8);
+    mySolver.setMaxIter(60);
+    mySolver.setTargetError(0.0000005);
+
+    mySolver.setBoundaryCondition("bottom", 1);
+    mySolver.setBoundaryCondition("outlet", 1);
+    mySolver.setBoundaryCondition("top", 1);
+    mySolver.setBoundaryCondition("inlet", 1);
+    mySolver.setBoundaryCondition("back", 1);
+    mySolver.setBoundaryCondition("front", 1);
+
+    mySolver.setInitialConditionsRiemann(Compressible({1.0, 0.75, 0.0, 0.0, 1.0}), Compressible({0.125, 0.0, 0.0, 0.0, 0.1}));
+
+    mySolver.solve();
+
+    int a = 5;
+
+
+    /*Compressible a({1.0, 2.0, 3.0, 4.0, 5.0});
     Vars<5> b({1.0, 2.0, 3.0, 4.0, 5.0});
 
     Vars<5> c = a + b;
@@ -56,7 +65,7 @@ int main(int argc, char** argv)
 
     pole2 += pole;
 
-    Compressible norma = pole.norm();
+    Compressible norma = pole.norm();*/
 
     return 0;
 }
