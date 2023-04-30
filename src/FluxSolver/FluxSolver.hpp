@@ -17,7 +17,6 @@ class FluxSolver
         virtual Vars<5> claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const = 0;
 
     protected:
-        //Vars<5> normalFlux(const Compressible& w, const Vector3& normalVector) const;
 
 };
 

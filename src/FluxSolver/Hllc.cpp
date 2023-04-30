@@ -1,100 +1,150 @@
 #include "Hllc.hpp"
 
 Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
-{
-    enum {sl, ss, sr};
-    Vars<3> wSpeed = waveSpeedsEstimate(wl, wr, normalVector);        
+{    
+    double rhoL = wl.density();
+    double pL = wl.pressure();
+    double nuL = wl.normalVelocity(normalVector);
+    double aL = wl.soundSpeed();
 
+    double rhoR = wr.density();
+    double pR = wr.pressure();
+    double nuR = wr.normalVelocity(normalVector);
+    double aR = wr.soundSpeed();
+    
+    //PVRS
+    double pm = std::fmax(0, 0.5*(pL + pR) - 0.5*(nuR - nuL)*0.5*(rhoL + rhoR)*0.5*(aL + aR));
 
-    if (0 <= wSpeed[sl])
+    double sl;
+    double sr;
+    double sm;
+
+    if (pm <= pL)
     {
-        //FL
+        sl = nuL - aL;
+    }        
+    else
+    {
+        sl = 0.5*(nuL + nuR) - 0.5*(aL + aR);
+    }
+        
+    if (pm <= pR)
+    {
+        sr = nuR + aR;
+    }        
+    else
+    {
+        sr = 0.5*(nuL + nuR) + 0.5*(aL + aR);
+    }
+        
+    //contact wave speed
+    sm = pR - pL + rhoL*nuL*(sl - nuL) - rhoR*nuR*(sr - nuR);
+    sm = sm / (rhoL*(sl - nuL) - rhoR*(sr - nuR));
+
+
+    //HLLC scheme
+    if (sl >= 0)
+    {
+        //left state
         return wl.flux(normalVector);
     }
-    else if(0 <= wSpeed[ss])
+    else if (sr <= 0)
     {
-        //F*L
-        //musi se natocit ss
-        Vars<3> normalVelocity = wl.velocity(normalVector); ////////////////???
-        double density = wl.density();
-        double totalEnergy = wl.totalEnergy();
-        double pressure = wl.pressure();
-
-        double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sl] - normalVelocity[0]))));
-        
-        Compressible wStar = density * (((wSpeed[sl] - normalVector[0])/(wSpeed[sl] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));////????
-        //ss natocit zpet
-
-        return wl.flux(normalVector) + wSpeed[sl]*(wStar - wl);
+        //right state
+        return wl.flux(normalVector);
     }
-    else if(0 <= wSpeed[sr])
+    else if (sm >= 0)
     {
-        //F*R
-        Vars<3> normalVelocity = wr.velocity(normalVector);
-        double density = wr.density();
-        double totalEnergy = wr.totalEnergy();
-        double pressure = wr.pressure();
+        //middle-left state
+        Vars<5> middleLeftFlux = Vars<5>();
 
-        double starE = (totalEnergy/density) + (wSpeed[ss] - normalVelocity[0])*(wSpeed[ss] + (pressure/(density*(wSpeed[sr] - normalVelocity[0]))));
-        Compressible wStar = density * (((wSpeed[sr] - normalVelocity[0])/(wSpeed[sr] - wSpeed[ss]))*Compressible({1.0, wSpeed[ss], normalVelocity[1], normalVelocity[2], starE}));
+        double uL = wl.velocityU();
+        double vL = wl.velocityU();
+        double wL = wl.velocityU();
+        double EL = wl.totalEnergy();
 
-        return wl.flux(normalVector) + wSpeed[sr]*(wStar - wr);
+        pm = pL + rhoL*(sl - nuL)*(sm - nuL);
+        double rM = rhoL*(sl - nuL)/(sl - sm);
+
+        return Vars<5>({rhoL*nuL + sl*(rM - rhoL),
+        rhoL*nuL*uL + pL*normalVector[0] + sl*((rM - rhoL)*uL + (pm - pL)/(sl - sm)*normalVector[0]),
+        rhoL*nuL*vL + pL*normalVector[1] + sl*((rM - rhoL)*vL + (pm - pL)/(sl - sm)*normalVector[1]),
+        rhoL*nuL*wL + pL*normalVector[2] + sl*((rM - rhoL)*wL + (pm - pL)/(sl - sm)*normalVector[2]),
+        rhoL*nuL*(EL + pL/rhoL) + sl*((rM - rhoL)*EL + (pm*sm - pL*nuL)/(sl - sm))});
     }
     else
     {
-        //FR
-        return wr.flux(normalVector);
+        //middle-right state
+        Vars<5> middleRightFlux = Vars<5>();
+
+        double uR = wr.velocityU();
+        double vR = wr.velocityU();
+        double wR = wr.velocityU();
+        double ER = wr.totalEnergy();
+
+        pm = pR + rhoR*(sr - nuR)*(sm - nuR);
+        double rM = rhoR*(sr - nuR)/(sr - sm);
+        return Vars<5>({rhoR*nuR + sr*(rM - rhoR),
+                        rhoR*nuR*uR + pR*normalVector[0] + sr*((rM - rhoR)*uR + (pm - pR)/(sr - sm)*normalVector[0]),
+                        rhoR*nuR*vR + pR*normalVector[1] + sr*((rM - rhoR)*vR + (pm - pR)/(sr - sm)*normalVector[1]),
+                        rhoR*nuR*wR + pR*normalVector[2] + sr*((rM - rhoR)*wR + (pm - pR)/(sr - sm)*normalVector[2]),
+                        rhoR*nuR*(ER + pR/rhoR) + sr*((rM - rhoR)*ER + (pm*sm - pR*nuR)/(sr - sm))});
     }
-    
-    return Vars<5>();
 }
 
 
-Vars<3> Hllc::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
+
+//nechce se mi to mazat - muze se hodit
+Vars<3> waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector)
 {
-    //TODO
-
     //PVRS
-    /*double pl = eulerEqn->pressure(wl);
-    double pr = eulerEqn->pressure(wr);
-    double ul = eulerEqn->velocity(wl);
-    double ur = eulerEqn->velocity(wr);
-    double rhol = eulerEqn->density(wl);
-    double rhor = eulerEqn->density(wr);
-    double al = eulerEqn->soundSpeed(wl);
-    double ar = eulerEqn->soundSpeed(wr);
-    double Gamma = eulerEqn->getGamma();
+    double rhoL = wl.density();
+    double pL = wl.pressure();
+    double nuL = wl.normalVelocity(normalVector);
+    double aL = wl.soundSpeed();
 
-    double pStar = std::fmax(0, 0.5*((pl + pr) - 0.25*(ul + ur)*(rhol + rhor)*(al + ar)));
-    double ql;
-    double qr;
+    double rhoR = wr.density();
+    double pR = wr.pressure();
+    double nuR = wr.normalVelocity(normalVector);
+    double aR = wr.soundSpeed();
 
-    if(pStar > pl)
+    double pm = std::fmax(0, 0.5*(pL + pR) - 0.5*(nuR - nuL)*0.5*(rhoL + rhoR)*0.5*(aL + aR));
+
+    double sl;
+    double sr;
+    double sm;
+
+    if (pm <= pL)
     {
-        ql = pow(1 + ((Gamma + 1)/(2*Gamma))*((pStar/pl) - 1), 0.5);
-    }
+        sl = nuL - aL; // left wave is expansion
+    }        
     else
     {
-        ql = 1;
+        sl = 0.5*(nuL + nuR) - 0.5*(aL + aR); // left wave is shock, Lax approach
     }
-    double sl = ul - al*ql;
-
-    if(pStar > pr)
+        
+    if (pm <= pR)
     {
-        qr = pow(1 + ((Gamma + 1)/(2*Gamma))*((pStar/pr) - 1), 0.5);
-    }
+        sr = nuR + aR; // right wave is expansion
+    }        
     else
     {
-        qr = 1;
+        sr = 0.5*(nuL + nuR) + 0.5*(aL + aR); // right wave is shock, Lax approach
     }
-    double sr = ur + ar*qr;
+        
+    //contact wave speed : sm
+    sm = pR - pL + rhoL*nuL*(sl - nuL) - rhoR*nuR*(sr - nuR);
+    sm = sm / (rhoL*(sl - nuL) - rhoR*(sr - nuR));
 
-    double ss = (pr - pl + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
+    return Vars<3>({sl, sm, sr});
+}
 
-    return Vector3({sl, ss, sr});*/
-
-    double ul = wl.velocity(normalVector)[0];
-    double ur = wr.velocity(normalVector)[0];
+//nechce se mi to mazat - muze se hodit
+Vars<3> basicSpeedEstimate(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector)
+{
+    //basic speed approximation
+    double ul = wl.normalVelocity(normalVector);
+    double ur = wr.normalVelocity(normalVector);
     double al = wl.soundSpeed();
     double ar = wr.soundSpeed();
     double pl = wl.pressure();
@@ -104,7 +154,7 @@ Vars<3> Hllc::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr,
 
     double sl = std::min(ul - al, ur - ar);
     double sr = std::max(ul + al, ur + ar);
-    double ss = (pr - pl + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
+    double sm = (pr - pl + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
 
-    return Vars<3>({sl, ss, sr});
+    return Vars<3>({sl, sm, sr});
 }

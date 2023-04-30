@@ -3,8 +3,7 @@
 Vars<5> Hll::claculateFlux(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
 {
     enum {sl, ss, sr};
-    Vars<3> wSpeed = waveSpeedsEstimate(wl, wr, normalVector);        
-
+    Vars<3> wSpeed = waveSpeedsEstimate(wl, wr, normalVector);
 
     if (0 <= wSpeed[sl])
     {
@@ -28,8 +27,8 @@ Vars<5> Hll::claculateFlux(const Compressible& wl, const Compressible& wr, const
 
 Vars<3> Hll::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, const Vars<3>& normalVector) const
 {
-    double ul = wl.velocity(normalVector)[0];
-    double ur = wr.velocity(normalVector)[0];
+    double ul = wl.normalVelocity(normalVector);
+    double ur = wr.normalVelocity(normalVector);
     double al = wl.soundSpeed();
     double ar = wr.soundSpeed();
     double pl = wl.pressure();

@@ -18,19 +18,14 @@ Vars<3> Compressible::velocity() const
     return Vars<3>({data[RHO_U] / data[RHO], data[RHO_V] / data[RHO], data[RHO_W] / data[RHO]});
 }
 
-Vars<3> Compressible::velocity(const Vars<3>& normalvector) const
-{
-    return Vars<3>();
-}
-
 double Compressible::absVelocity() const
 {
     return sqrt(data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / data[RHO];
 }
 
-double Compressible::normalVelocity(const Vars<3>& normalvector) const
+double Compressible::normalVelocity(const Vars<3>& normalVector) const
 {
-    return dot(this->velocity(), normalvector);
+    return dot(this->velocity(), normalVector);
 }
 
 double Compressible::velocityU() const
@@ -88,8 +83,11 @@ Vars<5> Compressible::flux(const Vars<3>& normalVector) const
 
 Vars<5> Compressible::primitive() const
 {
-    //TODO
-    return Vars<5>();
+    return Vars<5>({data[RHO],
+                    data[RHO_U] / data[RHO],
+                    data[RHO_V] / data[RHO],
+                    data[RHO_W] / data[RHO],
+                    this->pressure()});
 }
 
 void Compressible::operator+=(const Compressible& v)
