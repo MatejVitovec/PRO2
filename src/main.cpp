@@ -8,6 +8,7 @@
 #include "Mesh/Mesh.hpp"
 #include "ExplicitEuler.hpp"
 #include "FluxSolver/Hll.hpp"
+#include "outputVTK.hpp"
 
 //default eqs
 std::shared_ptr<EquationOfState> Compressible::eqs = std::make_shared<IdealGas>();
@@ -43,6 +44,8 @@ int main(int argc, char** argv)
     mySolver.setInitialConditionsRiemann(Compressible({1.0, 0.75, 0.0, 0.0, 1.0}), Compressible({0.125, 0.0, 0.0, 0.0, 0.1}));
 
     mySolver.solve();
+
+    outputVTK("results.vtk", myMesh, mySolver.getResults());
 
     int a = 5;
 

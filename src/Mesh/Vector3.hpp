@@ -2,6 +2,7 @@
 #define VECTOR3_H
 
 #include <cmath>
+#include <sstream>
 
 struct Vector3
 {
@@ -79,5 +80,11 @@ inline Vector3 abs(const Vector3& u)
 {
     return Vector3(fabs(u.x), fabs(u.y), fabs(u.z));
 }
+
+inline std::ostream& operator<<(std::ostream& os, const Vector3& u)
+{
+    os << u.x << " " << u.y << " " << u.z;
+    return os;
+};
 
 #endif // VECTOR3_H

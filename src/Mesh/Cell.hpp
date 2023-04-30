@@ -19,6 +19,8 @@ class Cell
 
         virtual std::vector<std::shared_ptr<Face>> createFaces();
 
+        int getVtkType() const;
+
         virtual ~Cell();
 
         std::vector<int> nodesIndex;
@@ -34,5 +36,17 @@ class Cell
         const int type;
 
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Cell& cell)
+{
+    os << cell.nodesIndex.size() << " ";
+    for (auto & nodeIndex : cell.nodesIndex)
+    {
+        os << nodeIndex << " ";
+    }
+    
+    return os;
+};
+
 
 #endif // CELL_H

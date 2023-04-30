@@ -7,7 +7,6 @@ void Compressible::setEquationOfState(std::shared_ptr<EquationOfState> eqs_)
     eqs = eqs_;
 }
 
-
 double Compressible::density() const
 {
     return data[RHO];

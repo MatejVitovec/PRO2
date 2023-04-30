@@ -31,14 +31,12 @@ Vars<3> Hll::waveSpeedsEstimate(const Compressible& wl, const Compressible& wr, 
     double ur = wr.normalVelocity(normalVector);
     double al = wl.soundSpeed();
     double ar = wr.soundSpeed();
-    double pl = wl.pressure();
-    double pr = wr.pressure();
     double rhol = wl.density();
     double rhor = wr.density();
 
     double sl = std::min(ul - al, ur - ar);
     double sr = std::max(ul + al, ur + ar);
-    double ss = (pr - pl + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
+    double ss = (wr.pressure() - wl.pressure() + rhol*ul*(sl - ul) - rhor*ur*(sr - ur))/(rhol*sl - rhol*ul - rhor*sr + rhor*ur);
 
     return Vars<3>({sl, ss, sr});
 }

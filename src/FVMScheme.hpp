@@ -34,8 +34,7 @@ class FVMScheme
 
         virtual void solve() = 0;
 
-        void getResults();
-        void saveResults() const;
+        Field<Compressible> getResults() const;
         
         
     protected:

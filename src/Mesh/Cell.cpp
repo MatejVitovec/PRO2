@@ -35,6 +35,15 @@ void Cell::update(const std::vector<std::shared_ptr<Face>>& faceList)
     projectedArea = 0.5*projArea;
 }
 
+int Cell::getVtkType() const
+{
+    if(type == 1) return 10;
+    if(type == 2) return 12;
+    if(type == 3) return 13;
+    if(type == 4) return 14;
+    return 0;
+}
+
 std::vector<std::shared_ptr<Face>> Cell::createFaces()
 {
     return std::vector<std::shared_ptr<Face>>{std::make_shared<Face>()};

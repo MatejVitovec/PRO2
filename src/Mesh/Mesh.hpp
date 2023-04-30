@@ -32,6 +32,7 @@ class Mesh
         const std::vector<int>& getOwnerIndexList() const;
         const std::vector<int>& getNeighborIndexList() const;
 
+        int getNodesSize() const;
         int getFacesSize() const;
         int getCellsSize() const;
 

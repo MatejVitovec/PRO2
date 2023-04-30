@@ -38,6 +38,11 @@ const std::vector<int>& Mesh::getNeighborIndexList() const
     return neighborIndexList;
 }
 
+int Mesh::getNodesSize() const
+{
+    return nodeList.size();
+}
+
 int Mesh::getFacesSize() const
 {
     return faceList.size();

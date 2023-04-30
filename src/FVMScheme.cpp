@@ -131,12 +131,7 @@ void FVMScheme::calculateFluxes()
     fluxes = fluxSolver->claculateFluxes(wl, wr, mesh.getFaceList());
 }
 
-void FVMScheme::getResults()
+Field<Compressible> FVMScheme::getResults() const
 {
-
-}
-
-void FVMScheme::saveResults() const
-{
-
+    return w;
 }
