@@ -8,7 +8,7 @@ int calculateCellNodeSize(const Mesh& mesh)
 
     for (int i = 0; i < cellList.size(); i++)
     {
-        num += cellList[i]->nodesIndex.size();
+        num += (1 + cellList[i]->nodesIndex.size());
     }
     
     return num;
@@ -36,7 +36,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 		f << nodeList[i] << "\n";
 	}
 	
-	f << "cells " << cellSize << " " << calculateCellNodeSize(mesh) << "\n"; // TODO: upravit az bude funkce nCellNodes
+	f << "cells " << cellSize << " " << calculateCellNodeSize(mesh) << "\n";
 	
 	for (int i = 0; i < cellSize; i++)
     {
