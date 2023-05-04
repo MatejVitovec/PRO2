@@ -1,5 +1,6 @@
 #include "outputVTK.hpp"
 #include <fstream>
+#include <iomanip>
 
 int calculateCellNodeSize(const Mesh& mesh)
 {
@@ -12,6 +13,15 @@ int calculateCellNodeSize(const Mesh& mesh)
     }
     
     return num;
+}
+
+double roundToZero(double in)
+{
+	if(in < 10e-12 && in > -10e-12)
+	{
+		return 0.0;
+	}
+	return in;
 }
 
 void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>& w)
@@ -56,7 +66,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 
     for (int i = 0; i < cellSize; i++)
     {
-		f << w[i].density() << "\n";
+		f << roundToZero(w[i].density()) << "\n";
 	}
 
  	//f << "SCALARS |u| float\n"; 
@@ -72,7 +82,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 
     for (int i = 0; i < cellSize; i++)
     {
-		f << w[i].velocityU() << " " << w[i].velocityV() << " " << w[i].velocityW() << "\n";
+		f << roundToZero(w[i].velocityU()) << " " << roundToZero(w[i].velocityV()) << " " << roundToZero(w[i].velocityW()) << "\n";
 	}	
 
  	f << "SCALARS e float\n"; 
@@ -80,7 +90,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 
     for (int i = 0; i < cellSize; i++)
     {
-		f << w[i].internalEnergy() << "\n";
+		f << roundToZero(w[i].internalEnergy()) << "\n";
 	}
 	
 	f << "SCALARS p float\n"; 
@@ -88,7 +98,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 
     for (int i = 0; i < cellSize; i++)
     {
-		f << w[i].pressure() << "\n";
+		f << roundToZero(w[i].pressure()) << "\n";
 	}
 	
  	f << "SCALARS x float 3\n"; 
@@ -97,7 +107,8 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
     for (int i = 0; i < cellSize; i++)
     {
 		f << cellList[i]->center << "\n";
-	}	
+	}
+	f << std::endl;
 
 	f.close();
 }

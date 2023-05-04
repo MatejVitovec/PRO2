@@ -27,7 +27,7 @@ double IdealGas::getR() const
 
 double IdealGas::pressure(const Compressible& data) const
 {
-    return (gamma - 1.0)*data.density()*(data.totalEnergy() - 0.5*data.absVelocity()*data.absVelocity());
+    return (gamma - 1.0)*data.density()*(data.totalEnergy() - 0.5*data.absVelocity2());
 }
 
 double IdealGas::internalEnergy(const Compressible& data) const
@@ -38,4 +38,15 @@ double IdealGas::internalEnergy(const Compressible& data) const
 double IdealGas::soundSpeed(const Compressible& data) const
 {
     return sqrt((gamma*data.pressure())/data.density());
+}
+
+Compressible IdealGas::primitiveToConservative(const Vars<5>& primitive) const
+{
+    double velocity2 = primitive[1]*primitive[1] + primitive[2]*primitive[2] + primitive[3]*primitive[3];
+
+    return Compressible({primitive[0],
+                         primitive[0]*primitive[1],
+                         primitive[0]*primitive[2],
+                         primitive[0]*primitive[3],
+                         0.5*primitive[0]*velocity2 + (primitive[4])/(gamma - 1.0)});
 }

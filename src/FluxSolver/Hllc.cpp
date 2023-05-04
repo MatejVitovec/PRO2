@@ -51,15 +51,15 @@ Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, cons
     else if (sr <= 0)
     {
         //right state
-        return wl.flux(normalVector);
+        return wr.flux(normalVector);
     }
     else if (sm >= 0)
     {
         //middle-left state
 
         double uL = wl.velocityU();
-        double vL = wl.velocityU();
-        double wL = wl.velocityU();
+        double vL = wl.velocityV();
+        double wL = wl.velocityW();
         double EL = wl.totalEnergy();
 
         pm = pL + rhoL*(sl - nuL)*(sm - nuL);
@@ -76,8 +76,8 @@ Vars<5> Hllc::claculateFlux(const Compressible& wl, const Compressible& wr, cons
         //middle-right state
 
         double uR = wr.velocityU();
-        double vR = wr.velocityU();
-        double wR = wr.velocityU();
+        double vR = wr.velocityV();
+        double wR = wr.velocityW();
         double ER = wr.totalEnergy();
 
         pm = pR + rhoR*(sr - nuR)*(sm - nuR);

@@ -11,7 +11,7 @@ template <int N>
 class Vars
 {
     public:
-        Vars() {}
+        Vars() : data() {}
 
         Vars(const std::array<double, N>& in) : data(in) {}
 

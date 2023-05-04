@@ -7,7 +7,7 @@
 
 #include "Mesh/Mesh.hpp"
 #include "ExplicitEuler.hpp"
-#include "FluxSolver/Hll.hpp"
+#include "FluxSolver/Hllc.hpp"
 #include "outputVTK.hpp"
 
 //default eqs
@@ -26,12 +26,12 @@ int main(int argc, char** argv)
     }
     
 
-    std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hll>();
+    std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hllc>();
 
     ExplicitEuler mySolver(myMesh, std::move(myFluxSolver));
 
     mySolver.setCfl(0.8);
-    mySolver.setMaxIter(60);
+    mySolver.setMaxIter(190);
     mySolver.setTargetError(0.0000005);
 
     mySolver.setBoundaryCondition("bottom", 1);
@@ -41,7 +41,21 @@ int main(int argc, char** argv)
     mySolver.setBoundaryCondition("back", 1);
     mySolver.setBoundaryCondition("front", 1);
 
-    mySolver.setInitialConditionsRiemann(Compressible({1.0, 0.75, 0.0, 0.0, 1.0}), Compressible({0.125, 0.0, 0.0, 0.0, 0.1}));
+    Compressible leftState = Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0}));
+    Compressible rightState = Compressible::primitiveToConservative(Vars<5>({0.125, 0.0, 0.0, 0.0, 0.1}));
+
+    mySolver.setInitialConditionsRiemann(leftState, rightState);
+
+    //outputVTK("results0.vtk", myMesh, mySolver.getResults());
+
+    /*Hllc testFluxSolver = Hllc();
+
+    Vars<5> fluxx = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({1.0, 0.0, 0.0}));
+    Vars<5> fluxy = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 1.0, 0.0}));
+    Vars<5> fluxz = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 0.0, 1.0}));
+    Vars<5> fluxxm = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({-1.0, 0.0, 0.0}));
+    Vars<5> fluxym = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, -1.0, 0.0}));
+    Vars<5> fluxzm = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 0.0, -1.0}));*/
 
     mySolver.solve();
 

@@ -19,7 +19,12 @@ Vars<3> Compressible::velocity() const
 
 double Compressible::absVelocity() const
 {
-    return sqrt(data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / data[RHO];
+    return sqrt((data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / (data[RHO]*data[RHO]));
+}
+
+double Compressible::absVelocity2() const
+{
+    return (data[RHO_U]*data[RHO_U] + data[RHO_V]*data[RHO_V] + data[RHO_W]*data[RHO_W]) / (data[RHO]*data[RHO]);
 }
 
 double Compressible::normalVelocity(const Vars<3>& normalVector) const
@@ -62,6 +67,11 @@ double Compressible::soundSpeed() const
     return eqs->soundSpeed(*this);
 }
 
+Compressible Compressible::primitiveToConservative(const Vars<5>& primitive)
+{
+    return eqs->primitiveToConservative(primitive);
+}
+
 Vars<5> Compressible::flux(const Vars<3>& normalVector) const
 {
     double density = this->density();
@@ -71,13 +81,11 @@ Vars<5> Compressible::flux(const Vars<3>& normalVector) const
 
     double normalVelocity = dot(velocity, normalVector);
 
-    //mozna to takto nejde
-
     return Compressible({density * normalVelocity,
-                    density * velocity[0] * normalVelocity + pressure * normalVector[0],
-                    density * velocity[1] * normalVelocity + pressure * normalVector[1],
-                    density * velocity[2] * normalVelocity + pressure * normalVector[2],
-                    density * enthalpy * normalVelocity});
+                         density * velocity[0] * normalVelocity + pressure * normalVector[0],
+                         density * velocity[1] * normalVelocity + pressure * normalVector[1],
+                         density * velocity[2] * normalVelocity + pressure * normalVector[2],
+                         density * enthalpy * normalVelocity});
 }
 
 Vars<5> Compressible::primitive() const
@@ -128,6 +136,12 @@ void Compressible::operator-=(const Vars<5>& v)
 
 //////////////Non member operators///////////////////
 
+// u == v
+bool operator== (const Compressible& u, const Compressible& v)
+{
+    if(u[0] == v[0] && u[0] == v[0] && u[0] == v[0] && u[0] == v[0] && u[0] == v[0]) return true;
+    return false;
+}
 
 // u + v
 Compressible operator+ (const Compressible& u, const Compressible& v)

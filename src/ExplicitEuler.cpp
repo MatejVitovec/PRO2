@@ -1,5 +1,5 @@
 #include "ExplicitEuler.hpp"
-
+#include <iostream>
 
 
 void ExplicitEuler::solve()
@@ -11,6 +11,7 @@ void ExplicitEuler::solve()
 
     int iter = 0;
 
+    double time = 0;
     bool exitLoop = false;
 
     while (iter < maxIter && !exitLoop)
@@ -18,6 +19,7 @@ void ExplicitEuler::solve()
         iter++;
 
         updateTimeStep();
+        time += timeStep;
 
         applyBoundaryConditions();
 
@@ -29,11 +31,13 @@ void ExplicitEuler::solve()
         
         Field<Compressible> wn = explicitIntegration(res);
 
-        Vars<5> resNorm = (wn - w).norm(); //mozna spatne
-        if(resNorm[0] < targetError) exitLoop = true;
+        /*Vars<5> resNorm = (wn - w).norm(); //mozna spatne
+        if(resNorm[0] < targetError) exitLoop = true;*/
 
         w = std::move(wn); //mozna to bude fungovat
     }
+
+    std::cout << "time: " << time << std::endl;
     
 }
 
@@ -45,7 +49,7 @@ Field<Vars<5>> ExplicitEuler::calculateResidual()
 
     for (int i = 0; i < cells.size(); i++)
     {
-        Vars<5> aux;
+        Vars<5> aux= Vars<5>();
 
         for (auto & faceIndex : cells[i]->ownFaceIndex)
         {

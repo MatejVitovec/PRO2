@@ -20,6 +20,8 @@ class IdealGas : public EquationOfState
         double internalEnergy(const Compressible& data) const;
         double soundSpeed(const Compressible& data) const;
 
+        Compressible primitiveToConservative(const Vars<5>& primitive) const;
+
     private:
         double gamma;
         double R;

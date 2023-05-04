@@ -27,7 +27,8 @@ class Compressible : public Vars<5>
 
         double density() const;
         Vars<3> velocity() const;
-        double absVelocity() const; 
+        double absVelocity() const;
+        double absVelocity2() const;
         double normalVelocity(const Vars<3>& normalVector) const;  
         double velocityU() const;
         double velocityV() const;
@@ -37,6 +38,8 @@ class Compressible : public Vars<5>
         double pressure() const;
         double internalEnergy() const;
         double soundSpeed() const;
+
+        static Compressible primitiveToConservative(const Vars<5>& primitive);
 
         Vars<5> flux(const Vars<3>& normalVector) const;
         Vars<5> primitive() const;
@@ -49,6 +52,8 @@ class Compressible : public Vars<5>
 
 //////////////Non member operators///////////////////
 
+// u == v
+bool operator== (const Compressible& u, const Compressible& v);
 
 // u + v
 Compressible operator+ (const Compressible& u, const Compressible& v);
