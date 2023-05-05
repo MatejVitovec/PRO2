@@ -12,8 +12,10 @@ class PressureTemperatureInlet : public BoundaryCondition
 
         void setTotalPressure(double totalPressure_);
         void setTotalTemperature(double totaltemperature_);
+        void setVelocityDirection(Vars<3> velocityDirection_);
         double getTotalPressure() const;
         double getTotalTemperature() const;
+        Vars<3> getVelocityDirection() const;
 
         Compressible calculateState(const Compressible& wl, const Face& f) const;
         
@@ -21,8 +23,7 @@ class PressureTemperatureInlet : public BoundaryCondition
     private:
         double totalPressure;
         double totalTemperature;
-        double angle1 = 0;
-        double angle2 = 0;
+        Vars<3> velocityDirection;
 };
 
 #endif // PRESSURETEMPERATUREINLET

@@ -23,21 +23,26 @@ class Compressible : public Vars<5>
         void operator+=(const Vars<5>& v);
         void operator-=(const Vars<5>& v);
 
-        static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);        
+        static void setEquationOfState(std::shared_ptr<EquationOfState> eqs_);
+        static std::shared_ptr<EquationOfState> getEquationOfState();
 
         double density() const;
+
         Vars<3> velocity() const;
         double absVelocity() const;
         double absVelocity2() const;
-        double normalVelocity(const Vars<3>& normalVector) const;  
+        double normalVelocity(const Vars<3>& normalVector) const;
+        double velocityCosine(const Vars<3>& normalVector) const;
         double velocityU() const;
         double velocityV() const;
         double velocityW() const;
+
         double totalEnergy() const;
 
         double pressure() const;
         double internalEnergy() const;
         double soundSpeed() const;
+        double machNumber() const;
 
         static Compressible primitiveToConservative(const Vars<5>& primitive);
 

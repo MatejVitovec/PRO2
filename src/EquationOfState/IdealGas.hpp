@@ -8,7 +8,7 @@ class IdealGas : public EquationOfState
     public:
 
         IdealGas() : EquationOfState(), gamma(1.4), R(287.05) {}
-        IdealGas(double gamma, double R) : EquationOfState(), gamma(gamma), R(R) {}
+        IdealGas(double gamma_, double R_, double cp_) : EquationOfState(), gamma(gamma_), R(R_) {}
 
         void setGamma(double gamma_);
         void setR(double R_);
@@ -22,9 +22,13 @@ class IdealGas : public EquationOfState
 
         Compressible primitiveToConservative(const Vars<5>& primitive) const;
 
+        Compressible subsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const;
+
     private:
         double gamma;
         double R;
+
+        double cp() const;
 
 };
 

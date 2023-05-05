@@ -1,10 +1,14 @@
 #include <cmath>
-
 #include "Compressible.hpp"
 
 void Compressible::setEquationOfState(std::shared_ptr<EquationOfState> eqs_)
 {
     eqs = eqs_;
+}
+
+std::shared_ptr<EquationOfState> Compressible::getEquationOfState()
+{
+    return eqs;
 }
 
 double Compressible::density() const
@@ -30,6 +34,11 @@ double Compressible::absVelocity2() const
 double Compressible::normalVelocity(const Vars<3>& normalVector) const
 {
     return dot(this->velocity(), normalVector);
+}
+
+double Compressible::velocityCosine(const Vars<3>& normalVector) const
+{
+    return -((dot(velocity(), normalVector))/absVelocity());
 }
 
 double Compressible::velocityU() const
@@ -65,6 +74,11 @@ double Compressible::internalEnergy() const
 double Compressible::soundSpeed() const
 {
     return eqs->soundSpeed(*this);
+}
+
+double Compressible::machNumber() const
+{
+    return absVelocity()/soundSpeed();
 }
 
 Compressible Compressible::primitiveToConservative(const Vars<5>& primitive)

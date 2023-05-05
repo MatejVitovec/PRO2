@@ -17,6 +17,8 @@ class EquationOfState
         virtual double soundSpeed(const Compressible& data) const = 0;
 
         virtual Compressible primitiveToConservative(const Vars<5>& primitive) const = 0;
+
+        virtual Compressible subsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const = 0;
         
 };
 

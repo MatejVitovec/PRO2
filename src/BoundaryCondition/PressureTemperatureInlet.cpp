@@ -11,6 +11,11 @@ void PressureTemperatureInlet::setTotalTemperature(double totaltemperature_)
     totalTemperature = totaltemperature_;
 }
 
+void PressureTemperatureInlet::setVelocityDirection(Vars<3> velocityDirection_)
+{
+    velocityDirection = velocityDirection_;
+}
+
 double PressureTemperatureInlet::getTotalPressure() const
 {
     return totalPressure;
@@ -21,9 +26,12 @@ double PressureTemperatureInlet::getTotalTemperature() const
     return totalTemperature;
 }
 
+Vars<3> PressureTemperatureInlet::getVelocityDirection() const
+{
+    return velocityDirection;
+}
+
 Compressible PressureTemperatureInlet::calculateState(const Compressible& wl, const Face& f) const
 {
-    //TODO
-
-    return Compressible();
+    return Compressible::getEquationOfState()->subsonicInletBoundaryState(wl, vector3toVars(f.normalVector), totalPressure, totalTemperature, velocityDirection);
 }
