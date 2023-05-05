@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <chrono>
 
 #include "Mesh/Mesh.hpp"
 #include "ExplicitEuler.hpp"
@@ -16,7 +17,13 @@ std::shared_ptr<EquationOfState> Compressible::eqs = std::make_shared<IdealGas>(
 int main(int argc, char** argv)
 {
     Mesh myMesh = Mesh();
-    myMesh.loadGmsh2("Mesh/riemannMesh.msh");
+
+    auto stop1 = std::chrono::high_resolution_clock::now();
+
+    myMesh.loadGmsh2("Mesh/GAMM.msh");
+
+    auto stop2 = std::chrono::high_resolution_clock::now();
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(stop2 - stop1).count() << " ms\n";
 
     const std::vector<std::shared_ptr<Cell>>& cellList = myMesh.getCellList();
     double vol = 0;
@@ -25,8 +32,15 @@ int main(int argc, char** argv)
         vol += cellList[i]->volume;
     }
     
+    std::cout << "Volume: " << vol << std::endl;
 
-    std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hllc>();
+
+
+
+
+
+
+    /*std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hllc>();
 
     ExplicitEuler mySolver(myMesh, std::move(myFluxSolver));
 
@@ -46,43 +60,11 @@ int main(int argc, char** argv)
 
     mySolver.setInitialConditionsRiemann(leftState, rightState);
 
-    //outputVTK("results0.vtk", myMesh, mySolver.getResults());
-
-    /*Hllc testFluxSolver = Hllc();
-
-    Vars<5> fluxx = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({1.0, 0.0, 0.0}));
-    Vars<5> fluxy = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 1.0, 0.0}));
-    Vars<5> fluxz = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 0.0, 1.0}));
-    Vars<5> fluxxm = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({-1.0, 0.0, 0.0}));
-    Vars<5> fluxym = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, -1.0, 0.0}));
-    Vars<5> fluxzm = testFluxSolver.claculateFlux(leftState, rightState, Vars<3>({0.0, 0.0, -1.0}));*/
-
     mySolver.solve();
 
-    outputVTK("results.vtk", myMesh, mySolver.getResults());
+    outputVTK("results.vtk", myMesh, mySolver.getResults());*/
 
     int a = 5;
-
-
-    /*Compressible a({1.0, 2.0, 3.0, 4.0, 5.0});
-    Vars<5> b({1.0, 2.0, 3.0, 4.0, 5.0});
-
-    Vars<5> c = a + b;
-
-    
-    Field<Compressible> pole(3);
-
-    pole[0] = Compressible({1,2,3,5,6});
-    pole[1] = Compressible({1,3,3,5,6});
-    pole[2] = Compressible({1,2,8,7,9});
-
-    Vars<5> promena = Vars<5>({5,4,8,9,3});
-
-    Field<Compressible> pole2 = pole*promena;
-
-    pole2 += pole;
-
-    Compressible norma = pole.norm();*/
 
     return 0;
 }
