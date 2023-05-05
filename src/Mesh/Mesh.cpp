@@ -67,6 +67,7 @@ void Mesh::createFaces()
     //vytvoreni sten + ownerList
     for (int j = 0; j < cellList.size(); j++)
     {
+        cellList[j]->ownFaceIndex.clear();
         std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
 
         for (auto & ownFace : ownFaces)
@@ -83,8 +84,10 @@ void Mesh::createFaces()
 
             if (!existInList)
             {
-                faceList.push_back(ownFace);
-                ownerIndexList.push_back(j);
+                cellList[j]->ownFaceIndex.push_back(faceList.size());
+
+                faceList.push_back(ownFace);                
+                ownerIndexList.push_back(j);                
             }
         }
     }
@@ -94,14 +97,27 @@ void Mesh::createFaces()
 
     for (int j = 0; j < cellList.size(); j++)
     {
+        cellList[j]->neighborFaceIndex.clear();
         std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
 
         for (auto & ownFace : ownFaces)
         {
+            bool goNext = false;            
+            for (int i = 0; i < cellList[j]->ownFaceIndex.size(); i++)
+            {
+                if(faceList[cellList[j]->ownFaceIndex[i]]->equal(*ownFace))
+                {
+                    goNext = true;
+                    break;
+                }
+            }
+            if(goNext == true) continue;          
+
             for (int i = 0; i < faceList.size(); i++)
             {
-                if (faceList[i]->equal(*ownFace) && ownerIndexList[i] != j)
+                if (faceList[i]->equal(*ownFace) /*&& ownerIndexList[i] != j*/)
                 {
+                    cellList[j]->neighborFaceIndex.push_back(i);
                     neighborIndexList[i] = j;
                     break;
                 }
@@ -198,7 +214,7 @@ void Mesh::loadGmsh2(std::string fileName)
 
     createFaces();
     createBoundariesGmsh(parseBlockData(stringData, "PhysicalNames"), parseBlockData(stringData, "Elements"));
-    updateCellsIndexToFace();
+    //updateCellsIndexToFace();
 
     update();
 }
@@ -332,7 +348,6 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
     std::vector<int> auxFacePhysicalGroupList;
     auxFacePhysicalGroupList.clear();
 
-    //TODO -> for( auto : ...), index from file (not for)
     for (int i = 1; i < elementsGmsh.size(); i++)
     {
         if(stoi(elementsGmsh[i][0]) == i)
@@ -364,7 +379,7 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
 
     for (int j = 1; j < physicalNamesGmsh.size(); j++)
     {
-        if(stoi(physicalNamesGmsh[j][0]) != 2)
+        if(stoi(physicalNamesGmsh[j][0]) != 2) //only 2d phasicalNames
         {
             continue;
         }

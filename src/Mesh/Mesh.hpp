@@ -46,6 +46,8 @@ class Mesh
         void createFaces();
         void createBoundaries();
         void updateCellsIndexToFace();
+        void updateCellsIndexToOwn();
+        void updateCellsIndexToNeighbor();
         
         void updateCells();
         void updateFaces();
