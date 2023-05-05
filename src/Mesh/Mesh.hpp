@@ -1,5 +1,5 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef MESH_HPP
+#define MESH_HPP
 
 #include <vector>
 #include <memory>
@@ -70,4 +70,4 @@ class Mesh
 
 };
 
-#endif // MESH_H
+#endif // MESH_HPP

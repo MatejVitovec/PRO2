@@ -1,5 +1,5 @@
-#ifndef HLLC_H
-#define HLLC_H
+#ifndef HLLC_HPP
+#define HLLC_HPP
 
 #include "FluxSolver.hpp"
 
@@ -15,4 +15,4 @@ class Hllc : public FluxSolver
 
 };
 
-#endif // HLLC_H
+#endif // HLLC_HPP

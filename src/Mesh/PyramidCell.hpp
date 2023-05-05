@@ -1,5 +1,5 @@
-#ifndef PYRAMIDCELL_H
-#define PYRAMIDCELL_H
+#ifndef PYRAMIDCELL_HPP
+#define PYRAMIDCELL_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class PyramidCell : public Cell
 
 };
 
-#endif // PYRAMIDCELL_H
+#endif // PYRAMIDCELL_HPP

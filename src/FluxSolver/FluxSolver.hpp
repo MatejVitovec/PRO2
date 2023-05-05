@@ -1,5 +1,5 @@
-#ifndef FLUXSOLVER_H
-#define FLUXSOLVER_H
+#ifndef FLUXSOLVER_HPP
+#define FLUXSOLVER_HPP
 
 #include "../Mesh/Mesh.hpp"
 #include "../Field.hpp"
@@ -20,4 +20,4 @@ class FluxSolver
 
 };
 
-#endif // FLUXSOLVER_H
+#endif // FLUXSOLVER_HPP

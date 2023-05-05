@@ -1,5 +1,5 @@
-#ifndef FREEBOUNDARY_H
-#define FREEBOUNDARY_H
+#ifndef FREEBOUNDARY_HPP
+#define FREEBOUNDARY_HPP
 
 #include "BoundaryCondition.hpp"
 

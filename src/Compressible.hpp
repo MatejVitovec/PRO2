@@ -1,5 +1,5 @@
-#ifndef COMPRESSIBLE_H
-#define COMPRESSIBLE_H
+#ifndef COMPRESSIBLE_HPP
+#define COMPRESSIBLE_HPP
 
 #include <vector>
 #include <memory>
@@ -90,4 +90,4 @@ Compressible operator* (const Compressible& u, const Vars<5>& v);
 
 Compressible sqrt(const Compressible& u);
 
-#endif // COMPRESSIBLE_H
+#endif // COMPRESSIBLE_HPP

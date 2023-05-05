@@ -1,5 +1,5 @@
-#ifndef FACE_H
-#define FACE_H
+#ifndef FACE_HPP
+#define FACE_HPP
 
 #include <vector>
 #include <memory>
@@ -37,4 +37,4 @@ class Face
 
 };
 
-#endif // FACE_H
+#endif // FACE_HPP

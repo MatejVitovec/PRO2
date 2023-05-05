@@ -1,5 +1,5 @@
-#ifndef CELL_H
-#define CELL_H
+#ifndef CELL_HPP
+#define CELL_HPP
 
 #include <vector>
 #include <memory>
@@ -49,4 +49,4 @@ inline std::ostream& operator<<(std::ostream& os, const Cell& cell)
 };
 
 
-#endif // CELL_H
+#endif // CELL_HPP

@@ -1,5 +1,5 @@
-#ifndef TRIANGULARFACE_H
-#define TRIANGULARFACE_H
+#ifndef TRIANGULARFACE_HPP
+#define TRIANGULARFACE_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class TriangularFace : public Face
 
 };
 
-#endif // TRIANGULARFACE_H
+#endif // TRIANGULARFACE_HPP

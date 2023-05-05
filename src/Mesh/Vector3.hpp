@@ -1,5 +1,5 @@
-#ifndef VECTOR3_H
-#define VECTOR3_H
+#ifndef VECTOR3_HPP
+#define VECTOR3_HPP
 
 #include <cmath>
 #include <sstream>
@@ -87,4 +87,4 @@ inline std::ostream& operator<<(std::ostream& os, const Vector3& u)
     return os;
 };
 
-#endif // VECTOR3_H
+#endif // VECTOR3_HPP

@@ -45,7 +45,7 @@ void FVMScheme::setInitialConditionsRiemann(Compressible initialConditionL, Comp
 {
     w = Field<Compressible>(mesh.getCellsSize());
     int i = 0;
-    for (i; i < mesh.getCellsSize()/2; i++)
+    for (i; i < 30; i++)
     {
         w[i] = initialConditionL;
     }

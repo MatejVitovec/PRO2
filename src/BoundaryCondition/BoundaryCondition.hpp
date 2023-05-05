@@ -1,5 +1,5 @@
-#ifndef BOUNDARYCONDITION_H
-#define BOUNDARYCONDITION_H
+#ifndef BOUNDARYCONDITION_HPP
+#define BOUNDARYCONDITION_HPP
 
 #include "../Mesh/Boundary.hpp"
 #include "../Mesh/Face.hpp"
@@ -22,4 +22,4 @@ class BoundaryCondition
 
 };
 
-#endif // BOUNDARYCONDITION_H
+#endif // BOUNDARYCONDITION_HPP

@@ -1,5 +1,5 @@
-#ifndef PRISMCELL_H
-#define PRISMCELL_H
+#ifndef PRISMCELL_HPP
+#define PRISMCELL_HPP
 
 #include <vector>
 #include <memory>
@@ -22,4 +22,4 @@ class PrismCell : public Cell
 
 };
 
-#endif // PRISMCELL_H
+#endif // PRISMCELL_HPP

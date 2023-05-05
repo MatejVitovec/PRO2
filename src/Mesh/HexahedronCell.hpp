@@ -1,5 +1,5 @@
-#ifndef HEXAHEDRONCELL_H
-#define HEXAHEDRONCELL_H
+#ifndef HEXAHEDRONCELL_HPP
+#define HEXAHEDRONCELL_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class HexahedronCell : public Cell
 
 };
 
-#endif // HEXAHEDRONCELL_H
+#endif // HEXAHEDRONCELL_HPP

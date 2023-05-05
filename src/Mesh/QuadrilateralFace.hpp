@@ -1,5 +1,5 @@
-#ifndef QUADRILATERALFACE_H
-#define QUADRILATERALFACE_H
+#ifndef QUADRILATERALFACE_HPP
+#define QUADRILATERALFACE_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class QuadrilateralFace : public Face
 
 };
 
-#endif // QUADRILATERALFACE_H
+#endif // QUADRILATERALFACE_HPP

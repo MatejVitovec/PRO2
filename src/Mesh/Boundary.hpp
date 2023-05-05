@@ -1,5 +1,5 @@
-#ifndef BOUNDARY_H
-#define BOUNDARY_H
+#ifndef BOUNDARY_HPP
+#define BOUNDARY_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class Boundary
 
 };
 
-#endif // BOUNDARY_H
+#endif // BOUNDARY_HPP

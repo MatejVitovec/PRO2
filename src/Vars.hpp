@@ -1,5 +1,5 @@
-#ifndef VARS_H
-#define VARS_H
+#ifndef VARS_HPP
+#define VARS_HPP
 
 #include <vector>
 #include <memory>
@@ -175,4 +175,4 @@ double sum(const Vars<N>& u)
 Vars<3> vector3toVars(const Vector3& vec);
 
 
-#endif // VARS_H
+#endif // VARS_HPP

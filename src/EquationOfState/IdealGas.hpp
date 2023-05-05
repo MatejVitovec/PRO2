@@ -1,5 +1,5 @@
-#ifndef IDEALGAS_H
-#define IDEALGAS_H
+#ifndef IDEALGAS_HPP
+#define IDEALGAS_HPP
 
 #include "EquationOfState.hpp"
 
@@ -28,4 +28,4 @@ class IdealGas : public EquationOfState
 
 };
 
-#endif // IDEALGAS_H
+#endif // IDEALGAS_HPP

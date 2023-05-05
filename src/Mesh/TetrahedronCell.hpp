@@ -1,5 +1,5 @@
-#ifndef TETRAHEDRONCELL_H
-#define TETRAHEDRONCELL_H
+#ifndef TETRAHEDRONCELL_HPP
+#define TETRAHEDRONCELL_HPP
 
 #include <vector>
 #include <memory>
@@ -21,4 +21,4 @@ class TetrahedronCell : public Cell
 
 };
 
-#endif // TETRAHEDRONCELL_H
+#endif // TETRAHEDRONCELL_HPP

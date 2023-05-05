@@ -1,5 +1,5 @@
-#ifndef PRESSUREOUTLET_H
-#define PRESSUREOUTLET_H
+#ifndef PRESSUREOUTLET_HPP
+#define PRESSUREOUTLET_HPP
 
 #include "BoundaryCondition.hpp"
 

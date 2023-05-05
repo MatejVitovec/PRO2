@@ -1,5 +1,5 @@
-#ifndef HLL_H
-#define HLL_H
+#ifndef HLL_HPP
+#define HLL_HPP
 
 #include "FluxSolver.hpp"
 
@@ -18,4 +18,4 @@ class Hll : public FluxSolver
 
 };
 
-#endif // HLL_H
+#endif // HLL_HPP

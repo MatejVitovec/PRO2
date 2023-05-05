@@ -1,5 +1,5 @@
-#ifndef EQUATIONOFSTATE_H
-#define EQUATIONOFSTATE_H
+#ifndef EQUATIONOFSTATE_HPP
+#define EQUATIONOFSTATE_HPP
 
 #include "../Vars.hpp"
 
@@ -20,4 +20,4 @@ class EquationOfState
         
 };
 
-#endif // EQUATIONOFSTATE_H
+#endif // EQUATIONOFSTATE_HPP

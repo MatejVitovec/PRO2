@@ -1,5 +1,5 @@
-#ifndef FVMSCHEME_H
-#define FVMSCHEME_H
+#ifndef FVMSCHEME_HPP
+#define FVMSCHEME_HPP
 
 #include <vector>
 #include <memory>
@@ -65,4 +65,4 @@ class FVMScheme
 
 
 
-#endif // FVMSCHEME_H
+#endif // FVMSCHEME_HPP

@@ -1,5 +1,5 @@
-#ifndef EXPLICITEULER_H
-#define EXPLICITEULER_H
+#ifndef EXPLICITEULER_HPP
+#define EXPLICITEULER_HPP
 
 #include "FVMScheme.hpp"
 
@@ -27,4 +27,4 @@ class ExplicitEuler : public FVMScheme
 
 
 
-#endif // EXPLICITEULER_H
+#endif // EXPLICITEULER_HPP
