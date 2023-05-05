@@ -1,5 +1,4 @@
 #include "FVMScheme.hpp"
-#include "BoundaryCondition/FreeBoundary.hpp"
 
 
 void FVMScheme::setCfl(double cfl_)
@@ -30,6 +29,11 @@ int FVMScheme::getMaxIter() const
 double FVMScheme::getTargetError() const
 {
     return targetError;
+}
+
+const Mesh& FVMScheme::getMesh() const
+{
+    return mesh;
 }
 
 void FVMScheme::setInitialConditions(Compressible initialCondition)
@@ -68,7 +72,7 @@ void FVMScheme::applyBoundaryConditions()
 
 void FVMScheme::setBoundaryCondition(std::string boundaryName, int type)
 {
-    const std::vector<Boundary>& meshBoundaryList = mesh.getBoundaryList();
+    /*const std::vector<Boundary>& meshBoundaryList = mesh.getBoundaryList();
     Boundary aux;
 
     for (auto & meshBoundary : meshBoundaryList)
@@ -81,10 +85,15 @@ void FVMScheme::setBoundaryCondition(std::string boundaryName, int type)
     }
 
     //TODO udelat lepe
-    if(type == 1)
-    {
-        boundaryConditionList.push_back(std::make_shared<FreeBoundary>(aux));
-    }
+    if(type == BoundaryCondition::PRESSURETEMPERATUREINLET) boundaryConditionList.push_back(std::make_unique<PressureTemperatureInlet>(aux));
+    else if(type == BoundaryCondition::PRESSUREOUTLET) boundaryConditionList.push_back(std::make_unique<PressureOutlet>(aux));
+    else if(type == BoundaryCondition::FREEBOUNDARY) boundaryConditionList.push_back(std::make_unique<FreeBoundary>(aux));
+    else if(type == BoundaryCondition::WALL) boundaryConditionList.push_back(std::make_unique<Wall>(aux));*/
+}
+
+void FVMScheme::setBoundaryConditions(std::vector<std::unique_ptr<BoundaryCondition>> boundaryConditions)
+{
+    boundaryConditionList = std::move(boundaryConditions);
 }
 
 void FVMScheme::calculateWlWr()

@@ -14,9 +14,9 @@ class FVMScheme
 {
     public:
 
-        FVMScheme() : mesh(Mesh()), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
-        FVMScheme(Mesh mesh_) : mesh(mesh_), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
-        FVMScheme(Mesh mesh_, std::unique_ptr<FluxSolver> fluxSolver_) : mesh(mesh_), w(Field<Compressible>()) , fluxSolver(std::move(fluxSolver_)), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
+        //vznikne obraz meshe - neprekopiruje se
+        //FVMScheme() : mesh(Mesh()), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
+        FVMScheme(Mesh&& mesh_, std::unique_ptr<FluxSolver> fluxSolver_) : mesh(std::move(mesh_)), fluxSolver(std::move(fluxSolver_)), w(Field<Compressible>()), wl(Field<Compressible>()), wr(Field<Compressible>()) {}
 
 
         virtual ~FVMScheme() {}
@@ -27,10 +27,12 @@ class FVMScheme
         double getCfl() const;
         int getMaxIter() const;
         double getTargetError() const;
+        const Mesh& getMesh() const;
 
         void setInitialConditions(Compressible initialCondition);
         void setInitialConditionsRiemann(Compressible initialConditionL, Compressible initialConditionR);
         void setBoundaryCondition(std::string boundaryName, int type);
+        void setBoundaryConditions(std::vector<std::unique_ptr<BoundaryCondition>> boundaryConditions);
 
         virtual void solve() = 0;
 
@@ -41,7 +43,7 @@ class FVMScheme
         std::unique_ptr<FluxSolver> fluxSolver;
 
         Mesh mesh;
-        std::vector<std::shared_ptr<BoundaryCondition>> boundaryConditionList;
+        std::vector<std::unique_ptr<BoundaryCondition>> boundaryConditionList;
 
         Field<Compressible> w; //cell size
 

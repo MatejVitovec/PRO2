@@ -10,6 +10,9 @@
 #include "ExplicitEuler.hpp"
 #include "FluxSolver/Hllc.hpp"
 #include "outputVTK.hpp"
+#include "setCFD.hpp"
+
+
 
 //default eqs
 std::shared_ptr<EquationOfState> Compressible::eqs = std::make_shared<IdealGas>();
@@ -18,11 +21,11 @@ int main(int argc, char** argv)
 {
     Mesh myMesh = Mesh();
 
-    auto stop1 = std::chrono::high_resolution_clock::now();
+    //auto stop1 = std::chrono::high_resolution_clock::now();
 
     myMesh.loadGmsh2("Mesh/GAMM.msh");
 
-    auto stop2 = std::chrono::high_resolution_clock::now();
+    /*auto stop2 = std::chrono::high_resolution_clock::now();
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(stop2 - stop1).count() << " ms\n";
 
     const std::vector<std::shared_ptr<Cell>>& cellList = myMesh.getCellList();
@@ -32,37 +35,29 @@ int main(int argc, char** argv)
         vol += cellList[i]->volume;
     }
     
-    std::cout << "Volume: " << vol << std::endl;
+    std::cout << "Volume: " << vol << std::endl;*/
 
 
+    std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hllc>();
 
-
-
-
-
-    /*std::unique_ptr<FluxSolver> myFluxSolver = std::make_unique<Hllc>();
-
-    ExplicitEuler mySolver(myMesh, std::move(myFluxSolver));
+    ExplicitEuler mySolver(std::move(myMesh), std::move(myFluxSolver));
 
     mySolver.setCfl(0.8);
-    mySolver.setMaxIter(190);
+    mySolver.setMaxIter(200);
     mySolver.setTargetError(0.0000005);
 
-    mySolver.setBoundaryCondition("bottom", 1);
-    mySolver.setBoundaryCondition("outlet", 1);
-    mySolver.setBoundaryCondition("top", 1);
-    mySolver.setBoundaryCondition("inlet", 1);
-    mySolver.setBoundaryCondition("back", 1);
-    mySolver.setBoundaryCondition("front", 1);
+    std::vector<std::unique_ptr<BoundaryCondition>> bc = createBoundaryCondition(mySolver.getMesh());
 
-    Compressible leftState = Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0}));
+    mySolver.setBoundaryConditions(std::move(bc));
+
+    /*Compressible leftState = Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0}));
     Compressible rightState = Compressible::primitiveToConservative(Vars<5>({0.125, 0.0, 0.0, 0.0, 0.1}));
+    mySolver.setInitialConditionsRiemann(leftState, rightState);*/
+    mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0})));
 
-    mySolver.setInitialConditionsRiemann(leftState, rightState);
+    //mySolver.solve();
 
-    mySolver.solve();
-
-    outputVTK("results.vtk", myMesh, mySolver.getResults());*/
+    outputVTK("results.vtk", mySolver.getMesh(), mySolver.getResults());
 
     int a = 5;
 

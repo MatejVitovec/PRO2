@@ -1,5 +1,6 @@
 #include "ExplicitEuler.hpp"
 #include <iostream>
+#include "outputVTK.hpp"
 
 
 void ExplicitEuler::solve()
@@ -35,6 +36,7 @@ void ExplicitEuler::solve()
         if(resNorm[0] < targetError) exitLoop = true;*/
 
         w = std::move(wn); //mozna to bude fungovat
+        outputVTK("results." + std::to_string(iter) + ".vtk", mesh, w);
     }
 
     std::cout << "time: " << time << std::endl;

@@ -9,6 +9,7 @@
 class BoundaryCondition
 {
     public:
+        enum BoundaryConditionType{PRESSURETEMPERATUREINLET, PRESSUREOUTLET, FREEBOUNDARY, WALL};
 
         BoundaryCondition() {}
         BoundaryCondition(Boundary meshBoundary) : facesIndex(meshBoundary.facesIndex) {}

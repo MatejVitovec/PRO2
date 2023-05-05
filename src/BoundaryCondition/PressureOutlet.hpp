@@ -8,7 +8,7 @@ class PressureOutlet : public BoundaryCondition
     public:
 
         PressureOutlet() {}
-        PressureOutlet(Boundary meshBoundary) : BoundaryCondition(meshBoundary) {}
+        PressureOutlet(Boundary meshBoundary, double pressure_) : BoundaryCondition(meshBoundary), pressure(pressure_) {}
 
         void setPressure(double pressure_);
         double getPressure() const;
