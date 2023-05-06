@@ -100,6 +100,14 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
     {
 		f << roundToZero(w[i].pressure()) << "\n";
 	}
+
+	f << "SCALARS M float\n"; 
+	f << "LOOKUP_TABLE default\n";
+
+    for (int i = 0; i < cellSize; i++)
+    {
+		f << roundToZero(w[i].machNumber()) << "\n";
+	}
 	
  	f << "SCALARS x float 3\n"; 
 	f << "LOOKUP_TABLE default\n";

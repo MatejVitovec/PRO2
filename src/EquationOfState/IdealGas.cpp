@@ -58,11 +58,17 @@ Compressible IdealGas::primitiveToConservative(const Vars<5>& primitive) const
 
 Compressible IdealGas::subsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const
 {
+    double gamma1 = gamma - 1.0;
 
     double inDomainSS = inDomainState.soundSpeed();
-    double riemannInv = dot(inDomainState.velocity(), normalVector) - (2*inDomainSS)/(gamma - 1.0);
-    double cosPhi = inDomainState.velocityCosine(normalVector);
-    double gamma1 = gamma - 1.0;
+    Vars<3> inDomainVelocity = inDomainState.velocity();
+    double riemannInv = dot(inDomainVelocity, normalVector) - (2*inDomainSS)/gamma1;
+    
+    double absVelo = inDomainState.absVelocity();
+    
+    //double cosPhi = inDomainState.velocityCosine(normalVector);
+    double cosPhi = -((dot(inDomainVelocity, normalVector))/absVelo);
+    if (absVelo == 0.0) cosPhi = 1.0;
 
     double stagnationSS2 = inDomainSS*inDomainSS + (gamma1/2)*inDomainState.absVelocity2();
 
