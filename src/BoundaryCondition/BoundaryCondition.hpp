@@ -12,14 +12,15 @@ class BoundaryCondition
         enum BoundaryConditionType{PRESSURETEMPERATUREINLET, PRESSUREOUTLET, FREEBOUNDARY, WALL};
 
         BoundaryCondition() {}
-        BoundaryCondition(Boundary meshBoundary) : facesIndex(meshBoundary.facesIndex) {}
+        BoundaryCondition(Boundary meshBoundary) : boundary(meshBoundary) {}
 
         void apply(const std::vector<int>& ownerIndexList,const std::vector<std::shared_ptr<Face>>& faces, const Field<Compressible>& w, Field<Compressible>& wr) const;
 
         virtual Compressible calculateState(const Compressible& wl, const Face& f) const = 0;
         
     protected:
-        std::vector<int> facesIndex;
+        Boundary boundary;
+        //std::vector<int> facesIndex;
 
 };
 

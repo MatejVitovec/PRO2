@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     ExplicitEuler mySolver(std::move(myMesh), std::move(myFluxSolver));
 
     mySolver.setCfl(0.8);
-    mySolver.setMaxIter(200);
+    mySolver.setMaxIter(400);
     mySolver.setTargetError(0.0000005);
 
     std::vector<std::unique_ptr<BoundaryCondition>> bc = createBoundaryCondition(mySolver.getMesh());
@@ -53,11 +53,11 @@ int main(int argc, char** argv)
     /*Compressible leftState = Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0}));
     Compressible rightState = Compressible::primitiveToConservative(Vars<5>({0.125, 0.0, 0.0, 0.0, 0.1}));
     mySolver.setInitialConditionsRiemann(leftState, rightState);*/
-    mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0})));
-
-    //mySolver.solve();
+    mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.0, 0.0, 0.0, 0.7143})));
 
     outputVTK("results.vtk", mySolver.getMesh(), mySolver.getResults());
+
+    mySolver.solve();
 
     int a = 5;
 

@@ -31,7 +31,6 @@ class FVMScheme
 
         void setInitialConditions(Compressible initialCondition);
         void setInitialConditionsRiemann(Compressible initialConditionL, Compressible initialConditionR);
-        void setBoundaryCondition(std::string boundaryName, int type);
         void setBoundaryConditions(std::vector<std::unique_ptr<BoundaryCondition>> boundaryConditions);
 
         virtual void solve() = 0;

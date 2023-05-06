@@ -36,7 +36,8 @@ void ExplicitEuler::solve()
         if(resNorm[0] < targetError) exitLoop = true;*/
 
         w = std::move(wn); //mozna to bude fungovat
-        outputVTK("results." + std::to_string(iter) + ".vtk", mesh, w);
+
+        outputVTK("results/results." + std::to_string(iter) + ".vtk", mesh, w);
     }
 
     std::cout << "time: " << time << std::endl;
@@ -75,7 +76,7 @@ Field<Compressible> ExplicitEuler::explicitIntegration(const Field<Vars<5>>& res
 
     for (int i = 0; i < w.size(); i++)
     {
-        wn[i] = w[i] + timeStep*res[i];
+        wn[i] = w[i] + timeStep*res[i];        
     }
     
     return wn;

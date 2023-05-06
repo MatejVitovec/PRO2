@@ -55,11 +55,11 @@ std::vector<std::unique_ptr<BoundaryCondition>> createBoundaryCondition(const Me
 
 		if(boundaryTypes[i] == BoundaryCondition::PRESSURETEMPERATUREINLET)
 		{
-			out.push_back(std::make_unique<PressureTemperatureInlet>(aux, 100000.0, 280.0, Vars<3>({1.0, 0.0, 0.0})));
+			out.push_back(std::make_unique<PressureTemperatureInlet>(aux, 0.7143, 0.5102, Vars<3>({1.0, 0.0, 0.0})));
 		}
 		else if(boundaryTypes[i] == BoundaryCondition::PRESSUREOUTLET)
 		{
-			out.push_back(std::make_unique<PressureOutlet>(aux, 700000.0));
+			out.push_back(std::make_unique<PressureOutlet>(aux, 0.5264));
 		}
 		else if(boundaryTypes[i] == BoundaryCondition::FREEBOUNDARY)
 		{
@@ -71,6 +71,6 @@ std::vector<std::unique_ptr<BoundaryCondition>> createBoundaryCondition(const Me
 		}
 	}
 
-	return std::move(out);
+	return out;
 
 }

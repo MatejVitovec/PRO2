@@ -70,27 +70,6 @@ void FVMScheme::applyBoundaryConditions()
     }
 }
 
-void FVMScheme::setBoundaryCondition(std::string boundaryName, int type)
-{
-    /*const std::vector<Boundary>& meshBoundaryList = mesh.getBoundaryList();
-    Boundary aux;
-
-    for (auto & meshBoundary : meshBoundaryList)
-    {
-        if(meshBoundary.boundaryConditionName == boundaryName)
-        {
-            aux = meshBoundary;
-            break;
-        }
-    }
-
-    //TODO udelat lepe
-    if(type == BoundaryCondition::PRESSURETEMPERATUREINLET) boundaryConditionList.push_back(std::make_unique<PressureTemperatureInlet>(aux));
-    else if(type == BoundaryCondition::PRESSUREOUTLET) boundaryConditionList.push_back(std::make_unique<PressureOutlet>(aux));
-    else if(type == BoundaryCondition::FREEBOUNDARY) boundaryConditionList.push_back(std::make_unique<FreeBoundary>(aux));
-    else if(type == BoundaryCondition::WALL) boundaryConditionList.push_back(std::make_unique<Wall>(aux));*/
-}
-
 void FVMScheme::setBoundaryConditions(std::vector<std::unique_ptr<BoundaryCondition>> boundaryConditions)
 {
     boundaryConditionList = std::move(boundaryConditions);

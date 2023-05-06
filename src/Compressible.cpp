@@ -38,7 +38,12 @@ double Compressible::normalVelocity(const Vars<3>& normalVector) const
 
 double Compressible::velocityCosine(const Vars<3>& normalVector) const
 {
-    return -((dot(velocity(), normalVector))/absVelocity());
+    double absVelo = absVelocity();
+    if (absVelo == 0.0)
+    {
+        return 0.0;
+    }
+    return -((dot(velocity(), normalVector))/absVelo);
 }
 
 double Compressible::velocityU() const
