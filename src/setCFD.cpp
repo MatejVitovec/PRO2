@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "BoundaryCondition/PressureTemperatureInlet.hpp"
+#include "BoundaryCondition/PressureDensityInlet.hpp"
 #include "BoundaryCondition/PressureOutlet.hpp"
 #include "BoundaryCondition/FreeBoundary.hpp"
 #include "BoundaryCondition/Wall.hpp"
@@ -24,7 +25,7 @@ std::vector<std::unique_ptr<BoundaryCondition>> createBoundaryCondition(const Me
 	boundaryNames.push_back("front");
 	boundaryNames.push_back("back");
 
-	boundaryTypes.push_back(BoundaryCondition::PRESSURETEMPERATUREINLET);
+	boundaryTypes.push_back(BoundaryCondition::PRESSUREDENSITYINLET);
 	boundaryTypes.push_back(BoundaryCondition::PRESSUREOUTLET);
 	boundaryTypes.push_back(BoundaryCondition::WALL);
 	boundaryTypes.push_back(BoundaryCondition::WALL);
@@ -56,6 +57,10 @@ std::vector<std::unique_ptr<BoundaryCondition>> createBoundaryCondition(const Me
 		if(boundaryTypes[i] == BoundaryCondition::PRESSURETEMPERATUREINLET)
 		{
 			out.push_back(std::make_unique<PressureTemperatureInlet>(aux, 0.7143, 0.5102, Vars<3>({1.0, 0.0, 0.0})));
+		}
+		else if(boundaryTypes[i] == BoundaryCondition::PRESSUREDENSITYINLET)
+		{
+			out.push_back(std::make_unique<PressureDensityInlet>(aux, 1.0/1.4, 1.0, Vars<3>({1.0, 0.0, 0.0})));
 		}
 		else if(boundaryTypes[i] == BoundaryCondition::PRESSUREOUTLET)
 		{

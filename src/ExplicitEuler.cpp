@@ -37,7 +37,7 @@ void ExplicitEuler::solve()
 
         w = std::move(wn); //mozna to bude fungovat
 
-        outputVTK("results/results." + std::to_string(iter) + ".vtk", mesh, w);
+        if(iter % 10 == 0) outputVTK("results/results." + std::to_string(iter) + ".vtk", mesh, w);
     }
 
     std::cout << "time: " << time << std::endl;

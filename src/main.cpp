@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     ExplicitEuler mySolver(std::move(myMesh), std::move(myFluxSolver));
 
     mySolver.setCfl(0.8);
-    mySolver.setMaxIter(400);
+    mySolver.setMaxIter(10000);
     mySolver.setTargetError(0.0000005);
 
     std::vector<std::unique_ptr<BoundaryCondition>> bc = createBoundaryCondition(mySolver.getMesh());

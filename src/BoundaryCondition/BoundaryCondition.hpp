@@ -9,7 +9,7 @@
 class BoundaryCondition
 {
     public:
-        enum BoundaryConditionType{PRESSURETEMPERATUREINLET, PRESSUREOUTLET, FREEBOUNDARY, WALL};
+        enum BoundaryConditionType{PRESSURETEMPERATUREINLET, PRESSUREDENSITYINLET, PRESSUREOUTLET, FREEBOUNDARY, WALL};
 
         BoundaryCondition() {}
         BoundaryCondition(Boundary meshBoundary) : boundary(meshBoundary) {}
@@ -20,8 +20,6 @@ class BoundaryCondition
         
     protected:
         Boundary boundary;
-        //std::vector<int> facesIndex;
-
 };
 
 #endif // BOUNDARYCONDITION_HPP

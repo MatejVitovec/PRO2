@@ -33,5 +33,5 @@ Vars<3> PressureTemperatureInlet::getVelocityDirection() const
 
 Compressible PressureTemperatureInlet::calculateState(const Compressible& wl, const Face& f) const
 {
-    return Compressible::getEquationOfState()->subsonicInletBoundaryState(wl, vector3toVars(f.normalVector), totalPressure, totalTemperature, velocityDirection);
+    return Compressible::getEquationOfState()->nonLinearSubsonicInletBoundaryState(wl, vector3toVars(f.normalVector), totalPressure, totalTemperature, velocityDirection);
 }

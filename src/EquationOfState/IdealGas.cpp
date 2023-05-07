@@ -42,7 +42,22 @@ double IdealGas::internalEnergy(const Compressible& data) const
 
 double IdealGas::soundSpeed(const Compressible& data) const
 {
-    return sqrt((gamma*data.pressure())/data.density());
+    return std::sqrt((gamma*data.pressure())/data.density());
+}
+
+double IdealGas::density(double totalDensity, double machNumeber2) const
+{
+    return totalDensity*std::pow(1.0 + ((gamma - 1.0)/2.0)*machNumeber2, 1.0/(1.0 - gamma));
+}
+
+double IdealGas::soundSpeed(double pressure, double density) const
+{
+    return std::sqrt((gamma*pressure)/density);
+}
+
+double IdealGas::machNumber2(double totalPressure, double pressure) const
+{
+    return (2.0/(gamma - 1.0))*(std::pow((pressure/totalPressure), ((1.0 - gamma)/gamma)) - 1.0);
 }
 
 Compressible IdealGas::primitiveToConservative(const Vars<5>& primitive) const
@@ -56,7 +71,7 @@ Compressible IdealGas::primitiveToConservative(const Vars<5>& primitive) const
                          0.5*primitive[0]*velocity2 + (primitive[4])/(gamma - 1.0)});
 }
 
-Compressible IdealGas::subsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const
+Compressible IdealGas::nonLinearSubsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const
 {
     double gamma1 = gamma - 1.0;
 

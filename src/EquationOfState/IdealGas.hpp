@@ -20,9 +20,13 @@ class IdealGas : public EquationOfState
         double internalEnergy(const Compressible& data) const;
         double soundSpeed(const Compressible& data) const;
 
+        double density(double totalDensity, double machNumeber2) const;
+        double soundSpeed(double pressure, double density) const;
+        double machNumber2(double totalPressure, double pressure) const;
+
         Compressible primitiveToConservative(const Vars<5>& primitive) const;
 
-        Compressible subsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const;
+        Compressible nonLinearSubsonicInletBoundaryState(const Compressible& inDomainState, const Vars<3>& normalVector, double totalPressure, double totaltemperature, Vars<3> velocityDirection) const;
 
     private:
         double gamma;
