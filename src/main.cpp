@@ -8,6 +8,7 @@
 
 #include "Mesh/Mesh.hpp"
 #include "ExplicitEuler.hpp"
+#include "FluxSolver/Hll.hpp"
 #include "FluxSolver/Hllc.hpp"
 #include "outputVTK.hpp"
 #include "setCFD.hpp"
@@ -42,8 +43,8 @@ int main(int argc, char** argv)
 
     ExplicitEuler mySolver(std::move(myMesh), std::move(myFluxSolver));
 
-    mySolver.setCfl(0.8);
-    mySolver.setMaxIter(10000);
+    mySolver.setCfl(0.1);
+    mySolver.setMaxIter(3000);
     mySolver.setTargetError(0.0000005);
 
     std::vector<std::unique_ptr<BoundaryCondition>> bc = createBoundaryCondition(mySolver.getMesh());
@@ -55,7 +56,7 @@ int main(int argc, char** argv)
     mySolver.setInitialConditionsRiemann(leftState, rightState);*/
     mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.0, 0.0, 0.0, 0.7143})));
 
-    outputVTK("results.vtk", mySolver.getMesh(), mySolver.getResults());
+    outputVTK("results/results.0.vtk", mySolver.getMesh(), mySolver.getResults());
 
     mySolver.solve();
 

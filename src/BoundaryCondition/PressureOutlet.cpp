@@ -21,7 +21,7 @@ Compressible PressureOutlet::calculateState(const Compressible& wl, const Face& 
         return wl;
     }
 
-    double referenceDensity = wl.density();
+    /*double referenceDensity = wl.density();
     double inDomainPressure = wl.pressure();
 
     double nonConstPressure = pressure; //pressure is const - non const cast copy
@@ -32,5 +32,11 @@ Compressible PressureOutlet::calculateState(const Compressible& wl, const Face& 
                                                           wl.velocityU() + normalVector[0]*aux,
                                                           wl.velocityV() + normalVector[1]*aux,
                                                           wl.velocityW() + normalVector[2]*aux,
-                                                          nonConstPressure}));
+                                                          nonConstPressure}));*/
+
+    return Compressible::primitiveToConservative(Vars<5>({wl.density(),
+                                                          wl.velocityU(),
+                                                          wl.velocityV(),
+                                                          wl.velocityW(),
+                                                          pressure}));
 }
