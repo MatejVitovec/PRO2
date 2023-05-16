@@ -29,8 +29,8 @@ std::vector<std::unique_ptr<BoundaryCondition>> createBoundaryCondition(const Me
 	boundaryTypes.push_back(BoundaryCondition::PRESSUREOUTLET);
 	boundaryTypes.push_back(BoundaryCondition::WALL);
 	boundaryTypes.push_back(BoundaryCondition::WALL);
-	boundaryTypes.push_back(BoundaryCondition::FREEBOUNDARY);
-	boundaryTypes.push_back(BoundaryCondition::FREEBOUNDARY);
+	boundaryTypes.push_back(BoundaryCondition::WALL);
+	boundaryTypes.push_back(BoundaryCondition::WALL);
 
 	const std::vector<Boundary>& meshBoundaryList = mesh.getBoundaryList();
 	

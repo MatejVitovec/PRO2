@@ -37,7 +37,7 @@ void ExplicitEuler::solve()
 
         w = std::move(wn); //mozna to bude fungovat
 
-        if(iter % 10 == 0) outputVTK("results/results." + std::to_string(iter) + ".vtk", mesh, w);
+        if(iter % 50 == 0) outputVTK("results/results." + std::to_string(iter) + ".vtk", mesh, w);
     }
 
     std::cout << "time: " << time << std::endl;
@@ -47,6 +47,7 @@ void ExplicitEuler::solve()
 Field<Vars<5>> ExplicitEuler::calculateResidual()
 {
     const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
+    const std::vector<std::shared_ptr<Face>>& faces = mesh.getFaceList();
 
     Field<Vars<5>> res(w.size());
 

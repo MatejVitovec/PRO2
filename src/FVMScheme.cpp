@@ -36,6 +36,8 @@ const Mesh& FVMScheme::getMesh() const
     return mesh;
 }
 
+
+
 void FVMScheme::setInitialConditions(Compressible initialCondition)
 {
     w = Field<Compressible>(mesh.getCellsSize());
@@ -79,23 +81,20 @@ void FVMScheme::calculateWlWr()
 {
     //Without reconstruction
 
-    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
+    const std::vector<std::shared_ptr<Face>>& faces = mesh.getFaceList();
+    const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
+    const std::vector<int>& neighborIndexList = mesh.getNeighborIndexList();
 
-    for (int i = 0; i < cells.size(); i++)
+    for (int i = 0; i < faces.size(); i++)
     {        
-        for (auto & faceIndex : cells[i]->ownFaceIndex)
-        {
-            wl[faceIndex] = w[i];
-        }
+        wl[i] = w[ownerIndexList[i]];
 
-        for (auto & faceIndex : cells[i]->neighborFaceIndex)
+        int neighbour = neighborIndexList[i];
+        if(neighbour >= 0)
         {
-            wr[faceIndex] = w[i];
+            wr[i] = w[neighbour];
         }
-    }
-
-    //TODO udelat pres steny
-    
+    }    
 }
 
 void FVMScheme::updateTimeStep()
@@ -108,9 +107,9 @@ void FVMScheme::updateTimeStep()
     {
         double soundSpeed = w[i].soundSpeed();
         Vars<3> ssVector({soundSpeed, soundSpeed, soundSpeed});
-        timeStep = std::min(cfl*((cells[i]->volume)/sum((abs(w[i].velocity()) + ssVector)*vector3toVars(cells[i]->projectedArea))), timeStep);
+        //timeStep = std::min(cfl*((cells[i]->volume)/sum((abs(w[i].velocity()) + ssVector)*vector3toVars(cells[i]->projectedArea))), timeStep);
         
-        //timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
+        timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
     }
 }
 

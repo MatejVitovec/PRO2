@@ -24,6 +24,7 @@ class FVMScheme
         void setCfl(double cfl_);
         void setMaxIter(int maxIter_);
         void setTargetError(double targetError_);
+        
         double getCfl() const;
         int getMaxIter() const;
         double getTargetError() const;
