@@ -79,6 +79,7 @@ void Mesh::createFaces()
                 if (faceList[i]->equal(*ownFace))
                 {
                     existInList = true;
+                    break;
                 }                
             }
 

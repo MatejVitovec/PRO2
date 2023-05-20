@@ -32,8 +32,8 @@ class Face
     protected:
         const int type;
 
-        virtual Vector3 calculateNormalVector(const std::vector<Vector3>& nodeList) const;
-        virtual Vector3 calculateMidpoint(const std::vector<Vector3>& nodeList) const;
+        Vector3 calculateNormalVector(const std::vector<Vector3>& nodeList);
+        Vector3 calculateMidpoint(const std::vector<Vector3>& nodeList) const;
 
 };
 

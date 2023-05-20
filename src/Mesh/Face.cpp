@@ -5,12 +5,12 @@
 
 void Face::update(const std::vector<Vector3>& nodeList)
 {
+    midpoint = calculateMidpoint(nodeList);
+
     Vector3 normalVectorScale = calculateNormalVector(nodeList);
 
-    area = sqrt(normalVectorScale.x*normalVectorScale.x + normalVectorScale.y*normalVectorScale.y + normalVectorScale.z*normalVectorScale.z);
+    area = norm2(normalVectorScale);
     normalVector = normalVectorScale/area;
-
-    midpoint = calculateMidpoint(nodeList);
 }
 
 bool Face::check() const
@@ -44,18 +44,35 @@ void Face::reverseOrientation()
     //update();
 }
 
-Vector3 Face::calculateNormalVector(const std::vector<Vector3>& nodeList) const
+Vector3 Face::calculateNormalVector(const std::vector<Vector3>& nodeList)
 {
-    //pouze virtualni - spatne
-    return Vector3();
+    Vector3 surface = Vector3();
+    //Vector3 center = Vector3();
+
+    int i;
+    for (i = 0; i < nodesIndex.size() - 1; i++)
+    {
+        Vector3 auxSurface = cross(nodeList[nodesIndex[i+1]] - nodeList[nodesIndex[i]], (midpoint - nodeList[nodesIndex[i]])/2.0);
+        surface = surface + auxSurface;
+        //center = center + norm2(auxSurface)*((nodeList[nodesIndex[i+1]] + nodeList[nodesIndex[i]] + midpoint)/3.0);
+    }
+    //i++;
+    Vector3 auxSurface = cross(nodeList[nodesIndex[0]] - nodeList[nodesIndex[i]], (midpoint - nodeList[nodesIndex[i]])/2.0);
+    surface = surface + auxSurface;
+    //center = center + norm2((nodeList[nodesIndex[0]] + nodeList[nodesIndex[i]] + midpoint)/3.0)*auxSurface;
+
+    //neni midpoint predelat na faceCenter
+    //midpoint = center/norm2(surface);
+
+    return surface;
 }
 
 Vector3 Face::calculateMidpoint(const std::vector<Vector3>& nodeList) const
 {
-    Vector3 aux = Vector3(0.0, 0.0, 0.0);
+    Vector3 aux = Vector3();
 
     int i;
-    for (i = 0; i < nodeList.size(); i++)
+    for (i = 0; i < nodesIndex.size(); i++)
     {
         aux = aux + nodeList[nodesIndex[i]];
     }
