@@ -1,0 +1,24 @@
+#ifndef PYRAMIDCELL_HPP
+#define PYRAMIDCELL_HPP
+
+#include <vector>
+#include <memory>
+#include "Cell.hpp"
+#include "Face.hpp"
+#include "Vector3.hpp"
+
+class PyramidCell : public Cell
+{
+    public:
+        PyramidCell() : Cell(PYRAMID) {};
+        PyramidCell(std::vector<int> nodesIdx) : Cell(PYRAMID, nodesIdx) {};
+
+        std::vector<Face> createFaces();
+
+        virtual ~PyramidCell();
+
+    private:
+
+};
+
+#endif // PYRAMIDCELL_HPP

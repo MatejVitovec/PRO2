@@ -13,12 +13,12 @@ const std::vector<Vector3>& Mesh::getNodeList() const
     return nodeList;
 }
 
-const std::vector<std::shared_ptr<Cell>>& Mesh::getCellList() const
+const std::vector<Cell>& Mesh::getCellList() const
 {
     return cellList;
 }
 
-const std::vector<std::shared_ptr<Face>>& Mesh::getFaceList() const
+const std::vector<Face>& Mesh::getFaceList() const
 {
     return faceList;
 }
@@ -67,8 +67,8 @@ void Mesh::createFaces()
     //vytvoreni sten + ownerList
     for (int j = 0; j < cellList.size(); j++)
     {
-        cellList[j]->ownFaceIndex.clear();
-        std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
+        cellList[j].ownFaceIndex.clear();
+        std::vector<Face> ownFaces = cellList[j].createFaces();
 
         for (auto & ownFace : ownFaces)
         {
@@ -76,7 +76,7 @@ void Mesh::createFaces()
 
             for (int i = 0; i < faceList.size(); i++)
             {
-                if (faceList[i]->equal(*ownFace))
+                if (faceList[i].equal(ownFace))
                 {
                     existInList = true;
                     break;
@@ -85,7 +85,7 @@ void Mesh::createFaces()
 
             if (!existInList)
             {
-                cellList[j]->ownFaceIndex.push_back(faceList.size());
+                cellList[j].ownFaceIndex.push_back(faceList.size());
 
                 faceList.push_back(ownFace);                
                 ownerIndexList.push_back(j);                
@@ -98,15 +98,15 @@ void Mesh::createFaces()
 
     for (int j = 0; j < cellList.size(); j++)
     {
-        cellList[j]->neighborFaceIndex.clear();
-        std::vector<std::shared_ptr<Face>> ownFaces = cellList[j]->createFaces();
+        cellList[j].neighborFaceIndex.clear();
+        std::vector<Face> ownFaces = cellList[j].createFaces();
 
         for (auto & ownFace : ownFaces)
         {
             bool goNext = false;            
-            for (int i = 0; i < cellList[j]->ownFaceIndex.size(); i++)
+            for (int i = 0; i < cellList[j].ownFaceIndex.size(); i++)
             {
-                if(faceList[cellList[j]->ownFaceIndex[i]]->equal(*ownFace))
+                if(faceList[cellList[j].ownFaceIndex[i]].equal(ownFace))
                 {
                     goNext = true;
                     break;
@@ -116,9 +116,9 @@ void Mesh::createFaces()
 
             for (int i = 0; i < faceList.size(); i++)
             {
-                if (faceList[i]->equal(*ownFace) /*&& ownerIndexList[i] != j*/)
+                if (faceList[i].equal(ownFace) /*&& ownerIndexList[i] != j*/)
                 {
-                    cellList[j]->neighborFaceIndex.push_back(i);
+                    cellList[j].neighborFaceIndex.push_back(i);
                     neighborIndexList[i] = j;
                     break;
                 }
@@ -131,14 +131,14 @@ void Mesh::updateCellsIndexToFace()
 {
     for(int j = 0; j < cellList.size(); j++)
     {
-        cellList[j]->ownFaceIndex.clear();
-        cellList[j]->neighborFaceIndex.clear();
+        cellList[j].ownFaceIndex.clear();
+        cellList[j].neighborFaceIndex.clear();
 
         for (int i = 0; i < ownerIndexList.size(); i++)
         {
             if(ownerIndexList[i] == j)
             {
-                cellList[j]->ownFaceIndex.push_back(i);
+                cellList[j].ownFaceIndex.push_back(i);
             }
         }
 
@@ -146,7 +146,7 @@ void Mesh::updateCellsIndexToFace()
         {
             if(neighborIndexList[i] == j)
             {
-                cellList[j]->neighborFaceIndex.push_back(i);
+                cellList[j].neighborFaceIndex.push_back(i);
             }
         }
     }
@@ -156,7 +156,7 @@ void Mesh::updateCells()
 {
     for(auto & cell : cellList)
     {
-        cell->update(faceList);
+        cell.update(faceList);
     }
 }
 
@@ -164,7 +164,7 @@ void Mesh::updateFaces()
 {
     for(auto & face : faceList)
     {
-        face->update(nodeList);
+        face.update(nodeList);
     }
 }
 
@@ -175,7 +175,7 @@ bool Mesh::checkFaces() const
     //kontrola sten na nenulovy obsah
     for (auto & face : faceList)
     {
-        if(face->check())
+        if(face.check())
         {
             std::cout << "stena neprosla kontorlou na nenulovy obsah" << std::endl;
             fail = true;
@@ -189,7 +189,7 @@ bool Mesh::checkFaces() const
         {
             if(i != j)
             {
-                if(faceList[i]->equal(*faceList[j]))
+                if(faceList[i].equal(faceList[j]))
                 {
                     std::cout << "v seznamuz sten je duplikat i:" << j << " j: "<< i << std::endl;
                     fail = true;
@@ -315,16 +315,16 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
             switch (stoi(cellsGmsh[i][1]))
             {
             case 4:
-                cellList.push_back(std::make_shared<TetrahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1}));
+                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1}, Cell::TETRAHEDRON));
                 break;
             case 5:
-                cellList.push_back(std::make_shared<HexahedronCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1, stoi(cellsGmsh[i][9+numOfTags]) - 1, stoi(cellsGmsh[i][10+numOfTags]) - 1}));
+                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1, stoi(cellsGmsh[i][9+numOfTags]) - 1, stoi(cellsGmsh[i][10+numOfTags]) - 1}, Cell::HEXAHEDRON));
                 break;
             case 6:
-                cellList.push_back(std::make_shared<PrismCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1}));
+                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1}, Cell::PRISM));
                 break;
             case 7:
-                cellList.push_back(std::make_shared<PyramidCell>(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1}));
+                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1}, Cell::PYRAMID));
                 break;
             
             default:
@@ -335,7 +335,7 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
         else
         {
             std::cout << "Chybejici Cell, index:" << i << std::endl;
-            cellList.push_back(std::make_shared<Cell>());
+            cellList.push_back(Cell());
         }
     }
 }
@@ -344,7 +344,7 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
 {
     boundaryList.clear();
 
-    std::vector<std::shared_ptr<Face>> auxFaceList;
+    std::vector<Face> auxFaceList;
     auxFaceList.clear();
     std::vector<int> auxFacePhysicalGroupList;
     auxFacePhysicalGroupList.clear();
@@ -358,11 +358,11 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
             switch (stoi(elementsGmsh[i][1]))
             {
             case 2:
-                auxFaceList.push_back(std::make_shared<TriangularFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1}));
+                auxFaceList.push_back(Face(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1}, Face::TRIANGULAR));
                 auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
                 break;
             case 3:
-                auxFaceList.push_back(std::make_shared<QuadrilateralFace>(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1, stoi(elementsGmsh[i][6+numOfTags]) - 1}));
+                auxFaceList.push_back(Face(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1, stoi(elementsGmsh[i][4+numOfTags]) - 1, stoi(elementsGmsh[i][5+numOfTags]) - 1, stoi(elementsGmsh[i][6+numOfTags]) - 1}, Face::QUADRILATERAL));
                 auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
                 break;
             
@@ -374,7 +374,7 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
         else
         {
             std::cout << "Chybejici Cell, index:" << i << std::endl;
-            cellList.push_back(std::make_shared<Cell>());
+            cellList.push_back(Cell());
         }
     }
 
@@ -394,11 +394,11 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
 
         for (int j = 0; j < auxFacePhysicalGroupList.size(); j++)
         {
-            if(auxFacePhysicalGroupList[j] == physicalId)
+                if(auxFacePhysicalGroupList[j] == physicalId)
             {
                 for (int i = 0; i < faceList.size(); i++)
                 {
-                    if(faceList[i]->equal(*auxFaceList[j]))
+                    if(faceList[i].equal(auxFaceList[j]))
                     {
                         auxBoundary.facesIndex.push_back(i);
                     }

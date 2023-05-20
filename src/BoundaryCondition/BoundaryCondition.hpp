@@ -14,7 +14,7 @@ class BoundaryCondition
         BoundaryCondition() {}
         BoundaryCondition(Boundary meshBoundary) : boundary(meshBoundary) {}
 
-        void apply(const std::vector<int>& ownerIndexList,const std::vector<std::shared_ptr<Face>>& faces, const Field<Compressible>& w, Field<Compressible>& wr) const;
+        void apply(const std::vector<int>& ownerIndexList,const std::vector<Face>& faces, const Field<Compressible>& w, Field<Compressible>& wr) const;
 
         virtual Compressible calculateState(const Compressible& wl, const Face& f) const = 0;
         

@@ -9,15 +9,15 @@
 class Cell
 {
     public:
-        enum cellType{VOID, TETRAHEDRON, HEXAHEDRON, PRISM, PYRAMID};
+        enum cellType{GENERAL, TETRAHEDRON, HEXAHEDRON, PRISM, PYRAMID};
 
-        Cell() : type(VOID) {};
-        Cell(cellType cType) : type(cType) {};
-        Cell(cellType cType, std::vector<int> nodesIdx) : type(cType), nodesIndex(nodesIdx) {};
+        Cell() : type(GENERAL) {};
+        Cell(std::vector<int> nodesIdx) : type(GENERAL) {};
+        Cell(std::vector<int> nodesIdx, cellType cType) : nodesIndex(nodesIdx), type(cType) {};
 
-        void update(const std::vector<std::shared_ptr<Face>>& faceList);
+        void update(const std::vector<Face>& faceList);
 
-        virtual std::vector<std::shared_ptr<Face>> createFaces();
+        std::vector<Face> createFaces();
 
         int getVtkType() const;
 

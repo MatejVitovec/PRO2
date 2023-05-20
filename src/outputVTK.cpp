@@ -4,12 +4,12 @@
 
 int calculateCellNodeSize(const Mesh& mesh)
 {
-    const std::vector<std::shared_ptr<Cell>>& cellList = mesh.getCellList();
+    const std::vector<Cell>& cellList = mesh.getCellList();
     int num = 0;
 
     for (int i = 0; i < cellList.size(); i++)
     {
-        num += (1 + cellList[i]->nodesIndex.size());
+        num += (1 + cellList[i].nodesIndex.size());
     }
     
     return num;
@@ -27,7 +27,7 @@ double roundToZero(double in)
 void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>& w)
 {
     const std::vector<Vector3>& nodeList = mesh.getNodeList();
-    const std::vector<std::shared_ptr<Cell>>& cellList = mesh.getCellList();
+    const std::vector<Cell>& cellList = mesh.getCellList();
 
     int cellSize = mesh.getCellsSize();
 
@@ -50,14 +50,14 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 	
 	for (int i = 0; i < cellSize; i++)
     {
-		f << *cellList[i] << "\n";
+		f << cellList[i] << "\n";
 	}
 	
 	f << "cell_types " << cellSize << "\n";
 	
 	for (int i = 0; i < cellSize; i++)
     {
-		f << cellList[i]->getVtkType() << "\n";
+		f << cellList[i].getVtkType() << "\n";
 	}
 	
 	f << "CELL_DATA " << cellSize << "\n";
@@ -114,7 +114,7 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 
     for (int i = 0; i < cellSize; i++)
     {
-		f << cellList[i]->center << "\n";
+		f << cellList[i].center << "\n";
 	}
 	f << std::endl;
 

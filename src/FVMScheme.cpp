@@ -64,7 +64,7 @@ void FVMScheme::setInitialConditionsRiemann(Compressible initialConditionL, Comp
 void FVMScheme::applyBoundaryConditions()
 {
     const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
-    const std::vector<std::shared_ptr<Face>>& faceList = mesh.getFaceList();
+    const std::vector<Face>& faceList = mesh.getFaceList();
 
     for (auto & boundaryCondition : boundaryConditionList)
     {
@@ -81,7 +81,7 @@ void FVMScheme::calculateWlWr()
 {
     //Without reconstruction
 
-    const std::vector<std::shared_ptr<Face>>& faces = mesh.getFaceList();
+    const std::vector<Face>& faces = mesh.getFaceList();
     const std::vector<int>& ownerIndexList = mesh.getOwnerIndexList();
     const std::vector<int>& neighborIndexList = mesh.getNeighborIndexList();
 
@@ -99,7 +99,7 @@ void FVMScheme::calculateWlWr()
 
 void FVMScheme::updateTimeStep()
 {
-    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
+    const std::vector<Cell>& cells = mesh.getCellList();
 
     timeStep = 1000000;
 
@@ -109,7 +109,7 @@ void FVMScheme::updateTimeStep()
         Vars<3> ssVector({soundSpeed, soundSpeed, soundSpeed});
         //timeStep = std::min(cfl*((cells[i]->volume)/sum((abs(w[i].velocity()) + ssVector)*vector3toVars(cells[i]->projectedArea))), timeStep);
         
-        timeStep = std::min(cfl*((cells[i]->volume)/(cells[i]->projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i]->projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i]->projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
+        timeStep = std::min(cfl*((cells[i].volume)/(cells[i].projectedArea.x*(w[i].velocityU() + soundSpeed) + cells[i].projectedArea.y*(w[i].velocityV() + soundSpeed) + cells[i].projectedArea.z*(w[i].velocityW() + soundSpeed))), timeStep);
     }
 }
 

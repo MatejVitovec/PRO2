@@ -1,0 +1,17 @@
+#include <cmath>
+#include "PrismCell.hpp"
+
+
+std::vector<Face> PrismCell::createFaces()
+{
+    return std::vector<Face>{Face(std::vector<int>{nodesIndex[0], nodesIndex[2], nodesIndex[1]}, Face::TRIANGULAR),
+                             Face(std::vector<int>{nodesIndex[3], nodesIndex[4], nodesIndex[5]}, Face::TRIANGULAR),
+                             Face(std::vector<int>{nodesIndex[0], nodesIndex[1], nodesIndex[4], nodesIndex[3]}, Face::QUADRILATERAL),
+                             Face(std::vector<int>{nodesIndex[0], nodesIndex[3], nodesIndex[5], nodesIndex[2]}, Face::QUADRILATERAL),
+                             Face(std::vector<int>{nodesIndex[1], nodesIndex[2], nodesIndex[5], nodesIndex[4]}, Face::QUADRILATERAL)};
+}
+
+PrismCell::~PrismCell()
+{
+    
+}

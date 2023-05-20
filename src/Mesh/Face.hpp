@@ -9,11 +9,11 @@
 class Face
 {
     public:
-        enum faceType{VOID, TRIANGULAR, QUADRILATERAL};
+        enum faceType{GENERAL, TRIANGULAR, QUADRILATERAL};
 
-        Face() : type(VOID) {};
-        Face(faceType fType) : type(fType) {};
-        Face(faceType fType, std::vector<int> nodesIdx) : type(fType), nodesIndex(nodesIdx) {};
+        Face() : type(GENERAL) {};
+        Face(std::vector<int> nodesIdx) : nodesIndex(nodesIdx), type(GENERAL) {};
+        Face(std::vector<int> nodesIdx, faceType fType) : nodesIndex(nodesIdx), type(fType) {};
 
         void update(const std::vector<Vector3>& nodeList);
         bool check() const;

@@ -50,8 +50,8 @@ void ExplicitEuler::solve()
 
 Field<Vars<5>> ExplicitEuler::calculateResidual()
 {
-    const std::vector<std::shared_ptr<Cell>>& cells = mesh.getCellList();
-    const std::vector<std::shared_ptr<Face>>& faces = mesh.getFaceList();
+    const std::vector<Cell>& cells = mesh.getCellList();
+    const std::vector<Face>& faces = mesh.getFaceList();
 
     Field<Vars<5>> res(w.size());
 
@@ -59,17 +59,17 @@ Field<Vars<5>> ExplicitEuler::calculateResidual()
     {
         Vars<5> aux= Vars<5>();
 
-        for (auto & faceIndex : cells[i]->ownFaceIndex)
+        for (auto & faceIndex : cells[i].ownFaceIndex)
         {
             aux -= fluxes[faceIndex];
         }
 
-        for (auto & faceIndex : cells[i]->neighborFaceIndex)
+        for (auto & faceIndex : cells[i].neighborFaceIndex)
         {
             aux += fluxes[faceIndex];
         }
 
-        res[i] = aux/(cells[i]->volume);
+        res[i] = aux/(cells[i].volume);
     }    
     
     return res;

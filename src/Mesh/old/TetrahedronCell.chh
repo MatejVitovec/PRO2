@@ -1,0 +1,16 @@
+#include <cmath>
+#include "TetrahedronCell.hpp"
+
+
+std::vector<Face> TetrahedronCell::createFaces()
+{
+    return std::vector<Face>{Face(std::vector<int>{nodesIndex[0], nodesIndex[2], nodesIndex[1]}, Face::TRIANGULAR),
+                             Face(std::vector<int>{nodesIndex[0], nodesIndex[1], nodesIndex[3]}, Face::TRIANGULAR),
+                             Face(std::vector<int>{nodesIndex[0], nodesIndex[3], nodesIndex[2]}, Face::TRIANGULAR),
+                             Face(std::vector<int>{nodesIndex[1], nodesIndex[2], nodesIndex[3]}, Face::TRIANGULAR)};
+}
+
+TetrahedronCell::~TetrahedronCell()
+{
+
+}

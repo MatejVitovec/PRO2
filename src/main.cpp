@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
     //auto stop1 = std::chrono::high_resolution_clock::now();
 
-    myMesh.loadGmsh2("Mesh/GAMM.msh");
+    myMesh.loadGmsh2("Mesh/GAMM_fine.msh");
 
     /*auto stop2 = std::chrono::high_resolution_clock::now();
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(stop2 - stop1).count() << " ms\n";
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     ExplicitEuler mySolver(std::move(myMesh), std::move(myFluxSolver));
 
     mySolver.setCfl(0.8);
-    mySolver.setMaxIter(30000);
+    mySolver.setMaxIter(100000);
     mySolver.setTargetError(0.0000005);
 
     std::vector<std::unique_ptr<BoundaryCondition>> bc = createBoundaryCondition(mySolver.getMesh());

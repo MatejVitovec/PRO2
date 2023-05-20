@@ -6,17 +6,8 @@
 #include <string>
 
 #include "Vector3.hpp"
-
 #include "Cell.hpp"
-#include "TetrahedronCell.hpp"
-#include "HexahedronCell.hpp"
-#include "PrismCell.hpp"
-#include "PyramidCell.hpp"
-
 #include "Face.hpp"
-#include "TriangularFace.hpp"
-#include "QuadrilateralFace.hpp"
-
 #include "Boundary.hpp"
 
 
@@ -26,8 +17,8 @@ class Mesh
         Mesh() {};
 
         const std::vector<Vector3>& getNodeList() const;
-        const std::vector<std::shared_ptr<Cell>>& getCellList() const;
-        const std::vector<std::shared_ptr<Face>>& getFaceList() const;
+        const std::vector<Cell>& getCellList() const;
+        const std::vector<Face>& getFaceList() const;
         const std::vector<Boundary>& getBoundaryList() const;
         const std::vector<int>& getOwnerIndexList() const;
         const std::vector<int>& getNeighborIndexList() const;
@@ -56,8 +47,8 @@ class Mesh
         bool checkFaces() const;
 
         std::vector<Vector3> nodeList;
-        std::vector<std::shared_ptr<Cell>> cellList;
-        std::vector<std::shared_ptr<Face>> faceList;
+        std::vector<Cell> cellList;
+        std::vector<Face> faceList;
         std::vector<Boundary> boundaryList;
         
         std::vector<int> ownerIndexList;
