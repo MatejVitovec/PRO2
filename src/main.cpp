@@ -10,7 +10,7 @@
 #include "ExplicitEuler.hpp"
 #include "FluxSolver/Hll.hpp"
 #include "FluxSolver/Hllc.hpp"
-#include "outputVTK.hpp"
+#include "outputCFD.hpp"
 #include "setCFD.hpp"
 
 
@@ -51,9 +51,6 @@ int main(int argc, char** argv)
 
     mySolver.setBoundaryConditions(std::move(bc));
 
-    /*Compressible leftState = Compressible::primitiveToConservative(Vars<5>({1.0, 0.75, 0.0, 0.0, 1.0}));
-    Compressible rightState = Compressible::primitiveToConservative(Vars<5>({0.125, 0.0, 0.0, 0.0, 0.1}));
-    mySolver.setInitialConditionsRiemann(leftState, rightState);*/
     mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.0, 0.0, 0.0, 0.7143})));
 
     outputVTK("results/results.0.vtk", mySolver.getMesh(), mySolver.getResults());
