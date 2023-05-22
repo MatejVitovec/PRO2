@@ -1,4 +1,4 @@
-#include "outputVTK.hpp"
+#include "outputCFD.hpp"
 #include <fstream>
 #include <iomanip>
 
@@ -117,6 +117,19 @@ void outputVTK(std::string filename, const Mesh& mesh, const Field<Compressible>
 		f << cellList[i].center << "\n";
 	}
 	f << std::endl;
+
+	f.close();
+}
+
+
+void saveResidual(std::string filename, Vars<5> res)
+{
+
+	std::ofstream f;
+	f.open(filename, std::ios_base::app);
+
+	//f << res[0] << " " << res[1] << " " << res[2] << " " << res[3] << " " << res[4] << std::endl;
+	f << res[0] <<std::endl;
 
 	f.close();
 }

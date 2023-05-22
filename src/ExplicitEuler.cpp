@@ -1,6 +1,6 @@
 #include "ExplicitEuler.hpp"
 #include <iostream>
-#include "outputVTK.hpp"
+#include "outputCFD.hpp"
 
 
 void ExplicitEuler::solve()
@@ -32,8 +32,11 @@ void ExplicitEuler::solve()
         
         Field<Compressible> wn = explicitIntegration(res);
 
-        /*Vars<5> resNorm = (wn - w).norm(); //mozna spatne
-        if(resNorm[0] < targetError) exitLoop = true;*/
+        Vars<5> resNorm = (wn - w).norm(); //mozna spatne
+        saveResidual("results/residuals.txt", resNorm);
+
+        if(resNorm[0] < targetError) exitLoop = true;
+        
 
         w = std::move(wn); //mozna to bude fungovat
 

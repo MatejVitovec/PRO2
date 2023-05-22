@@ -1,5 +1,5 @@
-#ifndef OUTPUTVTK_HPP
-#define OUTPUTVTK_HPP
+#ifndef OUTPUTCFD_HPP
+#define OUTPUTCFD_HPP
 
 #include "Mesh/Mesh.hpp"
 #include "Field.hpp"
@@ -8,4 +8,6 @@
 
 void outputVTK(std::string filename, const Mesh& m, const Field<Compressible>& u);
 
-#endif //OUTPUT_HPP
+void saveResidual(std::string filename, Vars<5> res);
+
+#endif //OUTPUTCFD_HPP

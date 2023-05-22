@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <list>
+#include <chrono>
 
 #include "Mesh.hpp"
 
@@ -63,8 +65,10 @@ void Mesh::createFaces()
 {
     faceList.clear();
     ownerIndexList.clear();
+    neighborIndexList.clear();
 
-    //vytvoreni sten + ownerList
+    //vytvoreni sten + ownerList, neighborList
+    std::list<int> nonNeighborList;
     for (int j = 0; j < cellList.size(); j++)
     {
         cellList[j].ownFaceIndex.clear();
@@ -74,7 +78,48 @@ void Mesh::createFaces()
         {
             bool existInList = false;
 
-            for (int i = 0; i < faceList.size(); i++)
+            std::list<int>::iterator it;
+            for (it = nonNeighborList.begin(); it != nonNeighborList.end(); it++)
+            {
+                if (faceList[*it].equal(ownFace))
+                {
+                    existInList = true;
+                    break;
+                }                
+            }
+
+            if (existInList)
+            {
+                cellList[j].neighborFaceIndex.push_back(*it);
+                neighborIndexList[*it] = j;
+                nonNeighborList.erase(it);
+            }
+            else
+            {
+                cellList[j].ownFaceIndex.push_back(faceList.size());
+
+                nonNeighborList.push_front(faceList.size());
+                faceList.push_back(ownFace);                
+                ownerIndexList.push_back(j);
+                neighborIndexList.push_back(-1);
+            }
+        }
+    }
+
+
+    //////////////
+    //vytvoreni sten + ownerList, neighborList
+    /*for (int j = 0; j < cellList.size(); j++)
+    {
+        cellList[j].ownFaceIndex.clear();
+        std::vector<Face> ownFaces = cellList[j].createFaces();
+
+        for (auto & ownFace : ownFaces)
+        {
+            bool existInList = false;
+
+            int i;
+            for (i = 0; i < faceList.size(); i++)
             {
                 if (faceList[i].equal(ownFace))
                 {
@@ -83,52 +128,27 @@ void Mesh::createFaces()
                 }                
             }
 
-            if (!existInList)
+            if (existInList)
+            {
+                cellList[j].neighborFaceIndex.push_back(i);
+                neighborIndexList[i] = j;
+            }
+            else
             {
                 cellList[j].ownFaceIndex.push_back(faceList.size());
 
                 faceList.push_back(ownFace);                
-                ownerIndexList.push_back(j);                
+                ownerIndexList.push_back(j);
+                neighborIndexList.push_back(-1);
             }
         }
-    }
-
-    //naplneni pole sousedu
-    neighborIndexList = std::vector<int>(faceList.size(), -1);
-
-    for (int j = 0; j < cellList.size(); j++)
-    {
-        cellList[j].neighborFaceIndex.clear();
-        std::vector<Face> ownFaces = cellList[j].createFaces();
-
-        for (auto & ownFace : ownFaces)
-        {
-            bool goNext = false;            
-            for (int i = 0; i < cellList[j].ownFaceIndex.size(); i++)
-            {
-                if(faceList[cellList[j].ownFaceIndex[i]].equal(ownFace))
-                {
-                    goNext = true;
-                    break;
-                }
-            }
-            if(goNext == true) continue;          
-
-            for (int i = 0; i < faceList.size(); i++)
-            {
-                if (faceList[i].equal(ownFace) /*&& ownerIndexList[i] != j*/)
-                {
-                    cellList[j].neighborFaceIndex.push_back(i);
-                    neighborIndexList[i] = j;
-                    break;
-                }
-            }
-        }
-    }
+    }*/
+    ////////
 }
 
 void Mesh::updateCellsIndexToFace()
 {
+    //neni potreba
     for(int j = 0; j < cellList.size(); j++)
     {
         cellList[j].ownFaceIndex.clear();
@@ -314,22 +334,46 @@ void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGms
 
             switch (stoi(cellsGmsh[i][1]))
             {
-            case 4:
-                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1}, Cell::TETRAHEDRON));
-                break;
-            case 5:
-                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1, stoi(cellsGmsh[i][9+numOfTags]) - 1, stoi(cellsGmsh[i][10+numOfTags]) - 1}, Cell::HEXAHEDRON));
-                break;
-            case 6:
-                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1, stoi(cellsGmsh[i][8+numOfTags]) - 1}, Cell::PRISM));
-                break;
-            case 7:
-                cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1, stoi(cellsGmsh[i][4+numOfTags]) - 1, stoi(cellsGmsh[i][5+numOfTags]) - 1, stoi(cellsGmsh[i][6+numOfTags]) - 1, stoi(cellsGmsh[i][7+numOfTags]) - 1}, Cell::PYRAMID));
-                break;
-            
-            default:
-                //std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
-                break;
+                //TODO udelat lepe indexovani
+                case 4:
+                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1},
+                                                            Cell::TETRAHEDRON));
+                    break;
+                case 5:
+                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][8+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][9+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][10+numOfTags]) - 1},
+                                                            Cell::HEXAHEDRON));
+                    break;
+                case 6:
+                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][8+numOfTags]) - 1},
+                                                            Cell::PRISM));
+                    break;
+                case 7:
+                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1},
+                                                            Cell::PYRAMID));
+                    break;
+                
+                default:
+                    //std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
+                    break;
             }
         }
         else
