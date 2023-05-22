@@ -29,20 +29,13 @@ class Mesh
 
         void update();
         void loadGmsh2(std::string fileName);
-        //std::vector<int> internalFaceIndexList;
-
-        void exportVTK() const;
 
     private:
         void createFaces();
-        void createBoundaries();
-        void updateCellsIndexToFace();
-        void updateCellsIndexToOwn();
-        void updateCellsIndexToNeighbor();
+        void createBoundaryFacesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh);
         
         void updateCells();
         void updateFaces();
-        void updateBoundaries();
 
         bool checkFaces() const;
 
@@ -56,9 +49,9 @@ class Mesh
 
         //load GMSH
         std::vector<std::string> readFile(std::string fileName);
-        std::vector<std::vector<std::string>> parseBlockData(const std::vector<std::string>& dataIn, std::string blockName);
+        std::vector<std::vector<std::string>> parseBlockDataGmsh(const std::vector<std::string>& dataIn, std::string blockName);
         void createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGmsh);
-        void createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGmsh);
+        void createCellsGmsh(const std::vector<std::vector<std::string>>& elementsGmsh);
         void createBoundariesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh);
 
 };

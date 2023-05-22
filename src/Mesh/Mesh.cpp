@@ -107,7 +107,7 @@ void Mesh::createFaces()
     }
 
 
-    //////////////
+    //asi pomalejsi nutno otestovat
     //vytvoreni sten + ownerList, neighborList
     /*for (int j = 0; j < cellList.size(); j++)
     {
@@ -146,31 +146,81 @@ void Mesh::createFaces()
     ////////
 }
 
-void Mesh::updateCellsIndexToFace()
+//rozdelane - BC jako v OpenFOAMU
+/*void Mesh::createBoundaryFacesGmsh(const std::vector<std::vector<std::string>>& physicalNamesGmsh, const std::vector<std::vector<std::string>>& elementsGmsh)
 {
-    //neni potreba
-    for(int j = 0; j < cellList.size(); j++)
+    boundaryList.clear();
+
+    std::vector<Face> auxFaceList;
+    auxFaceList.clear();
+    std::vector<int> auxFacePhysicalGroupList;
+    auxFacePhysicalGroupList.clear();
+
+    for (int i = 1; i < elementsGmsh.size(); i++)
     {
-        cellList[j].ownFaceIndex.clear();
-        cellList[j].neighborFaceIndex.clear();
-
-        for (int i = 0; i < ownerIndexList.size(); i++)
+        if(stoi(elementsGmsh[i][0]) == i)
         {
-            if(ownerIndexList[i] == j)
-            {
-                cellList[j].ownFaceIndex.push_back(i);
-            }
-        }
+            int numOfTags = stoi(elementsGmsh[i][2]);
 
-        for (int i = 0; i < neighborIndexList.size(); i++)
-        {
-            if(neighborIndexList[i] == j)
+            switch (stoi(elementsGmsh[i][1]))
             {
-                cellList[j].neighborFaceIndex.push_back(i);
+            case 2:
+                auxFaceList.push_back(Face(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1},
+                                                            Face::TRIANGULAR));
+
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
+                break;
+            case 3:
+                auxFaceList.push_back(Face(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][6+numOfTags]) - 1},
+                                                            Face::QUADRILATERAL));
+
+                auxFacePhysicalGroupList.push_back(stoi(elementsGmsh[i][3]));
+                break;
+            
+            default:
+                //std::cout << "Neplatný typ 3D bunky na pozici" << i << std::endl;
+                break;
             }
         }
     }
-}
+
+    faceList.clear();
+
+    for (int j = 1; j < physicalNamesGmsh.size(); j++)
+    {
+        if(stoi(physicalNamesGmsh[j][0]) != 2) //only 2d phasicalNames
+        {
+            continue;
+        }
+
+        int physicalId = stoi(physicalNamesGmsh[j][1]);
+        std::string physicalName = physicalNamesGmsh[j][2];
+        physicalName.erase(0,1);
+        physicalName.pop_back();
+
+        int startIndex = faceList.size();
+        int endIndex = startIndex;
+
+        for (int j = 0; j < auxFacePhysicalGroupList.size(); j++)
+        {
+            if(auxFacePhysicalGroupList[j] == physicalId)
+            {
+                faceList.push_back(auxFaceList[j]);
+                endIndex++;         
+            }
+        }
+        
+        //treba takhle - nutna uprava Boundary a celeho resice
+        //boundaryList.push_back(physicalName, startIndex, endIndex);
+    }
+}*/
+
+
 
 void Mesh::updateCells()
 {
@@ -221,21 +271,15 @@ bool Mesh::checkFaces() const
     return fail;
 }
 
-void Mesh::updateBoundaries()
-{
-    //TODO
-}
-
 void Mesh::loadGmsh2(std::string fileName)
 {
     std::vector<std::string> stringData = readFile(fileName);
 
-    createNodesGmsh(parseBlockData(stringData, "Nodes"));
-    createCellsGmsh(parseBlockData(stringData, "Elements"));
+    createNodesGmsh(parseBlockDataGmsh(stringData, "Nodes"));
+    createCellsGmsh(parseBlockDataGmsh(stringData, "Elements"));
 
     createFaces();
-    createBoundariesGmsh(parseBlockData(stringData, "PhysicalNames"), parseBlockData(stringData, "Elements"));
-    //updateCellsIndexToFace();
+    createBoundariesGmsh(parseBlockDataGmsh(stringData, "PhysicalNames"), parseBlockDataGmsh(stringData, "Elements"));
 
     update();
 }
@@ -261,7 +305,7 @@ std::vector<std::string> Mesh::readFile(std::string fileName)
     return data;
 }
 
-std::vector<std::vector<std::string>> Mesh::parseBlockData(const std::vector<std::string>& dataIn, std::string blockName)
+std::vector<std::vector<std::string>> Mesh::parseBlockDataGmsh(const std::vector<std::string>& dataIn, std::string blockName)
 {
     std::vector<std::vector<std::string>> out;
 
@@ -319,55 +363,55 @@ void Mesh::createNodesGmsh(const std::vector<std::vector<std::string>>& nodesGms
     }
 }
 
-void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& cellsGmsh)
+void Mesh::createCellsGmsh(const std::vector<std::vector<std::string>>& elementsGmsh)
 {
-    int cellsSum = stoi(cellsGmsh[0][0]);
+    int cellsSum = stoi(elementsGmsh[0][0]);
 
     cellList.clear();
 
     //TODO -> for( auto : ...), index from file (not for)
-    for (int i = 1; i < cellsGmsh.size(); i++)
+    for (int i = 1; i < elementsGmsh.size(); i++)
     {
-        if(stoi(cellsGmsh[i][0]) == i)
+        if(stoi(elementsGmsh[i][0]) == i)
         {
-            int numOfTags = stoi(cellsGmsh[i][2]);
+            int numOfTags = stoi(elementsGmsh[i][2]);
 
-            switch (stoi(cellsGmsh[i][1]))
+            switch (stoi(elementsGmsh[i][1]))
             {
                 //TODO udelat lepe indexovani
                 case 4:
-                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1},
+                    cellList.push_back(Cell(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][6+numOfTags]) - 1},
                                                             Cell::TETRAHEDRON));
                     break;
                 case 5:
-                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][8+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][9+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][10+numOfTags]) - 1},
+                    cellList.push_back(Cell(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][7+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][8+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][9+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][10+numOfTags]) - 1},
                                                             Cell::HEXAHEDRON));
                     break;
                 case 6:
-                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][8+numOfTags]) - 1},
+                    cellList.push_back(Cell(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][7+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][8+numOfTags]) - 1},
                                                             Cell::PRISM));
                     break;
                 case 7:
-                    cellList.push_back(Cell(std::vector<int>{stoi(cellsGmsh[i][3+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][4+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][5+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][6+numOfTags]) - 1,
-                                                            stoi(cellsGmsh[i][7+numOfTags]) - 1},
+                    cellList.push_back(Cell(std::vector<int>{stoi(elementsGmsh[i][3+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][4+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][5+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][6+numOfTags]) - 1,
+                                                            stoi(elementsGmsh[i][7+numOfTags]) - 1},
                                                             Cell::PYRAMID));
                     break;
                 
@@ -438,7 +482,7 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
 
         for (int j = 0; j < auxFacePhysicalGroupList.size(); j++)
         {
-                if(auxFacePhysicalGroupList[j] == physicalId)
+            if(auxFacePhysicalGroupList[j] == physicalId)
             {
                 for (int i = 0; i < faceList.size(); i++)
                 {
@@ -452,11 +496,4 @@ void Mesh::createBoundariesGmsh(const std::vector<std::vector<std::string>>& phy
         
         boundaryList.push_back(auxBoundary);
     }
-}
-
-
-void Mesh::exportVTK() const
-{
-
-
 }

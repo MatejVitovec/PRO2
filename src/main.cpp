@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
     //auto stop1 = std::chrono::high_resolution_clock::now();
 
-    myMesh.loadGmsh2("Mesh/GAMM_extraFine.msh");
+    myMesh.loadGmsh2("../meshes/GAMM_extraFine.msh");
 
     /*auto stop2 = std::chrono::high_resolution_clock::now();
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(stop2 - stop1).count() << " ms\n";
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
     mySolver.setInitialConditions(Compressible::primitiveToConservative(Vars<5>({1.0, 0.0, 0.0, 0.0, 0.7143})));
 
-    outputVTK("results/results.0.vtk", mySolver.getMesh(), mySolver.getResults());
+    outputVTK("../results/results.0.vtk", mySolver.getMesh(), mySolver.getResults());
 
     mySolver.solve();
 
